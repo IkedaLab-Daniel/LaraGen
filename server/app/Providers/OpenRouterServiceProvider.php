@@ -12,7 +12,7 @@ class OpenRouterServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $this->app->singleton(OpenRouterService::class, function ($app){
+        $this->app->singleton(OpenRouterService::class, function ($app) {
             return new OpenRouterService();
         });
     }
