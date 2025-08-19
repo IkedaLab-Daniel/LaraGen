@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\GenerateProjectIdeasRequest;
 use App\Services\OpenRouterService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -20,7 +21,7 @@ class ProjectIdeaController extends Controller
      * ? Generate project ideas
      */
 
-    public function generate(Request $request): JsonResponse
+    public function generate(GenerateProjectIdeasRequest $request): JsonResponse
     {
         // ? validate payload first
         $validated = $request->validate([
