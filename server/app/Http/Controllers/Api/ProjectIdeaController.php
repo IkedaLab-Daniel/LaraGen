@@ -3,9 +3,56 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Services\OpenRouterService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class ProjectIdeaController extends Controller
 {
-    //
+    private OpenRouterService $openRouterService;
+
+    public function __construct(OpenRouterService $openRouterService)
+    {
+        $this->openRouterService = $openRouterService;
+    }
+
+    /**
+     * ? Generate project ideas
+     */
+
+    public function generate(Request $request): JsonResponse
+    {
+        // ? validate payload first
+        $validated = $request->validate([
+            'techs' => 'required|array|min:1',
+            'techs.*' => 'required|string|max:50',
+            'difficulty' => 'required|string|in:beginner,intermediate,advanced'
+        ]);
+
+        try{
+            // ? generate project ideas using OpenRouter
+            $projectIdeas = $this->openRouterService->generateProjectIdeas(
+                $validated['techs'],
+                $validated['difficulty']
+            );
+
+            return response()->json([
+                'success' => 'true',
+                'data' => [
+                    'projects' => $projectIdeas,
+                    'requested_techs' => $validated['techs'],
+                    'request_difficulty' => $validated['difficulty']
+                ],
+                'message' => 'Project idea generated successfully'
+            ]);
+
+        } catch (\Exception $e){
+            return response()->json([
+                'success' => 'false',
+                'message' => 'Failed to generate project idea',
+                'error' => app()->environment('local') ? $e->getMessage() : 'Internal Server Error'
+            ], 500);
+        }
+        
+    }
 }
