@@ -11,7 +11,7 @@ class GenerateProjectIdeasRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false; // ! true
+        return true; // ! true
     }
 
     /**
