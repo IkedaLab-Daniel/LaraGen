@@ -35,4 +35,10 @@ return [
         ],
     ],
 
+    // > OpenRouter config
+    'openrouter' => [
+        'api_key' => env('OPENROUTER_API_KEY'),
+        'api_url' => env('OPENROUTER_API_URL', 'https://openrouter.ai/api/v1/chat/completions'),
+        'model' => env('OPENROUTER_MODEL', 'deepseek/deepseek-chat-v3-0324:free'),
+    ],
 ];
