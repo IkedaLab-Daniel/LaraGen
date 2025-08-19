@@ -53,6 +53,30 @@ class ProjectIdeaController extends Controller
                 'error' => app()->environment('local') ? $e->getMessage() : 'Internal Server Error'
             ], 500);
         }
-        
+    }
+
+    /**
+     * ? Get available technologies and dofficulty levels
+     */
+    public function options(): JsonResponse
+    {
+        return response()->json([
+            'success' => 'true',
+            'data' => [
+                'available_techs' => [
+                    'frontend' => ['React', 'Vue.js', 'Angular', 'Svelte', 'Next.js', 'Nuxt.js'],
+                    'backend' => ['Laravel', 'Node.js', 'Express.js', 'Django', 'FastAPI', 'Spring Boot'],
+                    'database' => ['MySQL', 'PostgreSQL', 'MongoDB', 'SQLite', 'Redis'],
+                    'mobile' => ['React Native', 'Flutter', 'Ionic', 'Swift', 'Kotlin'],
+                    'other' => ['TypeScript', 'GraphQL', 'Docker', 'AWS', 'Firebase', 'Tailwind CSS']
+                ],
+                'difficulty_levels' => [
+                    'beginner' => 'New to programming or learning fundamentals',
+                    'intermediate' => 'Comfortable with basics, ready for more complex challenge',
+                    'advanced' => 'Experienced developer looking for challenging projects'
+                ]
+            ],
+            'message' => 'Available options retrieved successfully'
+        ]);
     }
 }
