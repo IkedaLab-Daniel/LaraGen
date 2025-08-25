@@ -30,7 +30,7 @@ const Hero = () => {
             variants={containerVariants}
             initial="hidden"
             animate="visible"
-            className="w-full max-w-[1200px] bg-slate-200 h-[300px] mx-auto flex flex-col justify-center items-center "
+            className="w-full max-w-[1200px] bg-slate-200 h-[300px] mx-auto flex flex-col justify-center items-center pt-24"
         >
             {/* Badge */}
             <motion.div
@@ -42,8 +42,18 @@ const Hero = () => {
                 <Zap className="w-4 h-4 mr-2 text-blue-500" />
                 <span className="text-sm font-medium text-#FF2D20">Server Running</span>
             </motion.div>
-            <h1 className="font-bold text-5xl">Cool Hero</h1>
-            <h3 className="text-xl">A description for my web app</h3>
+            
+            {/* main headline */}
+            <motion.div variants={itemVariants} className="text-center mb-12">
+                <h1 className="text-5xl md:text-7xl font-bold text-gray-900 mb-6 leading-tight">
+                    Generate {' '}
+                    <span className="bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 bg-clip-text text-transparent">
+                        Perfect
+                    </span>
+                    <br/>
+                    Project Ideas
+                </h1>
+            </motion.div>
         </motion.div>
     )
 }

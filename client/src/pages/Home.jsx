@@ -49,7 +49,7 @@ const Home = () => {
                     <Sparkle size={80} />
                 </motion.div>
             </div>
-            <Hero />
+            <Hero/>
         </div>
     )
 }
