@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-body::before {
+/* body::before {
   content: '';
   position: fixed;
   top: 0;
@@ -14,4 +14,4 @@ body::before {
   opacity: 0.1;
   pointer-events: none;
   z-index: -1;
-}
+} */
