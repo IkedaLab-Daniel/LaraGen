@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion"
-import { LayoutGrid, Code, Database, ServerCog, Smartphone, Wrench } from "lucide-react";
+import { LayoutGrid, Code, Database, ServerCog, Smartphone, Wrench, Search } from "lucide-react";
 import { 
   SiReact, SiVuedotjs, SiAngular, SiSvelte, SiNextdotjs, SiNuxtdotjs, SiTailwindcss, SiBootstrap, 
   SiNodedotjs, SiExpress, SiLaravel, SiDjango, SiFlask, SiSpring, SiRubyonrails, SiDotnet, 
@@ -8,7 +8,7 @@ import {
   SiFlutter, SiSwift, SiKotlin, SiGit, SiWebpack, SiVite, SiJest, SiCypress, 
   SiStorybook, SiEslint, SiPrettier, SiSass, SiLess, SiGraphql, SiRedux, SiMobx, 
   SiPuppeteer, SiMocha, SiChai, SiJasmine, SiPhp, SiPython, SiJavascript, SiTypescript, 
-  SiGo, SiRust 
+  SiGo, SiRust, SiFramer
 } from "react-icons/si";
 
 const TechChoose = () => {
@@ -25,6 +25,7 @@ const TechChoose = () => {
     { id: 6, name: "Nuxt.js", icon: SiNuxtdotjs, color: "#00DC82", category: "frontend" },
     { id: 7, name: "Tailwind CSS", icon: SiTailwindcss, color: "#38BDF8", category: "frontend" },
     { id: 8, name: "Bootstrap", icon: SiBootstrap, color: "#7952B3", category: "frontend" },
+        { id: 56, name: "Framer", icon: SiFramer, color: "#0055FF", category: "frontend" },
     // Backend
     { id: 10, name: "Node.js", icon: SiNodedotjs, color: "#339933", category: "backend" },
     { id: 11, name: "Express.js", icon: SiExpress, color: "#000000", category: "backend" },
@@ -95,6 +96,10 @@ const TechChoose = () => {
     : techOptions.filter(
         techOption => techOption.category === selectedCategory)
 
+    const handleDragStart = (e, tech) => {
+        e.dataTransfer.setData('tech', JSON.stringify(tech))
+    }
+
     const itemVariants = {
         hidden: {opacity: 0, y: 30},
         visible: {
@@ -146,13 +151,21 @@ const TechChoose = () => {
                         {/* tech options here */}
                         <motion.div
                             layout
-                            className="grid grid-cols-4 gap-3 min-h-48"
+                            className="grid grid-cols-7 gap-3"
                         >
                             {filteredTechOptions.map((tech) => (
                                 <motion.div
                                     key={tech.id}
                                     layout
-                                    className="flex flex-col items-center justify-center p-2 bg-white rounded-xl shadow hover:shadow-lg transition-all duration-200 border border-gray-100"
+                                    className="flex flex-col items-center justify-center p-2 bg-white rounded-xl shadow hover:shadow-lg transition-all duration-200 border border-gray-100 max-h-[100px]"
+                                    initial={{ opacity: 0, scale: 0.8 }}
+                                    animate={{ opacity: 1, scale: 1 }}
+                                    exit={{ opacity: 0, scale: 0.8 }}
+                                    transition={{ duration: 0.2 }}
+                                    draggable
+                                    onDrag={(e) => handleDragStart(e, tech)}
+                                    whileHover={{ scale: 1.05 }}
+                                    whileDrag={{ scale: 1.1, rotate: 5}}
                                 >
                                     {/* React icon rendering */}
                                     <tech.icon size={32} color={tech.color} className="mb-2" />
@@ -160,6 +173,21 @@ const TechChoose = () => {
                                 </motion.div>
                             ))}
                         </motion.div>
+
+                        {/* 
+                        show this no tech found on the category
+                        This is not likely to happen but this might be useful later
+                        */}
+                        {filteredTechOptions.length === 0 && (
+                            <div className="flex items-center justify-center h-32 text-gray-400">
+                                <div className="text-center">
+                                    <div className="text-2xl mb-2">
+                                        <Search className="inline-block w-8 h-8 mb-2" />
+                                    </div>
+                                    <span>No technologies found in this category.</span>
+                                </div>
+                            </div>
+                        )}
                     </div>
                     
                 </div>
