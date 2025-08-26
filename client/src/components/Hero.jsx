@@ -30,14 +30,14 @@ const Hero = () => {
             variants={containerVariants}
             initial="hidden"
             animate="visible"
-            className="w-full max-w-[1200px] bg-slate-200 h-[300px] mx-auto flex flex-col justify-center items-center pt-24"
+            className="w-full max-w-[1200px]  h-[300px] mx-auto flex flex-col justify-center items-center pt-[160px]"
         >
             {/* Badge */}
             <motion.div
                 variants={itemVariants}
                 initial="hidden"
                 animate="visible"
-                className="inline-flex items-center px-4 py-2 mb-8 bg-white/70 backdrop-blur-sm border border-blue-200 rounded-full shadow-lg"
+                className="inline-flex items-center px-4 py-2 mb-5 md:mb-8 bg-white/70 backdrop-blur-sm border border-blue-200 rounded-full shadow-lg"
             >
                 <Zap className="w-4 h-4 mr-2 text-blue-500" />
                 <span className="text-sm font-medium text-#FF2D20">Server Running</span>
@@ -45,7 +45,7 @@ const Hero = () => {
             
             {/* main headline */}
             <motion.div variants={itemVariants} className="text-center mb-12">
-                <h1 className="text-5xl md:text-7xl font-bold text-gray-900 mb-6 leading-tight">
+                <h1 className="text-4xl md:text-7xl font-bold text-gray-900 mb-6 leading-tight">
                     Generate {' '}
                     <span className="bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 bg-clip-text text-transparent">
                         Perfect

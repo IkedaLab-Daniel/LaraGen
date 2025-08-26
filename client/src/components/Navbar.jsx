@@ -2,7 +2,7 @@
 const NavBar = () => {
     
     return(
-        <nav className="flex justify-between px-12 py-4 bg-[#ffffff00] shadow-md fixed w-full z-[1]">
+        <nav className="flex justify-between px-12 py-4 bg-[#ffffff00] shadow-md fixed w-full z-[1] shadow-blue-100">
             <div>
                 <h1>Logo</h1>
             </div>
