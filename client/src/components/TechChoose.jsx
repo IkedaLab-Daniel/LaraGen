@@ -1,5 +1,9 @@
+import { useState } from "react";
 import { motion } from "framer-motion"
+import { LayoutGrid, Code, Database, ServerCog, Smartphone, Wrench } from "lucide-react";
 const TechChoose = () => {
+
+        const [selectedCategory, setSelectedCategory] = useState('frontend')
 
         const techOptions = [
         // Frontend
@@ -69,9 +73,14 @@ const TechChoose = () => {
     ];
 
     const categories = [
-        { id: 'all', name: 'all', icon: {}, count: techOptions.length },
-        { id: 'frontend', name: 'Frontend', icon: {}, count: techOptions.filter(tech => tech.category === 'Frontend').length}
-    ]
+        { id: 'all', name: 'All', icon: LayoutGrid, count: techOptions.length },
+        { id: 'frontend', name: 'Frontend', icon: Code, count: techOptions.filter(tech => tech.category === 'Frontend').length },
+        { id: 'backend', name: 'Backend', icon: ServerCog, count: techOptions.filter(tech => tech.category === 'Backend').length },
+        { id: 'database', name: 'Database', icon: Database, count: techOptions.filter(tech => tech.category === 'Database').length },
+        { id: 'devops', name: 'DevOps', icon: Wrench, count: techOptions.filter(tech => tech.category === 'Devops').length },
+        { id: 'mobile', name: 'Mobile', icon: Smartphone, count: techOptions.filter(tech => tech.category === 'Mobile').length },
+        { id: 'tools', name: 'Tools', icon: Wrench, count: techOptions.filter(tech => tech.category === 'Tools').length },
+    ];
 
     const itemVariants = {
         hidden: {opacity: 0, y: 30},
@@ -87,7 +96,7 @@ const TechChoose = () => {
 
     return(
         <motion.div variants={itemVariants} className="bg-blue-300 w-full max-w-6xl mx-auto h-24">
-            <div className="grid md:grid-cols-2 gap-8">
+            <div className="grid md:grid-cols-[70%,30%] gap-8">
                 {/* tech stack selection */}
                 <div className="space-y-6">
                     <h3 className="text-2xl font-bold text-gray-800 text-center">Choose Your Tech Stack</h3>
@@ -98,8 +107,23 @@ const TechChoose = () => {
 
                         {/* category filtering */}
                         <div className="mb-6">
-                            <div>
-
+                            <div className="flex flex-wrap gap-4">
+                                {categories.map((category)=>(
+                                    <motion.button
+                                        key={category.id}
+                                        whileHover={{ scale: 1.05 }}
+                                        whileTap={{ scale: 0.95 }}
+                                        onClick={() => setSelectedCategory(category.id)}
+                                        className={`px-3 py-2 rounded-full text-xs font-medium transition-all duration-300 flex items-center gap-2 ${
+                                            selectedCategory === category.id
+                                                ? 'bg-blue-500 text-white shadow-md'
+                                                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                                        }`}
+                                    >
+                                        {category.icon && <category.icon className="w-4 h-4 mr-1" />}
+                                        {category.name}
+                                    </motion.button>
+                                ))}
                             </div>
                         </div>
                     </div>
