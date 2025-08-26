@@ -14,6 +14,7 @@ import {
 const TechChoose = () => {
 
         const [selectedCategory, setSelectedCategory] = useState('frontend')
+        const [droppedTech, setDroppedTech] = useState([])
 
         const techOptions = [
         // Frontend
@@ -100,6 +101,22 @@ const TechChoose = () => {
         e.dataTransfer.setData('tech', JSON.stringify(tech))
     }
 
+    const handleDrop = (e) => {
+        e.preventDefault();
+        const tech = JSON.parse(e.dataTransfer.getData('tech'))
+        addTechToStack(tech)
+    }
+
+    const addTechToStack = (tech) => {
+        if (!droppedTech.find(item => item.id === tech.id)){
+            setDroppedTech([...droppedTech, tech])
+        }
+    }
+
+    const handleDragOver = (e) => {
+        e.preventDefault();
+    }
+
     const itemVariants = {
         hidden: {opacity: 0, y: 30},
         visible: {
@@ -151,7 +168,7 @@ const TechChoose = () => {
                         {/* tech options here */}
                         <motion.div
                             layout
-                            className="grid grid-cols-7 gap-3"
+                            className="grid grid-cols-4 md:grid-cols-7 gap-3"
                         >
                             {filteredTechOptions.map((tech) => (
                                 <motion.div
@@ -188,6 +205,14 @@ const TechChoose = () => {
                                 </div>
                             </div>
                         )}
+                    </div>
+
+                    {/* Selected tech stack container*/}
+                    <div 
+                        className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-xl border-2 border-dashed border-blue-300 min-h-32"
+                        onDrop={handleDrop}
+                    >
+
                     </div>
                     
                 </div>
