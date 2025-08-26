@@ -30,7 +30,7 @@ const Hero = () => {
             variants={containerVariants}
             initial="hidden"
             animate="visible"
-            className="w-full max-w-[1200px] h-[300px] mx-auto flex flex-col justify-center items-center pt-[310px]"
+            className="w-full max-w-[1200px] h-[300px] mx-auto flex flex-col justify-center items-center pt-[260px] md:pt-[310px]"
         >
             {/* Badge */}
             <motion.div
@@ -54,7 +54,7 @@ const Hero = () => {
                     Project Ideas
                 </h1>
 
-                <p className="text-lg md:text-2xl text-gray-600 mb-8 max-w-3xl mx-auto leading-relaxed">
+                <p className="text-md md:text-2xl text-gray-600 mb-8 max-w-[80vw] md:max-w-3xl mx-auto leading-relaxe lg:max-w-4xl">
                     Choose your tech stack and difficulty level. Our AI will generate personalized project ideas that match your skills and help you grow as a developer.
                 </p>
             </motion.div>
