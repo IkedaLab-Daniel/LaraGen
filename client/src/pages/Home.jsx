@@ -1,6 +1,7 @@
 import { animate, motion } from "framer-motion";
 import Hero from "../components/Hero";
 import TechChoose from "../components/TechChoose";
+import Footer from "../components/Footer";
 import { Brain, Lightbulb, Rocket, Sparkle } from "lucide-react";
 
 const Home = () => {
@@ -18,9 +19,9 @@ const Home = () => {
     }
 
     return(
-        <div className="home bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 min-h-screen">
+    <div className="home relative bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 min-h-screen">
             {/* animation bg elements*/}
-            <div className="absolute inset-0 overflow-hidden pointer-events-none z-[3]">
+            <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
                 <motion.div
                     variants={floatingVariants}
                     animate="animate"
@@ -50,8 +51,11 @@ const Home = () => {
                     <Sparkle className="w-[50px] h-[50px] md:w-[90px] md:h-[90px]" />
                 </motion.div>
             </div>
-            <Hero/>
-            <TechChoose />
+            <div className="relative z-10">
+                <Hero/>
+                <TechChoose />
+                <Footer />
+            </div>
         </div>
     )
 }

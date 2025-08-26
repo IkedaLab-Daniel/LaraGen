@@ -102,8 +102,8 @@ const TechChoose = () => {
                     <h3 className="text-2xl font-bold text-gray-800 text-center">Choose Your Tech Stack</h3>
 
                     {/* render the techs here */}
-                    <div className="bg-white/80 backdrop-blur-sm rounder-2xl p-6 shadow-xl border border-blue-100">
-                        <h4>Available Technologies</h4>
+                    <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-xl border border-blue-100">
+                        <h4 className="text-lg font-semibold text-gray-700 mb-4">Available Technologies</h4>
 
                         {/* category filtering */}
                         <div className="mb-6">
@@ -121,11 +121,19 @@ const TechChoose = () => {
                                         }`}
                                     >
                                         {category.icon && <category.icon className="w-4 h-4 mr-1" />}
-                                        {category.name}
+                                        {category.name} ({category.count})
                                     </motion.button>
                                 ))}
                             </div>
                         </div>
+
+                        {/* tech options here */}
+                        <motion.div
+                            layout
+                            className="grid grid-cols-4 gap-3 min-h-48"
+                        >
+
+                        </motion.div>
                     </div>
                     
                 </div>
