@@ -19,34 +19,34 @@ const Home = () => {
     return(
         <div className="home bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 min-h-screen">
             {/* animation bg elements*/}
-            <div className="absolute inset-0 overflow-hidden pointer-events-none">
+            <div className="absolute inset-0 overflow-hidden pointer-events-none z-[3]">
                 <motion.div
                     variants={floatingVariants}
                     animate="animate"
-                    className="absolute top-20 left-10 text-blue-300"
+                    className="absolute top-24 left-10 text-blue-300"
                 >
-                    <Lightbulb size={80} />
+                    <Lightbulb className="w-[50px] h-[50px] md:w-[90px] md:h-[90px]" />
                 </motion.div>
                 <motion.div
                     variants={floatingVariants}
                     animate="animate"
-                    className="absolute top-40 right-20 text-blue-300"
+                    className="absolute top-[300px] md:top-40 right-5 md:right-20 text-blue-300"
                 >
-                    <Brain size={80} />
+                    <Brain className="w-[50px] h-[50px] md:w-[90px] md:h-[90px]" />
                 </motion.div>
                 <motion.div
                     variants={floatingVariants}
                     animate="animate"
-                    className="absolute bottom-40 left-20 text-blue-300"
+                    className="absolute bottom-24 md:bottom-40 left-20 text-blue-300"
                 >
-                    <Rocket size={80} />
+                    <Rocket className="w-[50px] h-[50px] md:w-[90px] md:h-[90px" />
                 </motion.div>
                 <motion.div
                     variants={floatingVariants}
                     animate="animate"
-                    className="absolute bottom-60 right-60 text-blue-300"
+                    className="absolute bottom-60 right-14 md:right-60 text-blue-300"
                 >
-                    <Sparkle size={80} />
+                    <Sparkle className="w-[50px] h-[50px] md:w-[90px] md:h-[90px" />
                 </motion.div>
             </div>
             <Hero/>

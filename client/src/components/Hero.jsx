@@ -30,7 +30,7 @@ const Hero = () => {
             variants={containerVariants}
             initial="hidden"
             animate="visible"
-            className="w-full max-w-[1200px]  h-[300px] mx-auto flex flex-col justify-center items-center pt-[160px]"
+            className="w-full max-w-[1200px] h-[300px] mx-auto flex flex-col justify-center items-center pt-[160px]"
         >
             {/* Badge */}
             <motion.div
