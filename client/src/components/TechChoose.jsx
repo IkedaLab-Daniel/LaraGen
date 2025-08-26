@@ -1,76 +1,83 @@
 import { useState } from "react";
 import { motion } from "framer-motion"
 import { LayoutGrid, Code, Database, ServerCog, Smartphone, Wrench } from "lucide-react";
+import { 
+  SiReact, SiVuedotjs, SiAngular, SiSvelte, SiNextdotjs, SiNuxtdotjs, SiTailwindcss, SiBootstrap, 
+  SiNodedotjs, SiExpress, SiLaravel, SiDjango, SiFlask, SiSpring, SiRubyonrails, SiDotnet, 
+  SiMongodb, SiMysql, SiPostgresql, SiSqlite, SiFirebase, SiDocker, SiJenkins, 
+  SiFlutter, SiSwift, SiKotlin, SiGit, SiWebpack, SiVite, SiJest, SiCypress, 
+  SiStorybook, SiEslint, SiPrettier, SiSass, SiLess, SiGraphql, SiRedux, SiMobx, 
+  SiPuppeteer, SiMocha, SiChai, SiJasmine, SiPhp, SiPython, SiJavascript, SiTypescript, 
+  SiGo, SiRust 
+} from "react-icons/si";
+
 const TechChoose = () => {
 
         const [selectedCategory, setSelectedCategory] = useState('frontend')
 
         const techOptions = [
         // Frontend
-    { id: 1, name: "React", icon: "react", category: "frontend" },
-    { id: 2, name: "Vue.js", icon: "vue", category: "frontend" },
-    { id: 3, name: "Angular", icon: "angular", category: "frontend" },
-    { id: 4, name: "Svelte", icon: "svelte", category: "frontend" },
-    { id: 5, name: "Next.js", icon: "nextjs", category: "frontend" },
-    { id: 6, name: "Nuxt.js", icon: "nuxtjs", category: "frontend" },
-    { id: 7, name: "Tailwind CSS", icon: "tailwind", category: "frontend" },
-    { id: 8, name: "Bootstrap", icon: "bootstrap", category: "frontend" },
-    { id: 9, name: "Material UI", icon: "materialui", category: "frontend" },
+    { id: 1, name: "React", icon: SiReact, color: "#61DAFB", category: "frontend" },
+    { id: 2, name: "Vue.js", icon: SiVuedotjs, color: "#4FC08D", category: "frontend" },
+    { id: 3, name: "Angular", icon: SiAngular, color: "#DD0031", category: "frontend" },
+    { id: 4, name: "Svelte", icon: SiSvelte, color: "#FF3E00", category: "frontend" },
+    { id: 5, name: "Next.js", icon: SiNextdotjs, color: "#000000", category: "frontend" },
+    { id: 6, name: "Nuxt.js", icon: SiNuxtdotjs, color: "#00DC82", category: "frontend" },
+    { id: 7, name: "Tailwind CSS", icon: SiTailwindcss, color: "#38BDF8", category: "frontend" },
+    { id: 8, name: "Bootstrap", icon: SiBootstrap, color: "#7952B3", category: "frontend" },
     // Backend
-    { id: 10, name: "Node.js", icon: "nodejs", category: "backend" },
-    { id: 11, name: "Express.js", icon: "express", category: "backend" },
-    { id: 12, name: "Laravel", icon: "laravel", category: "backend" },
-    { id: 13, name: "Django", icon: "django", category: "backend" },
-    { id: 14, name: "Flask", icon: "flask", category: "backend" },
-    { id: 15, name: "Spring Boot", icon: "spring", category: "backend" },
-    { id: 16, name: "Ruby on Rails", icon: "rails", category: "backend" },
-    { id: 17, name: "ASP.NET", icon: "dotnet", category: "backend" },
+    { id: 10, name: "Node.js", icon: SiNodedotjs, color: "#339933", category: "backend" },
+    { id: 11, name: "Express.js", icon: SiExpress, color: "#000000", category: "backend" },
+    { id: 12, name: "Laravel", icon: SiLaravel, color: "#FF2D20", category: "backend" },
+    { id: 13, name: "Django", icon: SiDjango, color: "#092E20", category: "backend" },
+    { id: 14, name: "Flask", icon: SiFlask, color: "#000000", category: "backend" },
+    { id: 15, name: "Spring Boot", icon: SiSpring, color: "#6DB33F", category: "backend" },
+    { id: 16, name: "Ruby on Rails", icon: SiRubyonrails, color: "#CC0000", category: "backend" },
+    { id: 17, name: "ASP.NET", icon: SiDotnet, color: "#512BD4", category: "backend" },
     // Database
-    { id: 18, name: "MongoDB", icon: "mongodb", category: "database" },
-    { id: 19, name: "MySQL", icon: "mysql", category: "database" },
-    { id: 20, name: "PostgreSQL", icon: "postgresql", category: "database" },
-    { id: 21, name: "SQLite", icon: "sqlite", category: "database" },
-    { id: 22, name: "Firebase", icon: "firebase", category: "database" },
+    { id: 18, name: "MongoDB", icon: SiMongodb, color: "#47A248", category: "database" },
+    { id: 19, name: "MySQL", icon: SiMysql, color: "#4479A1", category: "database" },
+    { id: 20, name: "PostgreSQL", icon: SiPostgresql, color: "#4169E1", category: "database" },
+    { id: 21, name: "SQLite", icon: SiSqlite, color: "#003B57", category: "database" },
+    { id: 22, name: "Firebase", icon: SiFirebase, color: "#FFCA28", category: "database" },
     // DevOps
-    { id: 23, name: "Docker", icon: "docker", category: "devops" },
-    { id: 24, name: "Jenkins", icon: "jenkins", category: "devops" },
+    { id: 23, name: "Docker", icon: SiDocker, color: "#2496ED", category: "devops" },
+    { id: 24, name: "Jenkins", icon: SiJenkins, color: "#D24939", category: "devops" },
     // Mobile
-    { id: 25, name: "React Native", icon: "react", category: "mobile" },
-    { id: 26, name: "Flutter", icon: "flutter", category: "mobile" },
-    { id: 27, name: "Swift", icon: "swift", category: "mobile" },
-    { id: 28, name: "Kotlin", icon: "kotlin", category: "mobile" },
+    { id: 25, name: "React Native", icon: SiReact, color: "#61DAFB", category: "mobile" },
+    { id: 26, name: "Flutter", icon: SiFlutter, color: "#02569B", category: "mobile" },
+    { id: 27, name: "Swift", icon: SiSwift, color: "#FA7343", category: "mobile" },
+    { id: 28, name: "Kotlin", icon: SiKotlin, color: "#7F52FF", category: "mobile" },
     // Tools
-    { id: 29, name: "Git", icon: "git", category: "tools" },
-    { id: 30, name: "Webpack", icon: "webpack", category: "tools" },
-    { id: 31, name: "Vite", icon: "vite", category: "tools" },
-    { id: 32, name: "Jest", icon: "jest", category: "tools" },
-    { id: 33, name: "Cypress", icon: "cypress", category: "tools" },
-    { id: 34, name: "Storybook", icon: "storybook", category: "tools" },
-    { id: 35, name: "ESLint", icon: "eslint", category: "tools" },
-    { id: 36, name: "Prettier", icon: "prettier", category: "tools" },
-    { id: 37, name: "Sass", icon: "sass", category: "tools" },
-    { id: 38, name: "Less", icon: "less", category: "tools" },
+    { id: 29, name: "Git", icon: SiGit, color: "#F05032", category: "tools" },
+    { id: 30, name: "Webpack", icon: SiWebpack, color: "#8DD6F9", category: "tools" },
+    { id: 31, name: "Vite", icon: SiVite, color: "#646CFF", category: "tools" },
+    { id: 32, name: "Jest", icon: SiJest, color: "#C21325", category: "tools" },
+    { id: 33, name: "Cypress", icon: SiCypress, color: "#17202C", category: "tools" },
+    { id: 34, name: "Storybook", icon: SiStorybook, color: "#FF4785", category: "tools" },
+    { id: 35, name: "ESLint", icon: SiEslint, color: "#4B32C3", category: "tools" },
+    { id: 36, name: "Prettier", icon: SiPrettier, color: "#F7B93E", category: "tools" },
+    { id: 37, name: "Sass", icon: SiSass, color: "#CC6699", category: "tools" },
+    { id: 38, name: "Less", icon: SiLess, color: "#1D365D", category: "tools" },
     // API
-    { id: 39, name: "GraphQL", icon: "graphql", category: "tools" },
-    { id: 40, name: "REST API", icon: "api", category: "tools" },
+    { id: 39, name: "GraphQL", icon: SiGraphql, color: "#E10098", category: "tools" },
+    { id: 40, name: "REST API", icon: SiRedux, color: "#6DB33F", category: "tools" },
     // State Management
-    { id: 41, name: "Redux", icon: "redux", category: "tools" },
-    { id: 42, name: "MobX", icon: "mobx", category: "tools" },
+    { id: 41, name: "Redux", icon: SiRedux, color: "#764ABC", category: "tools" },
+    { id: 42, name: "MobX", icon: SiMobx, color: "#FF9955", category: "tools" },
     // Testing
-    { id: 43, name: "Puppeteer", icon: "puppeteer", category: "tools" },
-    { id: 44, name: "Mocha", icon: "mocha", category: "tools" },
-    { id: 45, name: "Chai", icon: "chai", category: "tools" },
-    { id: 46, name: "Jasmine", icon: "jasmine", category: "tools" },
+    { id: 43, name: "Puppeteer", icon: SiPuppeteer, color: "#40B5A4", category: "tools" },
+    { id: 44, name: "Mocha", icon: SiMocha, color: "#8D6748", category: "tools" },
+    { id: 45, name: "Chai", icon: SiChai, color: "#A30701", category: "tools" },
+    { id: 46, name: "Jasmine", icon: SiJasmine, color: "#8A4182", category: "tools" },
     // Other
-    { id: 47, name: "PHP", icon: "php", category: "backend" },
-    { id: 48, name: "Python", icon: "python", category: "backend" },
-    { id: 49, name: "JavaScript", icon: "javascript", category: "frontend" },
-    { id: 50, name: "TypeScript", icon: "typescript", category: "frontend" },
-    { id: 51, name: "C#", icon: "csharp", category: "backend" },
-    { id: 52, name: "Java", icon: "java", category: "backend" },
-    { id: 53, name: "Go", icon: "go", category: "backend" },
-    { id: 54, name: "Rust", icon: "rust", category: "backend" },
-    { id: 55, name: "Redux Toolkit", icon: "redux", category: "tools" }
+    { id: 47, name: "PHP", icon: SiPhp, color: "#777BB4", category: "backend" },
+    { id: 48, name: "Python", icon: SiPython, color: "#3776AB", category: "backend" },
+    { id: 49, name: "JavaScript", icon: SiJavascript, color: "#F7DF1E", category: "frontend" },
+    { id: 50, name: "TypeScript", icon: SiTypescript, color: "#3178C6", category: "frontend" },
+    { id: 53, name: "Go", icon: SiGo, color: "#00ADD8", category: "backend" },
+    { id: 54, name: "Rust", icon: SiRust, color: "#000000", category: "backend" },
+    { id: 55, name: "Redux Toolkit", icon: SiRedux, color: "#764ABC", category: "tools" }
     ];
 
     const categories = [
@@ -147,13 +154,8 @@ const TechChoose = () => {
                                     layout
                                     className="flex flex-col items-center justify-center p-2 bg-white rounded-xl shadow hover:shadow-lg transition-all duration-200 border border-gray-100"
                                 >
-                                    {/* CDN icon rendering */}
-                                    <img
-                                        src={`https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/${tech.icon}.svg`}
-                                        alt={tech.name}
-                                        className="w-8 h-8 mb-2"
-                                        onError={e => { e.target.style.display = 'none'; }}
-                                    />
+                                    {/* React icon rendering */}
+                                    <tech.icon size={32} color={tech.color} className="mb-2" />
                                     <span className="text-xs text-gray-700 font-medium text-center">{tech.name}</span>
                                 </motion.div>
                             ))}
