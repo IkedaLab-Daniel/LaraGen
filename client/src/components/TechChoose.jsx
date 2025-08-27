@@ -26,7 +26,9 @@ import { TbBrandAzure, TbBrandReactNative, TbBrandXamarin } from 'react-icons/tb
 const TechChoose = () => {
 
         const [selectedCategory, setSelectedCategory] = useState('frontend')
-        const [droppedTech, setDroppedTech] = useState([])
+        const [droppedTech, setDroppedTech] = useState([
+            { id: 1, name: "React", icon: SiReact, color: "#61DAFB", category: "frontend" },
+        ])
 
         const techOptions = [
         // Frontend
@@ -218,6 +220,10 @@ const TechChoose = () => {
         e.preventDefault();
     }
 
+    const removeTech = (techId) => {
+        setDroppedTech(droppedTech.filter(tech => tech.id !== techId))
+    }
+
     const itemVariants = {
         hidden: {opacity: 0, y: 30},
         visible: {
@@ -230,6 +236,7 @@ const TechChoose = () => {
         }
     }
 
+
     // ! Debugging
     useEffect(() => {
         console.log("Techs rendered:", filteredTechOptions);
@@ -237,7 +244,7 @@ const TechChoose = () => {
 
     return(
         <motion.div variants={itemVariants} className="w-full max-w-6xl mx-auto h-auto">
-            <div className="grid md:grid-cols-[70%,30%] gap-8">
+            <div className="grid md:grid-cols-[70%,30%] gap-8 h-auto">
                 {/* tech stack selection */}
                 <div className="space-y-6 w-[95%] mx-auto md:w-full">
                     <h3 className="text-2xl font-bold text-gray-800 text-center">Choose Your Tech Stack</h3>
@@ -321,7 +328,8 @@ const TechChoose = () => {
                     <div className="space-y-6">
                         <h3 className="text-2xl font-bold text-gray-800 text-center">Selected Stack</h3>
                         <div 
-                            className="w-[95%] mx-auto md:w-full bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-xl border-2 border-dashed border-blue-300 md:min-h-[300px] flex items-center justify-center"
+                            className="w-[95%] mx-auto md:w-full bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-xl border-2 border-dashed border-blue-300 md:min-h-[200px] flex items-center justify-center h-auto"
+                            // ! I cant make the height consistent with tech options container
                             onDrop={handleDrop}
                         >   
                             {/* if no tech dropped yet let's display this */}
@@ -331,8 +339,33 @@ const TechChoose = () => {
                                     Drag technologies here
                                 </div>
                             ) : (
-                                <div>
-                                    item
+                                <div className="flex flex-wrap gap-2">
+                                    {droppedTech.map((tech) => (
+                                        <motion.div
+                                            key={tech.id}
+                                            initial={{ scale: 0, rotate: -180 }}
+                                            animate={{ scale: 1, rotate: 0 }}
+                                            exit={{ scale: 0, rotate: 180 }}
+                                            transition={{ type: "spring", stiffness: 500, damping: 25 }}
+                                            className={`px-3 py-2 rounded-lg border flex items-center text-sm font-medium group hover:shadow-md transition-all duration-200`}
+                                            style={{ borderColor: tech.color }}
+                                        >
+                                            <span className="mr-2">
+                                                {tech.icon && typeof tech.icon === 'function' ? (
+                                                    <tech.icon size={20} color={tech.color} />
+                                                ) : null}
+                                            </span>
+                                            {tech.name}
+                                            <motion.button
+                                                onClick={() => removeTech(tech.id)}
+                                                whileHover={{ scale: 1.2 }}
+                                                whileTap={{ scale: 0.8 }}
+                                                className="ml-2 text-gray-500 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-all duration-200 w-4 h-4 flex items-center justify-center rounded-full hover:bg-red-100"
+                                            >
+                                                x
+                                            </motion.button>
+                                        </motion.div>
+                                    ))}
                                 </div>
                             )}
                         </div>
