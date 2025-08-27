@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion"
-import { LayoutGrid, Code, Database, ServerCog, Smartphone, Wrench, Search, Plus } from "lucide-react";
+import { LayoutGrid, Code, Database, ServerCog, Smartphone, Wrench, Search, Plus, Check } from "lucide-react";
 import {
   SiReact, SiVuedotjs, SiAngular, SiSvelte, SiNextdotjs, SiNuxtdotjs, SiTailwindcss, SiBootstrap, 
   SiNodedotjs, SiExpress, SiLaravel, SiDjango, SiFlask, SiSpring, SiRubyonrails, SiDotnet, 
@@ -225,6 +225,19 @@ const TechChoose = () => {
         }
     }
 
+    const handleTechClick = (tech) => {
+        console.log('handle click triggered')
+        const foundTech = techOptions.find(t => t.id === tech);
+        if (!foundTech) return;
+        if (!droppedTech.find(item => item.id === foundTech.id)){
+            setDroppedTech([...droppedTech, foundTech]);
+        }
+    }
+
+    const isSelected = (techId) => {
+        return droppedTech.some(item => item.id === techId);
+    }
+
     const handleDragOver = (e) => {
         e.preventDefault();
     }
@@ -287,19 +300,29 @@ const TechChoose = () => {
                                 <motion.div
                                     key={tech.id}
                                     layout
-                                    className="flex flex-col items-center justify-center p-2 bg-white rounded-xl shadow hover:shadow-lg transition-all duration-200 border border-gray-100 max-h-[100px]"
+                                    className="flex flex-col items-center justify-center p-2 bg-white rounded-xl shadow hover:shadow-lg transition-all duration-200 border border-gray-100 max-h-[100px] relative"
                                     initial={{ opacity: 0, scale: 0.8 }}
                                     animate={{ opacity: 1, scale: 1 }}
                                     exit={{ opacity: 0, scale: 0.8 }}
                                     transition={{ duration: 0.2 }}
                                     draggable
                                     onDragStart={(e) => handleDragStart(e, tech)}
+                                    onClick={() => handleTechClick(tech.id)}
                                     whileHover={{ scale: 1.05 }}
                                     whileDrag={{ scale: 1.1, rotate: 5}}
                                 >
                                     {/* React icon rendering */}
                                     <tech.icon size={32} color={tech.color} className="mb-2" />
                                     <span className="text-xs text-gray-700 font-medium text-center">{tech.name}</span>
+                                    {isSelected(tech.id) && (
+                                        <motion.div
+                                            initial={{ scale: 0 }}
+                                            animate={{ scale: 1 }}
+                                            className="absolute -top-1 -right-1 w-5 h-5 bg-green-500 text-white rounded-full flex items-center justify-center"
+                                        >
+                                            <Check className="w-3 h-3" />
+                                        </motion.div>
+                                    )}
                                 </motion.div>
                             ))}
                         </motion.div>
