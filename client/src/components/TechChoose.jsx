@@ -1,15 +1,27 @@
 import { useState } from "react";
 import { motion } from "framer-motion"
 import { LayoutGrid, Code, Database, ServerCog, Smartphone, Wrench, Search, Plus } from "lucide-react";
-import { 
+import {
   SiReact, SiVuedotjs, SiAngular, SiSvelte, SiNextdotjs, SiNuxtdotjs, SiTailwindcss, SiBootstrap, 
   SiNodedotjs, SiExpress, SiLaravel, SiDjango, SiFlask, SiSpring, SiRubyonrails, SiDotnet, 
   SiMongodb, SiMysql, SiPostgresql, SiSqlite, SiFirebase, SiDocker, SiJenkins, 
   SiFlutter, SiSwift, SiKotlin, SiGit, SiWebpack, SiVite, SiJest, SiCypress, 
   SiStorybook, SiEslint, SiPrettier, SiSass, SiLess, SiGraphql, SiRedux, SiMobx, 
   SiPuppeteer, SiMocha, SiChai, SiJasmine, SiPhp, SiPython, SiJavascript, SiTypescript, 
-  SiGo, SiRust, SiFramer
+  SiGo, SiRust, SiFramer, SiHtml5, SiCss3, SiJquery, SiEmberdotjs, SiAlpinedotjs, SiAstro, 
+  SiRemix, SiGatsby, SiVuetify, SiQuasar, SiMui, SiChakraui, SiAntdesign, SiBulma,
+  SiFastapi, SiNestjs, SiKoa, SiSocketdotio, SiFastify, SiStrapi, SiSupabase, SiPlanetscale,
+  SiRedis, SiApachecassandra, SiOracle, SiMariadb, SiAmazondynamodb, SiElasticsearch, SiInfluxdb,
+  SiKubernetes, SiAmazon, SiGooglecloud, SiVercel, SiNetlify,
+  SiHeroku, SiGithubactions, SiGitlab, SiCircleci, SiTravisci, SiTerraform, SiAnsible,
+  SiIonic, SiApachecordova, SiNativescript, SiExpo,
+  SiYarn, SiNpm, SiPnpm, SiRollupdotjs, SiEsbuild, SiVitest, SiSelenium,
+  SiPostman, SiInsomnia, SiSwagger, SiFigma, SiSketch, SiAdobexd, SiInvision, SiPm2, SiNodemon, SiLerna, SiNx, SiTurborepo,
+  SiC, SiCplusplus, SiRuby, SiScala, SiElixir, SiHaskell, SiClojure,
+  SiContentful, SiSanity, SiGhost, SiWordpress
 } from "react-icons/si";
+import { FaJava } from "react-icons/fa"
+import { TbBrandAzure, TbBrandReactNative, TbBrandXamarin } from 'react-icons/tb'
 
 const TechChoose = () => {
 
@@ -27,6 +39,95 @@ const TechChoose = () => {
     { id: 7, name: "Tailwind CSS", icon: SiTailwindcss, color: "#38BDF8", category: "frontend" },
     { id: 8, name: "Bootstrap", icon: SiBootstrap, color: "#7952B3", category: "frontend" },
         { id: 56, name: "Framer", icon: SiFramer, color: "#0055FF", category: "frontend" },
+        // HTML/CSS/JS frameworks
+        { id: 56, name: "HTML5", icon: SiHtml5, color: "#E34F26", category: "frontend" },
+        { id: 57, name: "CSS3", icon: SiCss3, color: "#1572B6", category: "frontend" },
+        { id: 58, name: "jQuery", icon: SiJquery, color: "#0769AD", category: "frontend" },
+        { id: 59, name: "Ember.js", icon: SiEmberdotjs, color: "#E04E39", category: "frontend" },
+        { id: 60, name: "Alpine.js", icon: SiAlpinedotjs, color: "#8BC0D0", category: "frontend" },
+        { id: 61, name: "Astro", icon: SiAstro, color: "#1B1F23", category: "frontend" },
+        { id: 62, name: "Remix", icon: SiRemix, color: "#000000", category: "frontend" },
+        { id: 63, name: "Gatsby", icon: SiGatsby, color: "#663399", category: "frontend" },
+        { id: 64, name: "Vuetify", icon: SiVuetify, color: "#1867C0", category: "frontend" },
+        { id: 65, name: "Quasar", icon: SiQuasar, color: "#1976D2", category: "frontend" },
+        { id: 66, name: "MUI", icon: SiMui, color: "#007FFF", category: "frontend" },
+        { id: 67, name: "Chakra UI", icon: SiChakraui, color: "#319795", category: "frontend" },
+        { id: 68, name: "Ant Design", icon: SiAntdesign, color: "#0170FE", category: "frontend" },
+        { id: 69, name: "Bulma", icon: SiBulma, color: "#00D1B2", category: "frontend" },
+        // Backend frameworks
+        { id: 70, name: "FastAPI", icon: SiFastapi, color: "#009688", category: "backend" },
+        { id: 71, name: "NestJS", icon: SiNestjs, color: "#E0234E", category: "backend" },
+        { id: 72, name: "Koa", icon: SiKoa, color: "#33333D", category: "backend" },
+        { id: 73, name: "Socket.io", icon: SiSocketdotio, color: "#010101", category: "backend" },
+        { id: 74, name: "Fastify", icon: SiFastify, color: "#000000", category: "backend" },
+        { id: 75, name: "Strapi", icon: SiStrapi, color: "#8E75FF", category: "backend" },
+        { id: 76, name: "Supabase", icon: SiSupabase, color: "#3ECF8E", category: "backend" },
+        { id: 77, name: "PlanetScale", icon: SiPlanetscale, color: "#000000", category: "database" },
+        // Databases
+        { id: 78, name: "Redis", icon: SiRedis, color: "#DC382D", category: "database" },
+        { id: 79, name: "Cassandra", icon: SiApachecassandra, color: "#1287B1", category: "database" },
+        { id: 80, name: "Oracle", icon: SiOracle, color: "#F80000", category: "database" },
+        { id: 81, name: "MariaDB", icon: SiMariadb, color: "#003545", category: "database" },
+        { id: 82, name: "DynamoDB", icon: SiAmazondynamodb, color: "#4053D6", category: "database" },
+        { id: 83, name: "Elasticsearch", icon: SiElasticsearch, color: "#005571", category: "database" },
+        { id: 84, name: "InfluxDB", icon: SiInfluxdb, color: "#22ADF6", category: "database" },
+        // Cloud/DevOps
+        { id: 85, name: "Kubernetes", icon: SiKubernetes, color: "#326CE5", category: "devops" },
+        { id: 86, name: "AWS", icon: SiAmazon, color: "#FF9900", category: "devops" },
+        { id: 87, name: "Azure", icon: TbBrandAzure, color: "#0078D4", category: "devops" },
+        { id: 88, name: "Google Cloud", icon: SiGooglecloud, color: "#4285F4", category: "devops" },
+        { id: 89, name: "Vercel", icon: SiVercel, color: "#000000", category: "devops" },
+        { id: 90, name: "Netlify", icon: SiNetlify, color: "#00C7B7", category: "devops" },
+        { id: 91, name: "Heroku", icon: SiHeroku, color: "#430098", category: "devops" },
+        { id: 92, name: "GitHub Actions", icon: SiGithubactions, color: "#2088FF", category: "devops" },
+        { id: 93, name: "GitLab", icon: SiGitlab, color: "#FC6D26", category: "devops" },
+        { id: 94, name: "CircleCI", icon: SiCircleci, color: "#343434", category: "devops" },
+        { id: 95, name: "Travis CI", icon: SiTravisci, color: "#3EAAAF", category: "devops" },
+        { id: 96, name: "Terraform", icon: SiTerraform, color: "#623CE4", category: "devops" },
+        { id: 97, name: "Ansible", icon: SiAnsible, color: "#000000", category: "devops" },
+        // Mobile
+        { id: 98, name: "Xamarin Android", icon: TbBrandXamarin, color: "#3498DB", category: "mobile" },
+        { id: 99, name: "Ionic", icon: SiIonic, color: "#3880FF", category: "mobile" },
+        { id: 100, name: "Cordova", icon: SiApachecordova, color: "#E8E8E8", category: "mobile" },
+        { id: 101, name: "React Native", icon: TbBrandReactNative, color: "#61DAFB", category: "mobile" },
+        { id: 102, name: "NativeScript", icon: SiNativescript, color: "#3655FF", category: "mobile" },
+        { id: 103, name: "Expo", icon: SiExpo, color: "#000020", category: "mobile" },
+        // Build tools
+        { id: 104, name: "Yarn", icon: SiYarn, color: "#2C8EBB", category: "tools" },
+        { id: 105, name: "npm", icon: SiNpm, color: "#CB3837", category: "tools" },
+        { id: 106, name: "pnpm", icon: SiPnpm, color: "#F69220", category: "tools" },
+        { id: 107, name: "Rollup", icon: SiRollupdotjs, color: "#EC4A3F", category: "tools" },
+        { id: 109, name: "esbuild", icon: SiEsbuild, color: "#FFCF00", category: "tools" },
+        { id: 110, name: "Vitest", icon: SiVitest, color: "#6E9F18", category: "tools" },
+        { id: 112, name: "Selenium", icon: SiSelenium, color: "#43B02A", category: "tools" },
+        // API/Testing/Design tools
+        { id: 113, name: "Postman", icon: SiPostman, color: "#FF6C37", category: "tools" },
+        { id: 114, name: "Insomnia", icon: SiInsomnia, color: "#4000BF", category: "tools" },
+        { id: 115, name: "Swagger", icon: SiSwagger, color: "#85EA2D", category: "tools" },
+        { id: 116, name: "Figma", icon: SiFigma, color: "#F24E1E", category: "tools" },
+        { id: 117, name: "Sketch", icon: SiSketch, color: "#F7B500", category: "tools" },
+        { id: 118, name: "Adobe XD", icon: SiAdobexd, color: "#FF61F6", category: "tools" },
+        { id: 119, name: "InVision", icon: SiInvision, color: "#FF3366", category: "tools" },
+        { id: 120, name: "PM2", icon: SiPm2, color: "#2B637B", category: "tools" },
+        { id: 121, name: "Nodemon", icon: SiNodemon, color: "#76D04B", category: "tools" },
+        { id: 122, name: "Lerna", icon: SiLerna, color: "#9333EA", category: "tools" },
+        { id: 123, name: "Nx", icon: SiNx, color: "#1435C2", category: "tools" },
+        { id: 124, name: "Turborepo", icon: SiTurborepo, color: "#000000", category: "tools" },
+        // Languages
+        { id: 126, name: "Java", icon: FaJava, color: "#007396", category: "backend" },
+        { id: 127, name: "C#", icon: SiC, color: "#239120", category: "backend" },
+        { id: 128, name: "C++", icon: SiCplusplus, color: "#00599C", category: "backend" },
+        { id: 129, name: "C", icon: SiC, color: "#A8B9CC", category: "backend" },
+        { id: 130, name: "Ruby", icon: SiRuby, color: "#CC342D", category: "backend" },
+        { id: 131, name: "Scala", icon: SiScala, color: "#DC322F", category: "backend" },
+        { id: 132, name: "Elixir", icon: SiElixir, color: "#6E4A7E", category: "backend" },
+        { id: 133, name: "Haskell", icon: SiHaskell, color: "#5D4F85", category: "backend" },
+        { id: 134, name: "Clojure", icon: SiClojure, color: "#5881D8", category: "backend" },
+        // Headless CMS/Blog
+        { id: 136, name: "Contentful", icon: SiContentful, color: "#2478CC", category: "tools" },
+        { id: 137, name: "Sanity", icon: SiSanity, color: "#F03E2F", category: "tools" },
+        { id: 138, name: "Ghost", icon: SiGhost, color: "#181818", category: "tools" },
+        { id: 139, name: "WordPress", icon: SiWordpress, color: "#21759B", category: "tools" },
     // Backend
     { id: 10, name: "Node.js", icon: SiNodedotjs, color: "#339933", category: "backend" },
     { id: 11, name: "Express.js", icon: SiExpress, color: "#000000", category: "backend" },
