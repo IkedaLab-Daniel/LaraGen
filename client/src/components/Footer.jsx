@@ -1,5 +1,6 @@
 import { motion } from "framer-motion"
 import { useState, useEffect } from "react"
+import { SiReact, SiTailwindcss, SiFramer, SiLaravel } from 'react-icons/si'
 import ice from '../assets/ice.jpeg'
 
 const Footer = () => {
@@ -8,9 +9,16 @@ const Footer = () => {
   const [contributors, setContributors] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Configure your repository here
   const REPO_OWNER = "IkedaLab-Daniel";
   const REPO_NAME = "LaraGen";
+
+  // project techs here
+  const projectStack = [
+    { id: "react", name: "React", icon: SiReact, color: "#61dafb" },
+    { id: "tailwind", name: "Tailwind", icon: SiTailwindcss, color: "#38bdf8" },
+    { id: "framer", name: "Framer", icon: SiFramer, color: "#0055ff" },
+    { id: "laravel", name: "Laravel", icon: SiLaravel, color: "#ff2d20" }
+  ]
 
   useEffect(() => {
     const fetchGitHubData = async () => {
@@ -103,6 +111,36 @@ const Footer = () => {
                   <p className="text-sm text-gray-600">@Ikedalab-Daniel</p>
                 </div>
               </div>
+
+              {/* project tech stack */}
+              <motion.div 
+                className="flex gap-2"
+                initial={{ y: 0 }}
+                animate={{ y: [0, -2, 0] }}
+              >
+                {projectStack.map((tech, idx) => {
+                  const Icon = tech.icon;
+                  return (
+                    <motion.div
+                      key={tech.id}
+                        className="flex flex-col items-center gap-1"
+                        initial={{ y: 0 }}
+                        animate={{ y: [0, -3, 0] }}
+                        transition={{
+                          repeat: Infinity,
+                          duration: 2,
+                          ease: "easeInOut",
+                          delay: idx * 0.5 // ? delay each tech by 0.5s
+                        }}
+                        >
+                          <Icon className="w-5 h-5" style={{ color: tech.color }} />
+                          {/* <span className="text-xs text-gray-700">{tech.name}</span> */}
+                      </motion.div>
+                    );
+                  })
+                }
+              </motion.div>
+
               <p className="text-gray-700 text-sm leading-relaxed">
                 {displayData.description}
               </p>
