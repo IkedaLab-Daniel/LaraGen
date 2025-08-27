@@ -19,7 +19,7 @@ const Home = () => {
     }
 
     return(
-    <div className="home relative bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 min-h-screen">
+    <div className="home relative bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 min-h-screen pb-8 md:pb-0">
             {/* animation bg elements*/}
             <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
                 <motion.div

@@ -27,6 +27,7 @@ const Footer = () => {
         const repoResponse = await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}`);
         const repoData = await repoResponse.json();
         setRepoData(repoData);
+        console.log(repoData)
 
         // Fetch recent commits
         const commitsResponse = await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/commits?per_page=3`);
@@ -81,7 +82,7 @@ const Footer = () => {
 
   return (
     <>
-      <footer className="relative z-10 bg-white/80 backdrop-blur-sm border-t border-gray-200 mt-16">
+      <footer className="w-[95%] md:w-full mx-auto relative z-3 bg-white/80 backdrop-blur-sm border-t border-gray-200 mt-16 shadow-md rounded-md">
         <div className="max-w-6xl mx-auto px-4 py-8">
           <div className="grid md:grid-cols-3 gap-8">
             
@@ -144,13 +145,13 @@ const Footer = () => {
               <p className="text-gray-700 text-sm leading-relaxed">
                 {displayData.description}
               </p>
-              <div className="flex items-center space-x-4 text-sm text-gray-600">
+              {/* <div className="flex items-center space-x-4 text-sm text-gray-600">
                 <span className="flex items-center">
                   <div className="w-3 h-3 bg-blue-500 rounded-full mr-2"></div>
                   {displayData.language || "TypeScript"}
                 </span>
                 <span>{displayData.license?.name || "MIT License"}</span>
-              </div>
+              </div> */}
             </motion.div>
 
             {/* Repository Stats */}
