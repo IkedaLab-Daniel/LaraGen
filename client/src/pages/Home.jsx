@@ -58,7 +58,7 @@ const Home = () => {
                     <img src={LaragenGIF} className="w-[50px] h-[50px] md:w-[150px] md:h-[150px]" />
                 </motion.div>
             </div>
-            <div className="relative z-10">
+            <div className="relative">
                 <Hero/>
                 <TechChoose />
                 <Footer />

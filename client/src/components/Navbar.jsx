@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { Home, BookOpen, LogIn, UserPlus } from 'lucide-react'
 
 const NavBar = () => {
     const [isOpen, setIsOpen] = useState(false)
@@ -15,25 +16,33 @@ const NavBar = () => {
 
     return (
         <>
-            <nav className="flex justify-between items-center px-6 md:px-12 py-4 bg-[#ffffff00] shadow-md fixed w-full z-50 shadow-blue-100">
+            <nav className="flex justify-between items-center px-6 md:px-12 py-4 bg-white/70 backdrop-blur-md shadow-md fixed w-full z-[2] shadow-blue-100">
                 <div className='flex items-center gap-4'>
                     <h1 className="text-xl font-bold">Logo</h1>
                 </div>
                 
                 {/* Desktop Navigation */}
                 <div className="hidden md:block">
-                    <ul className="flex gap-8 items-center h-[100%]">
+                    <ul className="flex gap-8 items-center h-[100%] text-slate-500">
                         <Link to="/">
-                            <li className="hover:text-blue-500 transition-colors cursor-pointer">Home</li>
+                            <li className="hover:text-blue-500 transition-colors cursor-pointer flex items-center gap-2">
+                                <Home className="w-5 h-5" /> Home
+                            </li>
                         </Link>
                         <Link to="/contents">
-                            <li className="hover:text-blue-500 transition-colors cursor-pointer">Contents</li>
+                            <li className="hover:text-blue-500 transition-colors cursor-pointer flex items-center gap-2">
+                                <BookOpen className="w-5 h-5" /> Contents
+                            </li>
                         </Link>
                         <Link to="/login">
-                            <li className="hover:text-blue-500 transition-colors cursor-pointer">Log In</li>
+                            <li className="hover:text-blue-500 transition-colors cursor-pointer flex items-center gap-2">
+                                <LogIn className="w-5 h-5" /> Log In
+                            </li>
                         </Link>
                         <Link to="/signup">
-                            <li className="hover:text-blue-500 transition-colors cursor-pointer">Sign Up</li>
+                            <li className="hover:text-blue-500 transition-colors cursor-pointer flex items-center gap-2">
+                                <UserPlus className="w-5 h-5" /> Sign Up
+                            </li>
                         </Link>
                     </ul>
                 </div>
@@ -104,7 +113,7 @@ const NavBar = () => {
                                 </button>
                             </div>
                             
-                            <nav className="p-6">
+                            <nav className="p-6 text-slate-500">
                                 <ul className="space-y-6">
                                     <motion.li
                                         initial={{ opacity: 0, x: 20 }}
@@ -114,9 +123,9 @@ const NavBar = () => {
                                         <Link 
                                             to="/" 
                                             onClick={closeMenu}
-                                            className="block text-lg hover:text-blue-500 transition-colors"
+                                            className="flex text-lg hover:text-blue-500 transition-colors items-center gap-2"
                                         >
-                                            Home
+                                            <Home className="w-5 h-5" /> Home
                                         </Link>
                                     </motion.li>
                                     <motion.li
@@ -127,9 +136,9 @@ const NavBar = () => {
                                         <Link 
                                             to="/contents" 
                                             onClick={closeMenu}
-                                            className="block text-lg hover:text-blue-500 transition-colors"
+                                            className="flex text-lg hover:text-blue-500 transition-colors items-center gap-2"
                                         >
-                                            Contents
+                                            <BookOpen className="w-5 h-5" /> Contents
                                         </Link>
                                     </motion.li>
                                     <motion.li
@@ -140,9 +149,9 @@ const NavBar = () => {
                                         <Link 
                                             to="/login" 
                                             onClick={closeMenu}
-                                            className="block text-lg hover:text-blue-500 transition-colors"
+                                            className="flex text-lg hover:text-blue-500 transition-colors items-center gap-2"
                                         >
-                                            Log In
+                                            <LogIn className="w-5 h-5" /> Log In
                                         </Link>
                                     </motion.li>
                                     <motion.li
@@ -153,9 +162,9 @@ const NavBar = () => {
                                         <Link 
                                             to="/signup" 
                                             onClick={closeMenu}
-                                            className="block text-lg hover:text-blue-500 transition-colors bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
+                                            className="flex text-lg hover:text-blue-500 transition-colors items-center gap-2"
                                         >
-                                            Sign Up
+                                            <UserPlus className="w-5 h-5" /> Sign Up
                                         </Link>
                                     </motion.li>
                                 </ul>
