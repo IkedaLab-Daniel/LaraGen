@@ -1,10 +1,11 @@
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Home, BookOpen, LogIn, UserPlus } from 'lucide-react'
 
 const NavBar = () => {
     const [isOpen, setIsOpen] = useState(false)
+    const currentLocation = useLocation().pathname
 
     const toggleMenu = () => {
         setIsOpen(!isOpen)
@@ -14,33 +15,37 @@ const NavBar = () => {
         setIsOpen(false)
     }
 
+    const checkCurrentLocationMatch = (location) => {
+        return location === currentLocation;
+    }
+
     return (
         <>
             <nav className="flex justify-between items-center px-6 md:px-12 py-4 bg-white/70 backdrop-blur-md shadow-md fixed w-full z-[2] shadow-blue-100">
                 <div className='flex items-center gap-4'>
                     <h1 className="text-xl font-bold">Logo</h1>
+                    <span>{currentLocation}</span>
                 </div>
                 
-                {/* Desktop Navigation */}
                 <div className="hidden md:block">
                     <ul className="flex gap-8 items-center h-[100%] text-slate-500">
                         <Link to="/">
-                            <li className="hover:text-blue-500 transition-colors cursor-pointer flex items-center gap-2">
+                            <li className={`hover:text-blue-500 transition-colors cursor-pointer flex items-center gap-2 ${checkCurrentLocationMatch('/') ? 'text-blue-600 font-semibold' : ''}`}>
                                 <Home className="w-5 h-5" /> Home
                             </li>
                         </Link>
                         <Link to="/contents">
-                            <li className="hover:text-blue-500 transition-colors cursor-pointer flex items-center gap-2">
-                                <BookOpen className="w-5 h-5" /> Contents
+                            <li className={`hover:text-blue-500 transition-colors cursor-pointer flex items-center gap-2 ${checkCurrentLocationMatch('/contents') ? 'text-blue-600 font-semibold' : ''}`}>
+                                    <BookOpen className="w-5 h-5" /> Contents
                             </li>
                         </Link>
                         <Link to="/login">
-                            <li className="hover:text-blue-500 transition-colors cursor-pointer flex items-center gap-2">
+                            <li className={`hover:text-blue-500 transition-colors cursor-pointer flex items-center gap-2 ${checkCurrentLocationMatch('/login') ? 'text-blue-600 font-semibold' : ''}`}>
                                 <LogIn className="w-5 h-5" /> Log In
                             </li>
                         </Link>
                         <Link to="/signup">
-                            <li className="hover:text-blue-500 transition-colors cursor-pointer flex items-center gap-2">
+                            <li className={`hover:text-blue-500 transition-colors cursor-pointer flex items-center gap-2 ${checkCurrentLocationMatch('/signup') ? 'text-blue-600 font-semibold' : ''}`}>
                                 <UserPlus className="w-5 h-5" /> Sign Up
                             </li>
                         </Link>
