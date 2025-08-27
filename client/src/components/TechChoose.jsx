@@ -26,9 +26,7 @@ import { TbBrandAzure, TbBrandReactNative, TbBrandXamarin } from 'react-icons/tb
 const TechChoose = () => {
 
         const [selectedCategory, setSelectedCategory] = useState('frontend')
-        const [droppedTech, setDroppedTech] = useState([
-            { id: 1, name: "React", icon: SiReact, color: "#61DAFB", category: "frontend" },
-        ])
+        const [droppedTech, setDroppedTech] = useState([])
 
         const techOptions = [
         // Frontend
@@ -206,13 +204,24 @@ const TechChoose = () => {
 
     const handleDrop = (e) => {
         e.preventDefault();
-        const tech = JSON.parse(e.dataTransfer.getData('tech'))
-        addTechToStack(tech)
+        console.log("handle drop triggered")
+        const techData = e.dataTransfer.getData('tech');
+        if (!techData) return;
+        try {
+            const tech = JSON.parse(techData);
+            // ? Only pass the id, reconstruct the full object from techOptions
+            addTechToStack(tech.id);
+        } catch (err) {
+            console.error('Invalid tech data dropped:', err);
+        }
     }
 
     const addTechToStack = (tech) => {
-        if (!droppedTech.find(item => item.id === tech.id)){
-            setDroppedTech([...droppedTech, tech])
+        // ? tech is now just the id
+        const foundTech = techOptions.find(t => t.id === tech);
+        if (!foundTech) return;
+        if (!droppedTech.find(item => item.id === foundTech.id)){
+            setDroppedTech([...droppedTech, foundTech]);
         }
     }
 
@@ -236,12 +245,6 @@ const TechChoose = () => {
         }
     }
 
-
-    // ! Debugging
-    useEffect(() => {
-        console.log("Techs rendered:", filteredTechOptions);
-    }, [])
-
     return(
         <motion.div variants={itemVariants} className="w-full max-w-6xl mx-auto h-auto">
             <div className="grid md:grid-cols-[70%,30%] gap-8 h-auto">
@@ -261,10 +264,7 @@ const TechChoose = () => {
                                         key={category.id}
                                         whileHover={{ scale: 1.05 }}
                                         whileTap={{ scale: 0.95 }}
-                                        onClick={() => {
-                                            setSelectedCategory(category.id)
-                                            console.log(selectedCategory)
-                                        }}
+                                        onClick={() => setSelectedCategory(category.id)}
                                         className={`px-3 py-2 rounded-full text-xs font-medium transition-all duration-300 flex items-center gap-2 ${
                                             selectedCategory === category.id
                                                 ? 'bg-blue-500 text-white shadow-md'
@@ -293,7 +293,7 @@ const TechChoose = () => {
                                     exit={{ opacity: 0, scale: 0.8 }}
                                     transition={{ duration: 0.2 }}
                                     draggable
-                                    onDrag={(e) => handleDragStart(e, tech)}
+                                    onDragStart={(e) => handleDragStart(e, tech)}
                                     whileHover={{ scale: 1.05 }}
                                     whileDrag={{ scale: 1.1, rotate: 5}}
                                 >
@@ -325,7 +325,11 @@ const TechChoose = () => {
                 </div>
 
                     {/* Selected tech stack container*/}
-                    <div className="space-y-6">
+                    <div 
+                        className="space-y-6"
+                        onDrop={handleDrop}
+                        onDragOver={handleDragOver}
+                    >
                         <h3 className="text-2xl font-bold text-gray-800 text-center">Selected Stack</h3>
                         <div 
                             className="w-[95%] mx-auto md:w-full bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-xl border-2 border-dashed border-blue-300 md:min-h-[200px] flex items-center justify-center h-auto"
