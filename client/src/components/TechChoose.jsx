@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion"
-import { LayoutGrid, Code, Database, ServerCog, Smartphone, Wrench, Search } from "lucide-react";
+import { LayoutGrid, Code, Database, ServerCog, Smartphone, Wrench, Search, Plus } from "lucide-react";
 import { 
   SiReact, SiVuedotjs, SiAngular, SiSvelte, SiNextdotjs, SiNuxtdotjs, SiTailwindcss, SiBootstrap, 
   SiNodedotjs, SiExpress, SiLaravel, SiDjango, SiFlask, SiSpring, SiRubyonrails, SiDotnet, 
@@ -130,7 +130,7 @@ const TechChoose = () => {
     }
 
     return(
-        <motion.div variants={itemVariants} className="bg-blue-300 w-full max-w-6xl mx-auto h-24">
+        <motion.div variants={itemVariants} className="w-full max-w-6xl mx-auto h-auto">
             <div className="grid md:grid-cols-[70%,30%] gap-8">
                 {/* tech stack selection */}
                 <div className="space-y-6">
@@ -207,15 +207,30 @@ const TechChoose = () => {
                         )}
                     </div>
 
-                    {/* Selected tech stack container*/}
-                    <div 
-                        className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-xl border-2 border-dashed border-blue-300 min-h-32"
-                        onDrop={handleDrop}
-                    >
-
-                    </div>
+                
                     
                 </div>
+
+                    {/* Selected tech stack container*/}
+                    <div className="space-y-6">
+                        <h3 className="text-2xl font-bold text-gray-800 text-center">Selected Stack</h3>
+                        <div 
+                            className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-xl border-2 border-dashed border-blue-300 md:min-h-[300px] flex items-center justify-center"
+                            onDrop={handleDrop}
+                        >   
+                            {/* if no tech dropped yet let's display this */}
+                            {droppedTech.length === 0 ? (
+                                <div className="flex items-center justify-center text-gray-400 h-full">
+                                    <Plus className="w-8 h-8 mr-2" />
+                                    Drag technologies here
+                                </div>
+                            ) : (
+                                <div>
+                                    item
+                                </div>
+                            )}
+                        </div>
+                    </div>
             </div>
         </motion.div>
     )
