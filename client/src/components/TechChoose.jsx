@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion"
 import { LayoutGrid, Code, Database, ServerCog, Smartphone, Wrench, Search, Plus } from "lucide-react";
 import {
@@ -38,7 +38,7 @@ const TechChoose = () => {
     { id: 6, name: "Nuxt.js", icon: SiNuxtdotjs, color: "#00DC82", category: "frontend" },
     { id: 7, name: "Tailwind CSS", icon: SiTailwindcss, color: "#38BDF8", category: "frontend" },
     { id: 8, name: "Bootstrap", icon: SiBootstrap, color: "#7952B3", category: "frontend" },
-        { id: 56, name: "Framer", icon: SiFramer, color: "#0055FF", category: "frontend" },
+        { id: 156, name: "Framer", icon: SiFramer, color: "#0055FF", category: "frontend" },
         // HTML/CSS/JS frameworks
         { id: 56, name: "HTML5", icon: SiHtml5, color: "#E34F26", category: "frontend" },
         { id: 57, name: "CSS3", icon: SiCss3, color: "#1572B6", category: "frontend" },
@@ -230,11 +230,16 @@ const TechChoose = () => {
         }
     }
 
+    // ! Debugging
+    useEffect(() => {
+        console.log("Techs rendered:", filteredTechOptions);
+    }, [])
+
     return(
         <motion.div variants={itemVariants} className="w-full max-w-6xl mx-auto h-auto">
             <div className="grid md:grid-cols-[70%,30%] gap-8">
                 {/* tech stack selection */}
-                <div className="space-y-6">
+                <div className="space-y-6 w-[95%] mx-auto md:w-full">
                     <h3 className="text-2xl font-bold text-gray-800 text-center">Choose Your Tech Stack</h3>
 
                     {/* render the techs here */}
@@ -316,7 +321,7 @@ const TechChoose = () => {
                     <div className="space-y-6">
                         <h3 className="text-2xl font-bold text-gray-800 text-center">Selected Stack</h3>
                         <div 
-                            className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-xl border-2 border-dashed border-blue-300 md:min-h-[300px] flex items-center justify-center"
+                            className="w-[95%] mx-auto md:w-full bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-xl border-2 border-dashed border-blue-300 md:min-h-[300px] flex items-center justify-center"
                             onDrop={handleDrop}
                         >   
                             {/* if no tech dropped yet let's display this */}
