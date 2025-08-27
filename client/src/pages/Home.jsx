@@ -3,7 +3,7 @@ import Hero from "../components/Hero";
 import TechChoose from "../components/TechChoose";
 import Footer from "../components/Footer";
 import { Brain, Lightbulb, Rocket, Sparkle } from "lucide-react";
-
+import LaragenGIF from '../assets/laragen.gif'
 const Home = () => {
 
     const floatingVariants = {
@@ -32,7 +32,7 @@ const Home = () => {
                 <motion.div
                     variants={floatingVariants}
                     animate="animate"
-                    className="absolute top-[300px] md:top-40 right-5 md:right-20 text-blue-300"
+                    className="absolute top-[400px] md:top-40 right-5 md:right-20 text-blue-300"
                 >
                     <Brain className="w-[50px] h-[50px] md:w-[90px] md:h-[90px]" />
                 </motion.div>
@@ -49,6 +49,13 @@ const Home = () => {
                     className="absolute bottom-60 right-14 md:right-60 text-blue-300"
                 >
                     <Sparkle className="w-[50px] h-[50px] md:w-[90px] md:h-[90px]" />
+                </motion.div>
+                <motion.div
+                    variants={floatingVariants}
+                    animate="animate"
+                    className="absolute top-60 right-[10px] md:right-60 text-blue-300"
+                >
+                    <img src={LaragenGIF} className="w-[50px] h-[50px] md:w-[150px] md:h-[150px]" />
                 </motion.div>
             </div>
             <div className="relative z-10">

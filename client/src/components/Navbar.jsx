@@ -3,11 +3,11 @@ const NavBar = () => {
     
     return(
         <nav className="flex justify-between px-12 py-4 bg-[#ffffff00] shadow-md fixed w-full z-[1] shadow-blue-100">
-            <div>
+            <div className='flex items-center gap-4'>
                 <h1>Logo</h1>
             </div>
             <div>
-                <ul className="flex gap-8">
+                <ul className="flex gap-8 items-center h-[100%]">
                     <Link to="/">
                         <li>Home</li>
                     </Link>
