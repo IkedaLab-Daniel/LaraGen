@@ -24,7 +24,6 @@ const NavBar = () => {
             <nav className="flex justify-between items-center px-6 md:px-12 py-4 bg-white/70 backdrop-blur-md shadow-md fixed w-full z-[2] shadow-blue-100">
                 <div className='flex items-center gap-4'>
                     <h1 className="text-xl font-bold">Logo</h1>
-                    <span>{currentLocation}</span>
                 </div>
                 
                 <div className="hidden md:block">
@@ -128,7 +127,7 @@ const NavBar = () => {
                                         <Link 
                                             to="/" 
                                             onClick={closeMenu}
-                                            className="flex text-lg hover:text-blue-500 transition-colors items-center gap-2"
+                                            className={`flex text-lg hover:text-blue-500 transition-colors items-center gap-2 ${checkCurrentLocationMatch('/') ? 'text-blue-600 font-semibold' : ''}`}
                                         >
                                             <Home className="w-5 h-5" /> Home
                                         </Link>
@@ -141,7 +140,7 @@ const NavBar = () => {
                                         <Link 
                                             to="/contents" 
                                             onClick={closeMenu}
-                                            className="flex text-lg hover:text-blue-500 transition-colors items-center gap-2"
+                                            className={`flex text-lg hover:text-blue-500 transition-colors items-center gap-2 ${checkCurrentLocationMatch('/contents') ? 'text-blue-600 font-semibold' : ''}`}
                                         >
                                             <BookOpen className="w-5 h-5" /> Contents
                                         </Link>
@@ -154,7 +153,7 @@ const NavBar = () => {
                                         <Link 
                                             to="/login" 
                                             onClick={closeMenu}
-                                            className="flex text-lg hover:text-blue-500 transition-colors items-center gap-2"
+                                            className={`flex text-lg hover:text-blue-500 transition-colors items-center gap-2 ${checkCurrentLocationMatch('/login') ? 'text-blue-600 font-semibold' : ''}`}
                                         >
                                             <LogIn className="w-5 h-5" /> Log In
                                         </Link>
@@ -167,7 +166,7 @@ const NavBar = () => {
                                         <Link 
                                             to="/signup" 
                                             onClick={closeMenu}
-                                            className="flex text-lg hover:text-blue-500 transition-colors items-center gap-2"
+                                            className={`flex text-lg hover:text-blue-500 transition-colors items-center gap-2 ${checkCurrentLocationMatch('/signup') ? 'text-blue-600 font-semibold' : ''}`}
                                         >
                                             <UserPlus className="w-5 h-5" /> Sign Up
                                         </Link>

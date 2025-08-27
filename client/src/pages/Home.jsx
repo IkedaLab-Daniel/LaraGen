@@ -55,7 +55,7 @@ const Home = () => {
                     animate="animate"
                     className="absolute top-60 right-[10px] md:right-60 text-blue-300"
                 >
-                    <img src={LaragenGIF} className="w-[50px] h-[50px] md:w-[150px] md:h-[150px]" />
+                    <img src={LaragenGIF} className="w-[50px] h-[50px] md:w-[300px] md:h-[300px] opacity-[0.15]" />
                 </motion.div>
             </div>
             <div className="relative">
