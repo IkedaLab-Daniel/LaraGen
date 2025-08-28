@@ -1,6 +1,7 @@
 import { animate, motion } from "framer-motion";
 import Hero from "../components/Hero";
 import TechChoose from "../components/TechChoose";
+import Difficulty from "../components/Difficulty";
 import Footer from "../components/Footer";
 import { Brain, Lightbulb, Rocket, Sparkle } from "lucide-react";
 import LaragenGIF from '../assets/laragen.gif'
@@ -61,6 +62,7 @@ const Home = () => {
             <div className="relative">
                 <Hero/>
                 <TechChoose />
+                <Difficulty />
                 <Footer />
             </div>
         </div>
