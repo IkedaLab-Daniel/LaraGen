@@ -1,6 +1,10 @@
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
+import { Lightbulb } from "lucide-react";
+import { useState } from "react";
 
 const Results = () => {
+
+    const [selectedProject, setSelectedProject] = useState(null)
     
     const sampleResults = {
         "success": "true",
@@ -62,10 +66,12 @@ const Results = () => {
         }
     };
 
+    const projects = sampleResults.data.projects
+
     const containerVariants = {
         hidden: { opacity: 0 },
         visible: {
-            opacity: 0,
+            opacity: 1,
             transition: {
                 staggerChildren: 0.1
             }
@@ -82,17 +88,61 @@ const Results = () => {
     }
 
     return(
-        <div className="w-full max-w-6xl h-[300px] mx-auto">        
-            {/* project 1 */}
-            <div className="grid grid-cols-[30%,70%] gap-4 h-full">
-                <div className="bg-red-200 h-full">
-                    Left side details
+        <motion.div
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
+            className="w-full max-w-6xl mx-auto p-6 space-y-8"
+        >
+            {/* Heading stuffs */}
+            <motion.div
+                variants={itemVariants}
+                className="text-center space-y-4"
+            >
+                <div className="flex items-center justify-center gap-3 mb-4">
+                    <div className="w-12 h-12 bg-blue-400 rounded-full md:flex items-center justify-center hidden">
+                        <Lightbulb className="w-6 h-6 text-white" />
+                    </div>
+                    <h2 className="text-3xl font-bold text-gray-800">Recommended Projects</h2>
                 </div>
-                <div className="bg-blue-200 h-full">
-                    right side details
-                </div>
-            </div>
-        </div>
+                {/* subtitle here */}
+                <p className="text-gray-600 max-w-2xl mx-auto">
+                    Based on your selected tech stack, here are personalized project recommendations to help you build real-world experience and advance your skills.
+                </p>
+            </motion.div>
+
+            {/* main project grid */}
+            <motion.div
+                variants={containerVariants}
+                className="grid gap-6 md:grid-cols-2 lg:grid-cols-3"
+            >
+                <AnimatePresence>
+                    {projects.map((project, index) => (
+                        <motion.div
+                            key={project.name}
+                            variants={itemVariants}
+                            layout
+                            className="bg-white/80 backdrop-blue-sm rounded-2xl shadow-xl p-6 border border-blue-100 hover:shadow-2xl transition-all duration-300 cursor-pointer group"
+                            whileHover={{ y: -5, scale: 1.02 }}
+                            onClick={() => setSelectedProject(selectedProject === index ? null : index)}
+                        >
+                            {/* project heading here */}
+                            <div className="space-y-4">
+                                <div className="flex items-start justify-between">
+                                    <h3 className="text-xl font-bold text-gray-800 group-hover:text-blue-600 transition-colors">
+                                        {project.name}
+                                    </h3>
+                                    <span className="px-2 py-1 rounded-full text-xs font-medium text-gray-400">
+                                        {project.difficulty}
+                                    </span>
+                                </div>
+
+                            </div>
+                        </motion.div>
+                    ))}
+                </AnimatePresence>
+            </motion.div>
+        </motion.div>
     )
 }
 
