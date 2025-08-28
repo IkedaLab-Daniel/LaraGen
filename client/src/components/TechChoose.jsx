@@ -23,10 +23,8 @@ import {
 import { FaJava } from "react-icons/fa"
 import { TbBrandAzure, TbBrandReactNative, TbBrandXamarin } from 'react-icons/tb'
 
-const TechChoose = () => {
-
-        const [selectedCategory, setSelectedCategory] = useState('frontend')
-        const [droppedTech, setDroppedTech] = useState([])
+const TechChoose = ({ droppedTech, setDroppedTech }) => {
+    const [selectedCategory, setSelectedCategory] = useState('frontend')
 
         const techOptions = [
         // Frontend
