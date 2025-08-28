@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from "framer-motion";
-import { Lightbulb } from "lucide-react";
+import { Lightbulb, Clock, Star } from "lucide-react";
 import { useState } from "react";
 
 const Results = () => {
@@ -137,6 +137,35 @@ const Results = () => {
                                     </span>
                                 </div>
 
+                                <p className="text-gray-600 text-sm leading-relax">
+                                    {project.description}
+                                </p>
+
+                                {/* time */}
+                                <div className="flex items-center gap-2 text-sm text-gray-500">
+                                    <Clock className="w-4 h-4" />
+                                    <span>{project.estimatedTime}</span>
+                                </div>
+
+                                {/* key feature preview */}
+                                <div className="space-y-2">
+                                    <h4 className="text-sm font-semibold text-gray-700 flex items-center gap-2">
+                                        <Star className="w-4 h-4" />
+                                        Key Feature
+                                    </h4>
+                                    <div className="flex flex-wrap gap-1">
+                                        {project.features.slice(0,2).map((feature, index) => (
+                                            <span key={index} className="px-2 py-1 bg-blue-50 text-blue-700 rounded-md text-xs">
+                                                {feature}
+                                            </span>
+                                        ))}
+                                        {project.features.length > 2 && (
+                                            <span className="px-2 py-1 bg-gray-100 text-gray-600 rounded-md text-xs">
+                                                + {project.features.length - 2} more
+                                            </span>
+                                        )}
+                                    </div>
+                                </div>
                             </div>
                         </motion.div>
                     ))}
