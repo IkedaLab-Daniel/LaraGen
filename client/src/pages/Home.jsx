@@ -3,6 +3,7 @@ import { animate, motion } from "framer-motion";
 import Hero from "../components/Hero";
 import TechChoose from "../components/TechChoose";
 import Difficulty from "../components/Difficulty";
+import EpicGenerateButton from "../components/EpicGenerateButton";
 import Footer from "../components/Footer";
 import LaragenGIF from '../assets/laragen.gif'
 import { Brain, DiffIcon, Lightbulb, Rocket, Sparkle } from "lucide-react";
@@ -13,10 +14,9 @@ const Home = () => {
     const [droppedTech, setDroppedTech] = useState([]);
     const [selectedDifficulty, setSelectedDifficulty] = useState('');
 
-    const handleTestState = () => {
-        console.log("States:")
-        console.log("dropped: ", droppedTech)
-        console.log("difficulty:", selectedDifficulty)
+    const handleGenerate = (data) => {
+        // You can replace this with your API call logic
+        console.log("Generate triggered with:", data);
     }
 
     const floatingVariants = {
@@ -82,20 +82,13 @@ const Home = () => {
                     setSelectedDifficulty={setSelectedDifficulty}
                 />
 
-                {/* generate idea button */}
-                <div className="w-full md:w-6xl md:max-w-6xl flex justify-center mt-10 mx-auto">
-                    <motion.button
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 1.05 }}
-                        disabled={droppedTech.length === 0 || selectedDifficulty === ''}
-                        className={`bg-blue-500 w-[95%] md:w-full py-4 px-8 rounded-2xl font-bold text-lg flex items-center justify-center shadow-xl transition-all duration-300 ${droppedTech.length === 0 || selectedDifficulty === ''
-                            ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                            : 'bg-gradient-to-r from-blue-500 to-indigo-600 text-white hover:shadow-2xl'
-                        }`}
-                        onClick={handleTestState}
-                    >
-                        Generate Project Ideas
-                    </motion.button>
+                {/* EpicGenerateButton replaces previous button */}
+                <div className="w-full md:w-6xl md:max-w-6xl mt-10 mx-auto">
+                    <EpicGenerateButton
+                        selectedTech={droppedTech}
+                        selectedDifficulty={selectedDifficulty}
+                        onGenerate={handleGenerate}
+                    />
                 </div>
 
 
