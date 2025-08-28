@@ -5,7 +5,7 @@ import TechChoose from "../components/TechChoose";
 import Difficulty from "../components/Difficulty";
 import Footer from "../components/Footer";
 import LaragenGIF from '../assets/laragen.gif'
-import { Brain, Lightbulb, Rocket, Sparkle } from "lucide-react";
+import { Brain, DiffIcon, Lightbulb, Rocket, Sparkle } from "lucide-react";
 
 const Home = () => {
     
@@ -81,12 +81,24 @@ const Home = () => {
                     selectedDifficulty={selectedDifficulty} 
                     setSelectedDifficulty={setSelectedDifficulty}
                 />
-                <button 
-                    className="w-[95%] bg-blue-100 border border-blue-300 mx-auto my-2"
-                    onClick={() => handleTestState()}
-                >
-                    Test State
-                </button>
+
+                {/* generate idea button */}
+                <div className="w-full md:w-6xl md:max-w-6xl flex justify-center mt-10 mx-auto">
+                    <motion.button
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 1.05 }}
+                        disabled={droppedTech.length === 0 || selectedDifficulty === ''}
+                        className={`bg-blue-500 w-[95%] md:w-full py-4 px-8 rounded-2xl font-bold text-lg flex items-center justify-center shadow-xl transition-all duration-300 ${droppedTech.length === 0 || selectedDifficulty === ''
+                            ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                            : 'bg-gradient-to-r from-blue-500 to-indigo-600 text-white hover:shadow-2xl'
+                        }`}
+                        onClick={handleTestState}
+                    >
+                        Generate Project Ideas
+                    </motion.button>
+                </div>
+
+
                 <Footer />
             </div>
         </div>
