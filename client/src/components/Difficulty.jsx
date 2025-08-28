@@ -1,11 +1,7 @@
-import { useState } from "react";
 import { motion } from "framer-motion"
 
-const Difficulty = () => {
-
-    const [selectedDifficulty, setSelectedDifficulty] = useState('');
-
-    const difficulties = [
+const Difficulty = ({ selectedDifficulty, setSelectedDifficulty }) => {
+  const difficulties = [
         { id: 'easy', label: 'Easy', desc: 'Perfect for beginners', color: 'bg-green-500' },
         { id: 'intermediate', label: 'Intermediate', desc: 'Ready for a challenge', color: 'bg-yellow-500' },
         { id: 'advanced', label: 'Advanced', desc: 'Expert level projects', color: 'bg-red-500' }

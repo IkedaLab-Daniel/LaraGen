@@ -1,11 +1,23 @@
+import { useState } from "react";
 import { animate, motion } from "framer-motion";
 import Hero from "../components/Hero";
 import TechChoose from "../components/TechChoose";
 import Difficulty from "../components/Difficulty";
 import Footer from "../components/Footer";
-import { Brain, Lightbulb, Rocket, Sparkle } from "lucide-react";
 import LaragenGIF from '../assets/laragen.gif'
+import { Brain, Lightbulb, Rocket, Sparkle } from "lucide-react";
+
 const Home = () => {
+    
+    // Shared state
+    const [droppedTech, setDroppedTech] = useState([]);
+    const [selectedDifficulty, setSelectedDifficulty] = useState('');
+
+    const handleTestState = () => {
+        console.log("States:")
+        console.log("dropped: ", droppedTech)
+        console.log("difficulty:", selectedDifficulty)
+    }
 
     const floatingVariants = {
         animate: {
@@ -61,8 +73,20 @@ const Home = () => {
             </div>
             <div className="relative">
                 <Hero/>
-                <TechChoose />
-                <Difficulty />
+                <TechChoose 
+                    droppedTech={droppedTech} 
+                    setDroppedTech={setDroppedTech} 
+                />
+                <Difficulty 
+                    selectedDifficulty={selectedDifficulty} 
+                    setSelectedDifficulty={setSelectedDifficulty}
+                />
+                <button 
+                    className="w-[95%] bg-blue-100 border border-blue-300 mx-auto my-2"
+                    onClick={() => handleTestState()}
+                >
+                    Test State
+                </button>
                 <Footer />
             </div>
         </div>
