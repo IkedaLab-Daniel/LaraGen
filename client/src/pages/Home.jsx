@@ -4,6 +4,7 @@ import Hero from "../components/Hero";
 import TechChoose from "../components/TechChoose";
 import Difficulty from "../components/Difficulty";
 import EpicGenerateButton from "../components/EpicGenerateButton";
+import Results from "../components/Results";
 import Footer from "../components/Footer";
 import LaragenGIF from '../assets/laragen.gif'
 import { Brain, DiffIcon, Lightbulb, Rocket, Sparkle } from "lucide-react";
@@ -91,7 +92,7 @@ const Home = () => {
                     />
                 </div>
 
-
+                <Results />
                 <Footer />
             </div>
         </div>

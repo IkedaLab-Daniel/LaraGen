@@ -104,7 +104,7 @@ const EpicGenerateButton = ({ selectedTech = [], selectedDifficulty = '', onGene
   );
 
   return (
-    <div className="relative w-full flex justify-center flex-col items-center">
+    <div className="relative w-full flex justify-center flex-col items-center mb-6">
       <motion.button
         onClick={handleClick}
         disabled={isDisabled || isLoading}
