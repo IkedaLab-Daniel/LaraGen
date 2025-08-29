@@ -92,12 +92,12 @@ const Results = () => {
             variants={containerVariants}
             initial="hidden"
             animate="visible"
-            className="w-full max-w-6xl mx-auto p-6 space-y-8"
+            className="w-full max-w-6xl mx-auto py-6 px-0 space-y-8"
         >
             {/* Heading stuffs */}
             <motion.div
                 variants={itemVariants}
-                className="text-center space-y-4"
+                className="text-center space-y-4 w-[95%] mx-auto"
             >
                 <div className="flex items-center justify-center gap-3 mb-4">
                     <div className="w-12 h-12 bg-blue-400 rounded-full md:flex items-center justify-center hidden">
@@ -122,12 +122,13 @@ const Results = () => {
                             key={project.name}
                             variants={itemVariants}
                             layout
-                            className="bg-white/80 backdrop-blue-sm rounded-2xl shadow-xl p-6 border border-blue-100 hover:shadow-2xl transition-all duration-300 cursor-pointer group"
+                            className="w-[95%] md:w-full mx-auto bg-white/80 backdrop-blue-sm rounded-2xl shadow-xl p-6 border border-blue-100 hover:shadow-2xl transition-all duration-300 cursor-pointer group"
                             whileHover={{ y: -5, scale: 1.02 }}
                             onClick={() => setSelectedProject(selectedProject === index ? null : index)}
                         >
-                            {/* project heading here */}
+
                             <div className="space-y-4">
+                                {/* project heading here */}
                                 <div className="flex items-start justify-between">
                                     <h3 className="text-xl font-bold text-gray-800 group-hover:text-blue-600 transition-colors">
                                         {project.name}
@@ -174,7 +175,7 @@ const Results = () => {
                                     className="w-full mt-4 py-2 bg-gradient-to-r from-blue-700 via-blue-500 to-indigo-600 text-white rounded-lg font-medium hover:shadow-lg transition-all duration-300 flex items-center justify-center gap-2"
                                 >
                                     <Code className="w-4 h-4" />
-                                    {selectedProject === index ? "Show Less" : "Show"}
+                                    {selectedProject === index ? "Show Less" : "Show More"}
                                 </motion.button>
 
                                 {/* expand details */}
@@ -188,47 +189,48 @@ const Results = () => {
                                             className="overflow-hidden"
                                         >
                                             <div className="pt-6 mt-6 border-t border-gray-200 space-y-4">
-                                            {/* All Features */}
-                                            <div>
-                                                <h4 className="text-sm font-semibold text-gray-700 mb-2 flex items-center gap-2">
-                                                <CheckCircle className="w-4 h-4 text-green-500" />
-                                                Complete Feature List
-                                                </h4>
-                                                <ul className="space-y-1">
-                                                {project.features.map((feature, idx) => (
-                                                    <li key={idx} className="text-sm text-gray-600 flex items-start gap-2">
-                                                    <div className="w-1.5 h-1.5 bg-blue-400 rounded-full mt-2 flex-shrink-0"></div>
-                                                    {feature}
-                                                    </li>
-                                                ))}
-                                                </ul>
-                                            </div>
+                                                {/* All Features */}
+                                                <div>
+                                                    <h4 className="text-sm font-semibold text-gray-700 mb-2 flex items-center gap-2">
+                                                    <CheckCircle className="w-4 h-4 text-green-500" />
+                                                    Complete Feature List
+                                                    </h4>
+                                                    <ul className="space-y-1">
+                                                    {project.features.map((feature, idx) => (
+                                                        <li key={idx} className="text-sm text-gray-600 flex items-start gap-2">
+                                                        <div className="w-1.5 h-1.5 bg-blue-400 rounded-full mt-2 flex-shrink-0"></div>
+                                                        {feature}
+                                                        </li>
+                                                    ))}
+                                                    </ul>
+                                                </div>
 
-                                            {/* Learning Outcomes */}
-                                            <div>
-                                                <h4 className="text-sm font-semibold text-gray-700 mb-2 flex items-center gap-2">
-                                                <Target className="w-4 h-4 text-purple-500" />
-                                                Learning Outcomes
-                                                </h4>
-                                                <ul className="space-y-1">
-                                                {project.learningOutcomes.map((outcome, idx) => (
-                                                    <li key={idx} className="text-sm text-gray-600 flex items-start gap-2">
-                                                    <div className="w-1.5 h-1.5 bg-purple-400 rounded-full mt-2 flex-shrink-0"></div>
-                                                    {outcome}
-                                                    </li>
-                                                ))}
-                                                </ul>
-                                            </div>
+                                                {/* Learning Outcomes */}
+                                                <div>
+                                                    <h4 className="text-sm font-semibold text-gray-700 mb-2 flex items-center gap-2">
+                                                    <Target className="w-4 h-4 text-purple-500" />
+                                                    Learning Outcomes
+                                                    </h4>
+                                                    <ul className="space-y-1">
+                                                    {project.learningOutcomes.map((outcome, idx) => (
+                                                        <li key={idx} className="text-sm text-gray-600 flex items-start gap-2">
+                                                        <div className="w-1.5 h-1.5 bg-purple-400 rounded-full mt-2 flex-shrink-0"></div>
+                                                        {outcome}
+                                                        </li>
+                                                    ))}
+                                                    </ul>
+                                                </div>
 
-                                            {/* Action Button */}
-                                            <motion.button
-                                                whileHover={{ scale: 1.05 }}
-                                                whileTap={{ scale: 0.95 }}
-                                                className="w-full py-3 bg-gradient-to-r from-green-500 to-teal-600 text-white rounded-lg font-medium hover:shadow-lg transition-all duration-300 flex items-center justify-center gap-2"
-                                            >
-                                                <ExternalLink className="w-4 h-4" />
-                                                Start Building This Project
-                                            </motion.button>
+                                                {/* Action Button
+                                                */}
+                                                {/* <motion.button
+                                                    whileHover={{ scale: 1.05 }}
+                                                    whileTap={{ scale: 0.95 }}
+                                                    className="w-full py-3 bg-gradient-to-r from-green-500 to-teal-600 text-white rounded-lg font-medium hover:shadow-lg transition-all duration-300 flex items-center justify-center gap-2"
+                                                >
+                                                    <ExternalLink className="w-4 h-4" />
+                                                    Start Building This Project
+                                                </motion.button> */}
                                             </div>
                                         </motion.div>
                                     )}
