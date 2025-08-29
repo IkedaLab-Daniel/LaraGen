@@ -1,6 +1,25 @@
-import { motion } from "framer-motion"
+import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 import { Zap } from "lucide-react";
 const Hero = () => {
+    const [serverStatus, setServerStatus] = useState("pending"); // 'pending', 'up', 'down'
+
+    useEffect(() => {
+        const checkServer = async () => {
+            setServerStatus("pending");
+            try {
+                const res = await fetch(`${import.meta.env.VITE_API_URL.replace(/\/api$/, '')}/options`);
+                if (res.ok) {
+                    setServerStatus("up");
+                } else {
+                    setServerStatus("down");
+                }
+            } catch {
+                setServerStatus("down");
+            }
+        };
+        checkServer();
+    }, []);
 
     const containerVariants = {
         hidden: { opacity: 0 },
@@ -37,12 +56,15 @@ const Hero = () => {
                 variants={itemVariants}
                 initial="hidden"
                 animate="visible"
-                className="inline-flex items-center px-4 py-2 mb-5 md:mb-8 bg-white/70 backdrop-blur-sm border border-blue-200 rounded-full shadow-lg"
+                className={`inline-flex items-center px-4 py-2 mb-5 md:mb-8 bg-white/70 backdrop-blur-sm border rounded-full shadow-lg ${serverStatus === 'up' ? 'border-blue-200' : serverStatus === 'down' ? 'border-red-300' : 'border-yellow-200'}`}
             >
-                <Zap className="w-4 h-4 mr-2 text-blue-500" />
-                <span className="text-sm font-medium text-#FF2D20">Server Running</span>
+                <Zap className={`w-4 h-4 mr-2 ${serverStatus === 'up' ? 'text-blue-500' : serverStatus === 'down' ? 'text-red-500' : 'text-yellow-500'}`} />
+                <span className="text-sm font-medium">
+                    {serverStatus === 'pending' && 'Checking server status...'}
+                    {serverStatus === 'up' && 'Server Running'}
+                    {serverStatus === 'down' && 'Server Down'}
+                </span>
             </motion.div>
-            
             {/* main headline */}
             <motion.div variants={itemVariants} className="text-center mb-12">
                 <h1 className="text-4xl md:text-7xl font-bold text-gray-900 mb-6 leading-tight">
