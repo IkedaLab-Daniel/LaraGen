@@ -28,6 +28,20 @@ const Results = ({ results }) => {
         }
     }
 
+    const debugProject = () => {
+        console.log(projects)
+        console.log(results)
+    }
+
+    // Error handling
+    if (results && results.error) {
+        return (
+            <div className="w-full max-w-6xl mx-auto py-12 text-center text-red-500 text-lg">
+                {results.error}
+            </div>
+        );
+    }
+
     return(
         <motion.div
             variants={containerVariants}
@@ -44,7 +58,12 @@ const Results = ({ results }) => {
                     <div className="w-12 h-12 bg-blue-400 rounded-full md:flex items-center justify-center hidden">
                         <Lightbulb className="w-6 h-6 text-white" />
                     </div>
-                    <h2 className="text-3xl font-bold text-gray-800">Recommended Projects</h2>
+                    <h2 
+                        className="text-3xl font-bold text-gray-800"
+                        onClick={debugProject()}
+                    >
+                        Recommended Projects
+                    </h2>
                 </div>
                 {/* subtitle here */}
                 <p className="text-gray-600 max-w-2xl mx-auto">
@@ -67,7 +86,6 @@ const Results = ({ results }) => {
                             whileHover={{ y: -5, scale: 1.02 }}
                             onClick={() => setSelectedProject(selectedProject === index ? null : index)}
                         >
-
                             <div className="space-y-4">
                                 {/* project heading here */}
                                 <div className="flex items-start justify-between">

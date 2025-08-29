@@ -11,30 +11,22 @@ const EpicGenerateButton = ({ selectedTech = [], selectedDifficulty = '', onGene
 
   const handleClick = async () => {
     if (isDisabled || isLoading) return;
-    
     setIsLoading(true);
     setShowParticles(true);
-    
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 3000));
-      
+      if (onGenerate) {
+        const result = await onGenerate({
+          technologies: selectedTech,
+          difficulty: selectedDifficulty
+        });
+        // If parent returns a promise, wait for it
+      }
       setIsLoading(false);
       setIsSuccess(true);
-      
-      // Reset success state after 2 seconds
       setTimeout(() => {
         setIsSuccess(false);
         setShowParticles(false);
       }, 2000);
-      
-      // Call the parent callback
-      if (onGenerate) {
-        onGenerate({
-          technologies: selectedTech,
-          difficulty: selectedDifficulty
-        });
-      }
     } catch (error) {
       console.error('Error:', error);
       setIsLoading(false);
@@ -66,38 +58,6 @@ const EpicGenerateButton = ({ selectedTech = [], selectedDifficulty = '', onGene
             ease: 'easeOut'
           }}
           className="absolute w-2 h-2 bg-yellow-400 rounded-full"
-        />
-      ))}
-    </div>
-  );
-
-  // Success confetti
-  const Confetti = () => (
-    <div className="absolute inset-0 pointer-events-none overflow-hidden">
-      {[...Array(15)].map((_, i) => (
-        <motion.div
-          key={i}
-          initial={{
-            opacity: 1,
-            scale: 0,
-            y: '100%',
-            x: `${Math.random() * 100}%`,
-            rotate: 0
-          }}
-          animate={{
-            opacity: [1, 1, 0],
-            scale: [0, 1, 0.5],
-            y: '-100%',
-            rotate: 360
-          }}
-          transition={{
-            duration: 1.5,
-            delay: i * 0.1,
-            ease: 'easeOut'
-          }}
-          className={`absolute w-3 h-3 ${
-            ['bg-blue-500', 'bg-purple-500', 'bg-pink-500', 'bg-yellow-500', 'bg-green-500'][i % 5]
-          } rounded`}
         />
       ))}
     </div>
@@ -314,7 +274,6 @@ const EpicGenerateButton = ({ selectedTech = [], selectedDifficulty = '', onGene
         {/* Particles Effect */}
         <AnimatePresence>
           {showParticles && isLoading && <Particles />}
-          {isSuccess && <Confetti />}
         </AnimatePresence>
       </motion.button>
 

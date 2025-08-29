@@ -18,3 +18,7 @@ require __DIR__.'/../vendor/autoload.php';
 $app = require_once __DIR__.'/../bootstrap/app.php';
 
 $app->handleRequest(Request::capture());
+
+
+// Increase max execution time to 2 minutes for long-running requests
+set_time_limit(120);

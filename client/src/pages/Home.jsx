@@ -16,9 +16,11 @@ const Home = () => {
     const [selectedDifficulty, setSelectedDifficulty] = useState('');
     const [results, setResults] = useState(null);
 
+    const apiUrl = import.meta.env.VITE_API_URL;
+
     const handleGenerate = async ({ technologies, difficulty }) => {
         try {
-            const response = await fetch("http://127.0.0.1:8000/api/generate-ideas", {
+            const response = await fetch(`${apiUrl}/generate-ideas`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -28,11 +30,13 @@ const Home = () => {
                     difficulty
                 })
             });
+            console.log(`${apiUrl}/generate-ideas`)
             const data = await response.json();
             console.log(data)
             setResults(data);
         } catch (err) {
             setResults({ error: "Failed to fetch project ideas." });
+            console.log(`call: ${apiUrl}/generate-ideas`)
         }
     }
 
