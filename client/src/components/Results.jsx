@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from "framer-motion";
-import { Lightbulb, Clock, Star } from "lucide-react";
+import { Lightbulb, Clock, Star, Code, CheckCircle, Target,ExternalLink } from "lucide-react";
 import { useState } from "react";
 
 const Results = () => {
@@ -114,7 +114,7 @@ const Results = () => {
             {/* main project grid */}
             <motion.div
                 variants={containerVariants}
-                className="grid gap-6 md:grid-cols-2 lg:grid-cols-3"
+                className="grid gap-6 grid-cols-1"
             >
                 <AnimatePresence>
                     {projects.map((project, index) => (
@@ -166,6 +166,73 @@ const Results = () => {
                                         )}
                                     </div>
                                 </div>
+
+                                {/* Expand button here  */}
+                                <motion.button
+                                    whileHover={{ scale: 1.05 }}
+                                    whileTap={{ scale: 0.95 }}
+                                    className="w-full mt-4 py-2 bg-gradient-to-r from-blue-700 via-blue-500 to-indigo-600 text-white rounded-lg font-medium hover:shadow-lg transition-all duration-300 flex items-center justify-center gap-2"
+                                >
+                                    <Code className="w-4 h-4" />
+                                    {selectedProject === index ? "Show Less" : "Show"}
+                                </motion.button>
+
+                                {/* expand details */}
+                                <AnimatePresence>
+                                    {selectedProject === index && (
+                                        <motion.div
+                                            initial={{ height: 0, opacity: 0 }}
+                                            animate={{ height: 'auto', opacity: 1 }}
+                                            exit={{ height: 0, opacity: 0 }}
+                                            transition={{ duration: 0.3 }}
+                                            className="overflow-hidden"
+                                        >
+                                            <div className="pt-6 mt-6 border-t border-gray-200 space-y-4">
+                                            {/* All Features */}
+                                            <div>
+                                                <h4 className="text-sm font-semibold text-gray-700 mb-2 flex items-center gap-2">
+                                                <CheckCircle className="w-4 h-4 text-green-500" />
+                                                Complete Feature List
+                                                </h4>
+                                                <ul className="space-y-1">
+                                                {project.features.map((feature, idx) => (
+                                                    <li key={idx} className="text-sm text-gray-600 flex items-start gap-2">
+                                                    <div className="w-1.5 h-1.5 bg-blue-400 rounded-full mt-2 flex-shrink-0"></div>
+                                                    {feature}
+                                                    </li>
+                                                ))}
+                                                </ul>
+                                            </div>
+
+                                            {/* Learning Outcomes */}
+                                            <div>
+                                                <h4 className="text-sm font-semibold text-gray-700 mb-2 flex items-center gap-2">
+                                                <Target className="w-4 h-4 text-purple-500" />
+                                                Learning Outcomes
+                                                </h4>
+                                                <ul className="space-y-1">
+                                                {project.learningOutcomes.map((outcome, idx) => (
+                                                    <li key={idx} className="text-sm text-gray-600 flex items-start gap-2">
+                                                    <div className="w-1.5 h-1.5 bg-purple-400 rounded-full mt-2 flex-shrink-0"></div>
+                                                    {outcome}
+                                                    </li>
+                                                ))}
+                                                </ul>
+                                            </div>
+
+                                            {/* Action Button */}
+                                            <motion.button
+                                                whileHover={{ scale: 1.05 }}
+                                                whileTap={{ scale: 0.95 }}
+                                                className="w-full py-3 bg-gradient-to-r from-green-500 to-teal-600 text-white rounded-lg font-medium hover:shadow-lg transition-all duration-300 flex items-center justify-center gap-2"
+                                            >
+                                                <ExternalLink className="w-4 h-4" />
+                                                Start Building This Project
+                                            </motion.button>
+                                            </div>
+                                        </motion.div>
+                                    )}
+                                </AnimatePresence>
                             </div>
                         </motion.div>
                     ))}
