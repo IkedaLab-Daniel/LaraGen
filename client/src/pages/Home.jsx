@@ -14,10 +14,26 @@ const Home = () => {
     // Shared state
     const [droppedTech, setDroppedTech] = useState([]);
     const [selectedDifficulty, setSelectedDifficulty] = useState('');
+    const [results, setResults] = useState(null);
 
-    const handleGenerate = (data) => {
-        // You can replace this with your API call logic
-        console.log("Generate triggered with:", data);
+    const handleGenerate = async ({ technologies, difficulty }) => {
+        try {
+            const response = await fetch("http://127.0.0.1:8000/api/generate-ideas", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    techs: technologies.map(t => t.name),
+                    difficulty
+                })
+            });
+            const data = await response.json();
+            console.log(data)
+            setResults(data);
+        } catch (err) {
+            setResults({ error: "Failed to fetch project ideas." });
+        }
     }
 
     const floatingVariants = {
@@ -91,8 +107,9 @@ const Home = () => {
                         onGenerate={handleGenerate}
                     />
                 </div>
-
-                <Results />
+                {results && (
+                    <Results results={results} />
+                )}
                 <Footer />
             </div>
         </div>
