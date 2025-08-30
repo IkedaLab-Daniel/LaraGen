@@ -8,7 +8,7 @@ const Hero = () => {
         const checkServer = async () => {
             setServerStatus("pending");
             try {
-                const res = await fetch(`${import.meta.env.VITE_API_URL.replace(/\/api$/, '')}/options`);
+                const res = await fetch(`${import.meta.env.VITE_API_URL.replace(/\/api$/, '')}/api/options`);
                 if (res.ok) {
                     setServerStatus("up");
                 } else {

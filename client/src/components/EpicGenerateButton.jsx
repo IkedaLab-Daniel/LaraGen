@@ -284,9 +284,11 @@ const EpicGenerateButton = ({ selectedTech = [], selectedDifficulty = '', onGene
         className="mt-4 text-center text-sm text-gray-600"
       >
         {selectedTech.length > 0 && selectedDifficulty ? (
-          <div className="flex items-center justify-center space-x-2">
-            <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-            <span>Ready to generate with {selectedTech.length} technologies • {selectedDifficulty} difficulty</span>
+          <div className=" w-full">
+            <div className="w-[70%] md:w-full flex items-center justify-center space-x-2 mx-auto">
+              {/* <div className="w-4 h-4 bg-green-500 rounded-full animate-pulse" /> */}
+              <span>Ready to generate with {selectedTech.length} technologies • {selectedDifficulty} difficulty</span>
+            </div>
           </div>
         ) : (
           <div className="flex items-center justify-center space-x-2">
