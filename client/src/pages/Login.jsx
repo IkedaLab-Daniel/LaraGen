@@ -1,9 +1,12 @@
+import DualAuthForm from "../components/DualAuthForm";
 import { motion } from "framer-motion"
-import { ShieldCheck, User, KeyRound, Lock, Fingerprint } from "lucide-react";
+import { ShieldCheck, User, KeyRound, Lock, Fingerprint, Zap } from "lucide-react";
 import LaragenGIF from '../assets/laragen.gif'
-
+import { useState } from "react";
 
 const Login = () => {
+
+    const [isLogin, setIsLogin] = useState(false)
 
     const floatingVariants = {
         animate: {
@@ -16,6 +19,30 @@ const Login = () => {
             }
         }
     }
+
+    // > Framer Motion Variants
+    const containerVariants = {
+        hidden: { opacity: 0 },
+        visible: { 
+            opacity: 1,
+            transition: {
+                staggerChildren: 0.1,
+                delayChildren: 0.2
+            }
+        }
+    }
+
+    const itemVariants = {
+        hidden: { opacity: 0, y: 30 },
+        visible: {
+        opacity: 1,
+        y: 0,
+        transition: {
+            duration: 0.6,
+            ease: [0.22, 1, 0.36, 1]
+        }
+        }
+    };
 
     return(
         <div className="relative bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 min-h-screen pb-8 md:pb-0">
@@ -63,6 +90,35 @@ const Login = () => {
                 >
                     <img src={LaragenGIF} className="w-[50px] h-[50px] md:w-[200px] md:h-[200px] opacity-[0.15]" />
                 </motion.div>
+            </div>
+            <div className="relative min-h-screen flex items-center justify-center">
+                <motion.div
+                    variants={containerVariants}
+                    className="text-center mb-8"
+                >
+                    <div className="inline-flex items-center px-4 py-2 mb-6 bg-white/70 backdrop-blur-sm border border-blue-200 rounded-full shadow-lg">
+                        <Zap className="w-4 h-4 text-blue-500" />
+                        <span>Cool Badge Badge</span>
+                    </div>
+
+                    <motion.h1
+                        variants={itemVariants}
+                        className="text-4xl font-bold text-gray-99 mb-2"
+                    >
+                        {isLogin ? 'Welcome Back' : 'Join the Community'}
+                    </motion.h1>
+
+                    <motion.p
+                        variants={itemVariants}
+                        className="text-gray-600"
+                    >
+                        {isLogin
+                            ? 'Sign In to continue generating AMAZINNGG projects'
+                            : 'Create an account to start building incredible projects'
+                        }
+                    </motion.p>
+                </motion.div>
+                {/* <DualAuthForm /> */}
             </div>
         </div>
     )
