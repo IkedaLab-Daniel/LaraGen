@@ -13,7 +13,7 @@ class AuthController extends Controller
     {
         $request->validate([
             'name' => 'required|string',
-            'email' => 'required|string|email|inique:users',
+            'email' => 'required|string|email|unique:users',
             'password' => 'required|string|min:6'
         ]);
 
@@ -54,6 +54,7 @@ class AuthController extends Controller
     }
 
     // ? Logout
+    // ! Logout needs the Authorization header with the user's token
     public function logout(Request $request)
     {
         $request->user()->tokens()->delete();
