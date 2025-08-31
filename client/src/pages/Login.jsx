@@ -6,7 +6,7 @@ import { useState } from "react";
 
 const Login = () => {
 
-    const [isLogin, setIsLogin] = useState(false)
+    const [isLogin, setIsLogin] = useState(true)
 
     const floatingVariants = {
         animate: {
