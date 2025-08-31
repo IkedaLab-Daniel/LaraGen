@@ -1,6 +1,6 @@
 import { useState } from "react"
-import { motion } from "framer-motion"
-import { Github } from "lucide-react";
+import { AnimatePresence, motion } from "framer-motion"
+import { Github, User } from "lucide-react";
 const DualAuthForm = ({ isLogin, setIsLogin}) => {
 
     const [formData, setFormData] = useState({
@@ -9,6 +9,13 @@ const DualAuthForm = ({ isLogin, setIsLogin}) => {
         password: '',
         confirmPassword: ''
     })
+
+    const handleInputChange = (e) => {
+        setFormData({
+            ...formData,
+            [e.target.name]: e.target.value
+        })
+    }
 
     const itemVariants = {
         hidden: { opacity: 0, y: 30 },
@@ -74,6 +81,32 @@ const DualAuthForm = ({ isLogin, setIsLogin}) => {
                     <div className="relative flex justify-center text-sm">
                         <span className="px-2 bg-white/80 text-gray-500">or continue with email</span>
                     </div>
+                </div>
+
+                {/* form inputs */}
+                <div className="space-y-4">
+                    <AnimatePresence mode="wait">
+                        {isLogin && (
+                            <motion.div
+                                initial={{ opacity: 0, height: 0}}
+                                animate={{ opacity: 1, height: 'auto' }}
+                                exit={{ opacity: 0, height: 0 }}
+                                transition={{ duration:0.3 }}
+                            >
+                                <div className="relative">
+                                    <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                                    <input 
+                                        type="text" 
+                                        name="name"
+                                        placeholder="Full Name"
+                                        value={formData.name}
+                                        onChange={handleInputChange}
+                                        className="w-full pl-12 pr-4 py-4 bg-gray-50/80 border border-gray-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-200 focus:border-blue-400 transition-all duration-300"
+                                    />
+                                </div>
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
                 </div>
                 
             </motion.div>
