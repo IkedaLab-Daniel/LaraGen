@@ -13,9 +13,37 @@ const DualAuthForm = ({ isLogin, setIsLogin}) => {
     const [showPassword, setShowPassword] = useState(false)
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [isLoading, setIsLoading] = useState(false)
+    const [error, setError] = useState(null);
+    const apiURL = import.meta.env.VITE_API_URL;
 
-    const handleSubmit = () => {
-        console.log("submit")
+    const handleSubmit = async () => {
+        e.preventDefault();
+        setIsLoading(true);
+        setError(null);
+
+        try{
+            let endpoint = isLoading ? "/login" : "/register";
+            let payload = isLogin
+                ? {email: formData.email, password: formData.password}
+                : {name: formData.name, email: formData.email, password: formData.password}
+            const res = await fetch(`${apiURL}${endpoint}`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload)
+            })
+
+            const data = await res.json();
+
+            if (!res.ok){
+                setError(data.message || "Authentication failed");
+            } else {
+                localStorage.setItem("token", data.token)
+            }
+
+        } catch (err){
+            setError("Network Error")
+        }
+        setIsLoading(false)
     }
 
     const handleInputChange = (e) => {
@@ -218,6 +246,22 @@ const DualAuthForm = ({ isLogin, setIsLogin}) => {
                     </>
                     )}
                 </motion.button>
+            </motion.div>
+
+            {/* Footer Link */}
+            <motion.div
+                variants={itemVariants}
+                className="text-center mt-6"
+            >
+                <p className="text-gray-600">
+                {isLogin ? "Don't have an account?" : "Already have an account?"}{' '}
+                <button
+                    onClick={() => setIsLogin(!isLogin)}
+                    className="text-blue-600 font-semibold hover:text-blue-800 hover:underline transition-colors duration-200"
+                >
+                    {isLogin ? 'Sign up' : 'Sign in'}
+                </button>
+                </p>
             </motion.div>
         </motion.div>
     )
