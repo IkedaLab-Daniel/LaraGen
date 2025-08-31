@@ -117,8 +117,12 @@ const Login = () => {
                             : 'Create an account to start building incredible projects'
                         }
                     </motion.p>
+                    {/* Auth form component */}
+                    <DualAuthForm 
+                        isLogin = {isLogin}
+                        setIsLogin = {setIsLogin}
+                    />
                 </motion.div>
-                {/* <DualAuthForm /> */}
             </div>
         </div>
     )
