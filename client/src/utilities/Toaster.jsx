@@ -1,6 +1,6 @@
 import { animate, AnimatePresence, m } from "framer-motion";
 import { CheckCircle, X } from "lucide-react";
-import { createContext, useEffect, useState } from "react";
+import { createContext, useEffect, useState, useContext } from "react";
 
 const ToastContext = createContext();
 
@@ -118,7 +118,7 @@ export const ToastProvider = ({
 
     //  > add new toast
     const addToast = (message, type = "info", options = {}) => {
-        const id = Data.now() + Math.random();
+    const id = Date.now() + Math.random();
         const toast = {
             id,
             message,
@@ -188,6 +188,3 @@ export const useToast = () => {
 
 // Export individual components for advanced usage
 export { Toast, ToastContainer };
-
-// Default export for convenience
-export default { ToastProvider, useToast };

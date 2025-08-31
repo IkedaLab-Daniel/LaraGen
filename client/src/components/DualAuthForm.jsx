@@ -1,6 +1,8 @@
-import { useState } from "react"
+import { useState, useContext } from "react"
 import { AnimatePresence, motion } from "framer-motion"
 import { Github, User, Mail, EyeOff, Eye, Lock, ArrowRight, CircleAlert } from "lucide-react";
+import { useToast } from "../utilities/Toaster";
+import { Navigate } from "react-router-dom";
 const DualAuthForm = ({ isLogin, setIsLogin}) => {
 
     const [formData, setFormData] = useState({
@@ -15,6 +17,17 @@ const DualAuthForm = ({ isLogin, setIsLogin}) => {
     const [isLoading, setIsLoading] = useState(false)
     const [error, setError] = useState(null);
     const apiURL = import.meta.env.VITE_API_URL;
+
+    // Get toast functions from the utility
+    const toast = useToast();
+
+    // redirections
+    const redirectToHome = () => {
+        toast.info("Redirecting to homepage...");
+        setTimeout(() => {
+            window.location.href = '/';
+        }, 1000);
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -36,16 +49,44 @@ const DualAuthForm = ({ isLogin, setIsLogin}) => {
 
             if (!res.ok){
                 setError(data.message || "Authentication failed");
-                console.log("Res no OK")
-                console.log(data)
+                toast.error(data.message || "Authentication failed");
             } else {
                 localStorage.setItem("token", data.token)
                 console.log("Auth success:", data)
+
+                // Show success toast with personalized message
+                const successMessage = isLogin 
+                    ? `Welcome back, ${data.user?.name || 'User'}!`
+                    : `Account created successfully! Welcome, ${data.user?.name || 'User'}!`;
+                
+                toast.success(successMessage, {
+                    duration: 4000 // Custom duration for success message
+                });
+                
+                // Clear form
+                setFormData({
+                    name: '',
+                    email: '',
+                    password: '',
+                    confirmPassword: ''
+                });
+                
+                // Redirect after showing success toast
+                setTimeout(() => {
+                    redirectToHome();
+                }, 1500);
             }
 
         } catch (err){
-            setError("Network Error")
-            console.log("Network error")
+            // Ensure error is a string, not an Error object
+            let errorMessage = "Network Error";
+            if (err instanceof Error) {
+                errorMessage = err.message;
+            } else if (typeof err === "string") {
+                errorMessage = err;
+            }
+            setError(errorMessage);
+            toast.error(errorMessage);
         }
         setIsLoading(false)
     }
