@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { AnimatePresence, motion } from "framer-motion"
-import { Github, User, Mail, EyeOff, Eye, Lock, ArrowRight } from "lucide-react";
+import { Github, User, Mail, EyeOff, Eye, Lock, ArrowRight, CircleAlert } from "lucide-react";
 const DualAuthForm = ({ isLogin, setIsLogin}) => {
 
     const [formData, setFormData] = useState({
@@ -16,13 +16,13 @@ const DualAuthForm = ({ isLogin, setIsLogin}) => {
     const [error, setError] = useState(null);
     const apiURL = import.meta.env.VITE_API_URL;
 
-    const handleSubmit = async () => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         setIsLoading(true);
         setError(null);
 
         try{
-            let endpoint = isLoading ? "/login" : "/register";
+            let endpoint = isLogin ? "/login" : "/register";
             let payload = isLogin
                 ? {email: formData.email, password: formData.password}
                 : {name: formData.name, email: formData.email, password: formData.password}
@@ -36,12 +36,16 @@ const DualAuthForm = ({ isLogin, setIsLogin}) => {
 
             if (!res.ok){
                 setError(data.message || "Authentication failed");
+                console.log("Res no OK")
+                console.log(data)
             } else {
                 localStorage.setItem("token", data.token)
+                console.log("Auth success:", data)
             }
 
         } catch (err){
             setError("Network Error")
+            console.log("Network error")
         }
         setIsLoading(false)
     }
@@ -51,6 +55,11 @@ const DualAuthForm = ({ isLogin, setIsLogin}) => {
             ...formData,
             [e.target.name]: e.target.value
         })
+    }
+
+    const changeForm = (isLogin) => {
+        setIsLogin(isLogin)
+        setError(null)
     }
 
     const itemVariants = {
@@ -73,7 +82,7 @@ const DualAuthForm = ({ isLogin, setIsLogin}) => {
             {/* toggle tabs */}
             <div className="flex mb-6 p-1 bg-gray-100/80 rounded-2xl">
                 <button
-                    onClick={() => setIsLogin(true)}
+                    onClick={() => changeForm(true)}
                     className={`flex-1 py-3 px-6 rounded-xl font-semibold text-sm transition-all duration-300 ${
                         isLogin
                             ? 'bg-white shadow-lg text-gray-900'
@@ -83,7 +92,7 @@ const DualAuthForm = ({ isLogin, setIsLogin}) => {
                     Log In
                 </button>
                 <button
-                    onClick={() => setIsLogin(false)}
+                    onClick={() => changeForm(false)}
                     className={`flex-1 py-3 px-6 rounded-xl font-semibold text-sm transition-all duration-300 ${
                         !isLogin
                             ? 'bg-white shadow-lg text-gray-900'
@@ -208,6 +217,14 @@ const DualAuthForm = ({ isLogin, setIsLogin}) => {
                     </motion.div>
                     )}
                 </AnimatePresence>
+
+                {/* Error display */}
+                {error && (
+                    <div className="border border-red-600 rounded-md p-4 bg-red-100 flex justify-center items-center gap-1">
+                        <CircleAlert className="w-5 h-5 text-red-600" />
+                        <span className="text-sm text-red-600">{error}</span>
+                    </div>
+                )}
                 
                 {/* Forgot Password (Login only) */}
                 {isLogin && (
