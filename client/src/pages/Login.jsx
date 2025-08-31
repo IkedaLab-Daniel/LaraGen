@@ -45,7 +45,7 @@ const Login = () => {
     };
 
     return(
-        <div className="relative bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 min-h-screen pb-8 md:pb-0">
+        <div className="relative bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 min-h-screen pb-8 md:pb-0 pt-8 md:pt-6">
             {/* animation bg elements*/}
             <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
                 <motion.div
@@ -96,10 +96,10 @@ const Login = () => {
                     variants={containerVariants}
                     className="text-center mb-8"
                 >
-                    <div className="inline-flex items-center px-4 py-2 mb-6 bg-white/70 backdrop-blur-sm border border-blue-200 rounded-full shadow-lg">
+                    {/* <div className="inline-flex items-center px-4 py-2 mb-6 bg-white/70 backdrop-blur-sm border border-blue-200 rounded-full shadow-lg">
                         <Zap className="w-4 h-4 text-blue-500" />
                         <span>Cool Badge Badge</span>
-                    </div>
+                    </div> */}
 
                     <motion.h1
                         variants={itemVariants}
