@@ -1,5 +1,6 @@
 import { useState } from "react"
 import { motion } from "framer-motion"
+import { Github } from "lucide-react";
 const DualAuthForm = ({ isLogin, setIsLogin}) => {
 
     const [formData, setFormData] = useState({
@@ -24,10 +25,10 @@ const DualAuthForm = ({ isLogin, setIsLogin}) => {
     return(
         <motion.div
             variants={itemVariants}
-            className="bg-white/80 backdrop-blur-sm rounded-3xl p-8 shadow-2xl border boder-white/50"
+            className="w-[90%] md:min-w-[600px] mx-auto bg-white/80 backdrop-blur-sm rounded-xl p-4 md:p-8 shadow-2xl border boder-white/50 "
         >
             {/* toggle tabs */}
-            <div className="flex mb-8 p-1 bg-gray-100/80 rounded-2xl">
+            <div className="flex mb-6 p-1 bg-gray-100/80 rounded-2xl">
                 <button
                     onClick={() => setIsLogin(true)}
                     className={`flex-1 py-3 px-6 rounded-xl font-semibold text-sm transition-all duration-300 ${
@@ -49,7 +50,22 @@ const DualAuthForm = ({ isLogin, setIsLogin}) => {
                     Sign Up
                 </button>
             </div>
-
+            
+            {/* social login here */}
+            <motion.div
+                variants={itemVariants}
+                className="space-y-3 mb-6"
+            >
+                <motion.button
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    className="w-full flex items-center justify-center py-3 px-4 bg-gray-900 text-white rounded-xl font-medium hover:bg-gray-800 transition-colors duration-200"
+                >
+                    {/* ? GitHub icon marked as deplicated!!?? */}
+                    <Github className="w-5 h-5 mr-3" /> 
+                    GitHub to be implemented
+                </motion.button>
+            </motion.div>
         </motion.div>
     )
 }

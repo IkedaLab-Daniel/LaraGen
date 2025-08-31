@@ -103,14 +103,14 @@ const Login = () => {
 
                     <motion.h1
                         variants={itemVariants}
-                        className="text-4xl font-bold text-gray-99 mb-2"
+                        className="text-3xl md:text-4xl font-bold text-gray-99 mb-2"
                     >
                         {isLogin ? 'Welcome Back' : 'Join the Community'}
                     </motion.h1>
 
                     <motion.p
                         variants={itemVariants}
-                        className="text-gray-600"
+                        className="px-8 md:px-0 mb-4 text-gray-600 text-center"
                     >
                         {isLogin
                             ? 'Sign In to continue generating AMAZINNGG projects'
