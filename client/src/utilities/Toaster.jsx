@@ -1,6 +1,6 @@
-import { animate, AnimatePresence } from "framer-motion";
+import { animate, AnimatePresence, m } from "framer-motion";
 import { CheckCircle, X } from "lucide-react";
-import { createContext, useEffect } from "react";
+import { createContext, useEffect, useState } from "react";
 
 const ToastContext = createContext();
 
@@ -106,3 +106,88 @@ const ToastContainer = ({ toasts, removeToast, position = 'top-right' }) => {
         </div>
     )
 }
+
+// toast provider component
+export const ToastProvider = ({
+    children,
+    position = "top-right",
+    defaultDuration = 4000, 
+    maxToast = 5
+}) => {
+    const [toasts, setToasts] = useState([])
+
+    //  > add new toast
+    const addToast = (message, type = "info", options = {}) => {
+        const id = Data.now() + Math.random();
+        const toast = {
+            id,
+            message,
+            type,
+            duration: options.duration ?? defaultDuration,
+            position,
+            ...options
+        };
+
+        setToasts((prev) => {
+            const newToast = [...prev, toast];
+            // ! limit toasts
+            return newToast.slice(-maxToast)
+        });
+
+        return id;
+    }
+
+    // > Remove toast function
+    const removeToast = (id) => {
+        setToasts((prev) => prev.filter((toast) => toast.id !== id));
+    };
+
+    // > Clear all toasts
+    const removeAllToasts = () => {
+        setToasts([]);
+    };
+
+    // Helper functions for different toast types
+    const toast = {
+        success: (message, options) => addToast(message, 'success', options),
+        error: (message, options) => addToast(message, 'error', options),
+        warning: (message, options) => addToast(message, 'warning', options),
+        info: (message, options) => addToast(message, 'info', options),
+        remove: removeToast,
+        removeAll: removeAllToasts
+    };
+
+    const value = {
+        toasts,
+        toast,
+        addToast,
+        removeToast,
+        removeAllToasts
+    };
+
+    return (
+        <ToastContext.Provider value={value}>
+        {children}
+        <ToastContainer
+            toasts={toasts}
+            removeToast={removeToast}
+            position={position}
+        />
+        </ToastContext.Provider>
+    );
+}
+
+// Custom hook to use toast
+export const useToast = () => {
+  const context = useContext(ToastContext);
+  if (!context) {
+    throw new Error('useToast must be used within a ToastProvider');
+  }
+  return context.toast;
+};
+
+// Export individual components for advanced usage
+export { Toast, ToastContainer };
+
+// Default export for convenience
+export default { ToastProvider, useToast };
