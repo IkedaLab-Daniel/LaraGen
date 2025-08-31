@@ -11,6 +11,7 @@ const DualAuthForm = ({ isLogin, setIsLogin}) => {
     })
 
     const [showPassword, setShowPassword] = useState(false)
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
     const handleInputChange = (e) => {
         setFormData({
@@ -88,7 +89,7 @@ const DualAuthForm = ({ isLogin, setIsLogin}) => {
                 {/* form inputs */}
                 <div className="space-y-4">
                     <AnimatePresence mode="wait">
-                        {isLogin && (
+                        {!isLogin && (
                             <motion.div
                                 initial={{ opacity: 0, height: 0}}
                                 animate={{ opacity: 1, height: 'auto' }}
@@ -143,7 +144,37 @@ const DualAuthForm = ({ isLogin, setIsLogin}) => {
                     {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                 </button>
               </div>
-
+            
+                <AnimatePresence mode="wait">
+                    {!isLogin && (
+                    <motion.div
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: 'auto' }}
+                        exit={{ opacity: 0, height: 0 }}
+                        transition={{ duration: 0.3 }}
+                    >
+                        <div className="relative">
+                        <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                        <input
+                            type={showConfirmPassword ? 'text' : 'password'}
+                            name="confirmPassword"
+                            placeholder="Confirm Password"
+                            value={formData.confirmPassword}
+                            onChange={handleInputChange}
+                            className="w-full pl-12 pr-12 py-4 bg-gray-50/80 border border-gray-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-200 focus:border-blue-400 transition-all duration-300"
+                            required={!isLogin}
+                        />
+                        <button
+                            type="button"
+                            onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                        >
+                            {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                        </button>
+                        </div>
+                    </motion.div>
+                    )}
+                </AnimatePresence>
                 
             </motion.div>
         </motion.div>
