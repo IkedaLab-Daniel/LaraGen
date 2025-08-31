@@ -1,5 +1,5 @@
-import { animate, AnimatePresence, m } from "framer-motion";
-import { CheckCircle, X } from "lucide-react";
+import { motion, AnimatePresence} from "framer-motion";
+import { AlertTriangle, CheckCircle, CircleAlert, Info, X } from "lucide-react";
 import { createContext, useEffect, useState, useContext } from "react";
 
 const ToastContext = createContext();
@@ -13,22 +13,45 @@ const TOAST_TYPES = {
         textColor: 'text-green-800',
         iconColor: 'text-green-600',
         hoverBG: 'hover:bg-green-100'
+    },
+    error: {
+        icon: CircleAlert,
+        bgColor: 'bg-red-50/90',
+        borderColor: 'border-red-200',
+        textColor: 'text-red-800',
+        iconColor: 'text-red-600',
+        hoverBg: 'hover:bg-red-100'
+    },
+    warning: {
+        icon: AlertTriangle,
+        bgColor: 'bg-yellow-50/90',
+        borderColor: 'border-yellow-200',
+        textColor: 'text-yellow-800',
+        iconColor: 'text-yellow-600',
+        hoverBg: 'hover:bg-yellow-100'
+    },
+    info: {
+        icon: Info,
+        bgColor: 'bg-blue-50/90',
+        borderColor: 'border-blue-200',
+        textColor: 'text-blue-800',
+        iconColor: 'text-blue-600',
+        hoverBg: 'hover:bg-blue-100'
     }
 }
 
 const Toast = ({ toast, onClose }) => {
     const { id, message, type, position } = toast; // destructure data from parent
     const config = TOAST_TYPES[type] || TOAST_TYPES.info;
-    const Icon = config.Icon
+    const Icon = config.icon
 
     // auto dismiss
     useEffect(()=>{
-        if (duration > 0){
-            const timer = setTimeout(() => onClose(id), duration)
-            clearTimeout(timer)
-            return
+        if (toast.duration > 0){
+            const timer = setTimeout(() => onClose(id), toast.duration)
+            return () => clearTimeout(timer);
         }
-    }, [id, duration, onClose]);
+    }, [id, toast.duration, onClose]);
 
     // f motion variant
     const getAnimationVariants = () => {
@@ -38,7 +61,7 @@ const Toast = ({ toast, onClose }) => {
             exit: { opacity: 0, scale: 0.9 }
         }
         // > for toaster nofication on top, start animation below going up, vice versa for others
-        if (position.include('top')){
+    if (position.includes('top')){
             return {
                 ...baseVariants,
                 initial: { ...baseVariants.initial, y:-50 },
@@ -95,13 +118,13 @@ const ToastContainer = ({ toasts, removeToast, position = 'top-right' }) => {
     return (
         <div className={`fixed z-50 flex flex-col gap-2 ${getPositionClasses()}`}>
             <AnimatePresence mode="popLayout">
-                {toasts.map((toast) => {
+                {toasts.map((toast) => (
                     <Toast
                         key={toast.id}
                         toast={toast}
                         onClose={removeToast}
-                     />
-                })}
+                    />
+                ))}
             </AnimatePresence>
         </div>
     )
