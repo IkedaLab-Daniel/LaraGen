@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { AnimatePresence, motion } from "framer-motion"
-import { Github, User, Mail } from "lucide-react";
+import { Github, User, Mail, EyeOff, Eye, Lock } from "lucide-react";
 const DualAuthForm = ({ isLogin, setIsLogin}) => {
 
     const [formData, setFormData] = useState({
@@ -9,6 +9,8 @@ const DualAuthForm = ({ isLogin, setIsLogin}) => {
         password: '',
         confirmPassword: ''
     })
+
+    const [showPassword, setShowPassword] = useState(false)
 
     const handleInputChange = (e) => {
         setFormData({
@@ -120,8 +122,28 @@ const DualAuthForm = ({ isLogin, setIsLogin}) => {
                             required
                         />
                     </div>
-
                 </div>
+
+                <div className="relative">
+                    <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                    <input
+                        type={showPassword ? 'text' : 'password'}
+                        name="password"
+                        placeholder="Password"
+                        value={formData.password}
+                        onChange={handleInputChange}
+                        className="w-full pl-12 pr-12 py-4 bg-gray-50/80 border border-gray-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-200 focus:border-blue-400 transition-all duration-300"
+                        required
+                    />
+                    <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                    >
+                    {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                </button>
+              </div>
+
                 
             </motion.div>
         </motion.div>
