@@ -1,13 +1,29 @@
 import { Link, useLocation } from 'react-router-dom'
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Home, BookOpen, LogIn, UserPlus, User, LogOut } from 'lucide-react'
+import { Home, BookOpen, LogIn, UserPlus, User, LogOut, ChevronDown, UserCircle, FolderOpen } from 'lucide-react'
 import { useAuth } from '../contexts/AuthContext'
 
 const NavBar = () => {
     const [isOpen, setIsOpen] = useState(false)
+    const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false)
     const currentLocation = useLocation().pathname
     const { user, logout } = useAuth()
+    const dropdownRef = useRef(null)
+
+    // Close dropdown when clicking outside
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+                setIsUserDropdownOpen(false)
+            }
+        }
+
+        document.addEventListener('mousedown', handleClickOutside)
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside)
+        }
+    }, [])
 
     const toggleMenu = () => {
         setIsOpen(!isOpen)
@@ -17,9 +33,18 @@ const NavBar = () => {
         setIsOpen(false)
     }
 
+    const toggleUserDropdown = () => {
+        setIsUserDropdownOpen(!isUserDropdownOpen)
+    }
+
+    const closeUserDropdown = () => {
+        setIsUserDropdownOpen(false)
+    }
+
     const handleLogout = () => {
         logout()
         closeMenu()
+        closeUserDropdown()
     }
 
     const checkCurrentLocationMatch = (location) => {
@@ -47,22 +72,56 @@ const NavBar = () => {
                         </Link>
                         
                         {user ? (
-                            // Authenticated user
-                            <>
-                                <li className="flex items-center gap-2 text-blue-600">
+                            // ? Authenticated user with dropdown
+                            <div className="relative" ref={dropdownRef}>
+                                <button
+                                    onClick={toggleUserDropdown}
+                                    className="flex items-center gap-2 text-slate-600 hover:text-blue-600 transition-colors cursor-pointer rounded-lg hover:bg-blue-50"
+                                >
                                     <User className="w-5 h-5" />
                                     <span className="font-medium">{user.name}</span>
-                                </li>
-                                <li>
-                                    <button
-                                        onClick={handleLogout}
-                                        className="flex items-center gap-2 px-4 py-2 text-red-600 hover:text-red-700 hover:bg-red-50 rounded-lg transition-colors cursor-pointer"
-                                    >
-                                        <LogOut className="w-5 h-5" />
-                                        Logout
-                                    </button>
-                                </li>
-                            </>
+                                    <ChevronDown className={`w-4 h-4 transition-transform ${isUserDropdownOpen ? 'rotate-180' : ''}`} />
+                                </button>
+                                
+                                <AnimatePresence>
+                                    {isUserDropdownOpen && (
+                                        <motion.div
+                                            initial={{ opacity: 0, y: -10 }}
+                                            animate={{ opacity: 1, y: 0 }}
+                                            exit={{ opacity: 0, y: -10 }}
+                                            transition={{ duration: 0.2 }}
+                                            className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border z-20"
+                                        >
+                                            <div className="py-2">
+                                                <Link
+                                                    to="/profile"
+                                                    onClick={closeUserDropdown}
+                                                    className="flex items-center gap-3 px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors"
+                                                >
+                                                    <UserCircle className="w-4 h-4" />
+                                                    Profile
+                                                </Link>
+                                                <Link
+                                                    to="/projects"
+                                                    onClick={closeUserDropdown}
+                                                    className="flex items-center gap-3 px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors"
+                                                >
+                                                    <FolderOpen className="w-4 h-4" />
+                                                    My Projects
+                                                </Link>
+                                                <hr className="my-1" />
+                                                <button
+                                                    onClick={handleLogout}
+                                                    className="flex items-center gap-3 px-4 py-2 text-red-600 hover:bg-red-50 hover:text-red-700 transition-colors w-full text-left"
+                                                >
+                                                    <LogOut className="w-4 h-4" />
+                                                    Log Out
+                                                </button>
+                                            </div>
+                                        </motion.div>
+                                    )}
+                                </AnimatePresence>
+                            </div>
                         ) : (
                             // Non-authenticated user
                             <>
@@ -195,6 +254,41 @@ const NavBar = () => {
                                             </Link>
                                         )}
                                     </motion.li>
+                                    
+                                    {/* Mobile Profile Link */}
+                                    {user && (
+                                        <motion.li
+                                            initial={{ opacity: 0, x: 20 }}
+                                            animate={{ opacity: 1, x: 0 }}
+                                            transition={{ delay: 0.23 }}
+                                        >
+                                            <Link 
+                                                to="/profile" 
+                                                onClick={closeMenu}
+                                                className="flex text-lg hover:text-blue-500 transition-colors items-center gap-2"
+                                            >
+                                                <UserCircle className="w-5 h-5" /> Profile
+                                            </Link>
+                                        </motion.li>
+                                    )}
+                                    
+                                    {/* Mobile My Projects Link */}
+                                    {user && (
+                                        <motion.li
+                                            initial={{ opacity: 0, x: 20 }}
+                                            animate={{ opacity: 1, x: 0 }}
+                                            transition={{ delay: 0.24 }}
+                                        >
+                                            <Link 
+                                                to="/projects" 
+                                                onClick={closeMenu}
+                                                className="flex text-lg hover:text-blue-500 transition-colors items-center gap-2"
+                                            >
+                                                <FolderOpen className="w-5 h-5" /> My Projects
+                                            </Link>
+                                        </motion.li>
+                                    )}
+                                    
                                     <motion.li
                                         initial={{ opacity: 0, x: 20 }}
                                         animate={{ opacity: 1, x: 0 }}
