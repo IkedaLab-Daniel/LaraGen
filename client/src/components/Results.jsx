@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from "framer-motion";
-import { Lightbulb, Clock, Star, Code, CheckCircle, Target,ExternalLink } from "lucide-react";
+import { Lightbulb, Clock, Star, Code, CheckCircle, Target, ExternalLink, AlertTriangle } from "lucide-react";
 import { useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import SignInCard from "./SignInCard";

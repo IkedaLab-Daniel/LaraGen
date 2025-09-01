@@ -37,7 +37,7 @@ class ProjectIdeaController extends Controller
                 $validated['difficulty']
             );
 
-            return response()->json([
+            $response = [
                 'success' => 'true',
                 'data' => [
                     'projects' => $projectIdeas,
@@ -45,7 +45,16 @@ class ProjectIdeaController extends Controller
                     'request_difficulty' => $validated['difficulty']
                 ],
                 'message' => 'Project idea generated successfully'
-            ]);
+            ];
+
+            // Add fallback information if applicable
+            if (isset($projectIdeas['isFallback']) && $projectIdeas['isFallback']) {
+                $response['data']['is_fallback'] = true;
+                $response['data']['fallback_reason'] = $projectIdeas['fallbackReason'] ?? 'Unknown reason';
+                $response['message'] = 'Project ideas generated using fallback (API issue detected)';
+            }
+
+            return response()->json($response);
 
         } catch (\Exception $e){
             return response()->json([

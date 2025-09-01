@@ -48,13 +48,23 @@ class OpenRouterService
                 
                 // Try to extract JSON from the response
                 $parsed = $this->parseProjectIdeas($content);
+                
+                if (empty($parsed)) {
+                    // JSON parsing failed, use fallback
+                    return [
+                        'projects' => $this->getFallbackIdeas($techs, $difficulty),
+                        'isFallback' => true,
+                        'fallbackReason' => 'API response received but JSON parsing failed. Raw content: ' . substr($content, 0, 200) . '...'
+                    ];
+                }
+                
                 return [
                     'projects' => $parsed,
                     'isFallback' => false
                 ];
             }
 
-            throw new \Exception("$this->model API request failed: " . $response->body());
+            throw new \Exception("$this->model API request failed with status " . $response->status() . ": " . $response->body());
 
         } catch (\Exception $e) {
             Log::error('OpenRouter API Error: ' . $e->getMessage());
@@ -62,7 +72,8 @@ class OpenRouterService
             // Return fallback ideas if API fails
             return [
                 'projects' => $this->getFallbackIdeas($techs, $difficulty),
-                'isFallback' => true
+                'isFallback' => true,
+                'fallbackReason' => 'API Error: ' . $e->getMessage()
             ];
         }
     }
