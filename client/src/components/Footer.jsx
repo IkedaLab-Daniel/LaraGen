@@ -320,16 +320,16 @@ const Footer = () => {
           <div className="border-t border-gray-200 mt-8 pt-6 flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
             <div className="flex items-center space-x-6 text-sm text-gray-600">
               <span>© 2025 {displayData.name}</span>
-              <span>•</span>
-              <span>Last updated: {loading ? "Loading..." : formatTimeAgo(displayData.updated_at)}</span>
-              <span>•</span>
-              <span className="flex items-center">
+              {/* <span>•</span> */}
+              {/* <span>Last updated: {loading ? "Loading..." : formatTimeAgo(displayData.updated_at)}</span> */}
+              {/* <span>•</span> */}
+              {/* <span className="flex items-center">
                 <div className="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse"></div>
                 All systems operational
-              </span>
+              </span> */}
             </div>
             <div className="flex items-center space-x-4 text-sm text-gray-600">
-              <span>Built with ❤️ by developers, for developers</span>
+              {/* <span>Built with ❤️ by developers, for developers</span> */}
             </div>
           </div>
         </div>
