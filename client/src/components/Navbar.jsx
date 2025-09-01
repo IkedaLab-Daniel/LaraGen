@@ -3,12 +3,14 @@ import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Home, BookOpen, LogIn, UserPlus, User, LogOut, ChevronDown, UserCircle, FolderOpen } from 'lucide-react'
 import { useAuth } from '../contexts/AuthContext'
+import { useToast } from '../utilities/Toaster'
 
 const NavBar = () => {
     const [isOpen, setIsOpen] = useState(false)
     const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false)
     const currentLocation = useLocation().pathname
     const { user, logout } = useAuth()
+    const toast = useToast()
     const dropdownRef = useRef(null)
 
     // Close dropdown when clicking outside
@@ -42,7 +44,7 @@ const NavBar = () => {
     }
 
     const handleLogout = () => {
-        logout()
+        logout(toast.info)
         closeMenu()
         closeUserDropdown()
     }
@@ -76,7 +78,7 @@ const NavBar = () => {
                             <div className="relative" ref={dropdownRef}>
                                 <button
                                     onClick={toggleUserDropdown}
-                                    className="flex items-center gap-2 text-slate-600 hover:text-blue-600 transition-colors cursor-pointer rounded-lg hover:bg-blue-50"
+                                    className="hidden md:flex md:items-center gap-2 text-slate-600 hover:text-blue-600 transition-colors cursor-pointer rounded-lg hover:bg-blue-50"
                                 >
                                     <User className="w-5 h-5" />
                                     <span className="font-medium">{user.name}</span>
@@ -240,10 +242,8 @@ const NavBar = () => {
                                         transition={{ delay: 0.2 }}
                                     >
                                         {user ? (
-                                            <div className="flex items-center gap-2 text-blue-600 text-lg">
-                                                <User className="w-5 h-5" />
-                                                <span className="font-medium">{user.name}</span>
-                                            </div>
+                                            // ? Hide user info on mobile, only show for non-authenticated users
+                                            null
                                         ) : (
                                             <Link 
                                                 to="/login" 
