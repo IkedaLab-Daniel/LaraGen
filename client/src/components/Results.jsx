@@ -1,9 +1,12 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { Lightbulb, Clock, Star, Code, CheckCircle, Target,ExternalLink } from "lucide-react";
 import { useState } from "react";
+import { useAuth } from "../contexts/AuthContext";
+import SignInCard from "./SignInCard";
 
 const Results = ({ results }) => {
     const [selectedProject, setSelectedProject] = useState(null)
+    const { user } = useAuth()
     let projects = [];
     if (results && results.data && results.data.projects && Array.isArray(results.data.projects.projects)) {
         projects = results.data.projects.projects;
@@ -190,6 +193,10 @@ const Results = ({ results }) => {
                                                     <ExternalLink className="w-4 h-4" />
                                                     Start Building This Project
                                                 </motion.button> */}
+
+                                                {!user && (
+                                                    <SignInCard />
+                                                )}
                                             </div>
                                         </motion.div>
                                     )}
@@ -199,6 +206,16 @@ const Results = ({ results }) => {
                     ))}
                 </AnimatePresence>
             </motion.div>
+
+            {/* Sign In Card for unauthenticated users - shown at bottom */}
+            {!user && (
+                <motion.div
+                    variants={itemVariants}
+                    className="w-[95%] md:w-full mx-auto"
+                >
+                    <SignInCard />
+                </motion.div>
+            )}
         </motion.div>
     )
 }

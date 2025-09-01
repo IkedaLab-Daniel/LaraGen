@@ -328,7 +328,7 @@ const DualAuthForm = ({ isLogin, setIsLogin}) => {
                     onClick={() => setIsLogin(!isLogin)}
                     className="text-blue-600 font-semibold hover:text-blue-800 hover:underline transition-colors duration-200"
                 >
-                    {isLogin ? 'Sign up' : 'Sign in'}
+                    {isLogin ? 'Sign Up' : 'Log In'}
                 </button>
                 </p>
             </motion.div>
