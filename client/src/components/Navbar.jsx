@@ -127,13 +127,13 @@ const NavBar = () => {
                         ) : (
                             // Non-authenticated user
                             <>
-                                <Link to="/login">
-                                    <li className={`hover:text-blue-500 transition-colors cursor-pointer flex items-center gap-2 ${checkCurrentLocationMatch('/login') ? 'text-blue-600 font-semibold' : ''}`}>
+                                <Link to="/auth?mode=login">
+                                    <li className={`hover:text-blue-500 transition-colors cursor-pointer flex items-center gap-2 ${checkCurrentLocationMatch('/auth') ? 'text-blue-600 font-semibold' : ''}`}>
                                         <LogIn className="w-5 h-5" /> Log In
                                     </li>
                                 </Link>
-                                <Link to="/signup">
-                                    <li className={`hover:text-blue-500 transition-colors cursor-pointer flex items-center gap-2 ${checkCurrentLocationMatch('/signup') ? 'text-blue-600 font-semibold' : ''}`}>
+                                <Link to="/auth?mode=signup">
+                                    <li className={`hover:text-blue-500 transition-colors cursor-pointer flex items-center gap-2 ${checkCurrentLocationMatch('/auth') ? 'text-blue-600 font-semibold' : ''}`}>
                                         <UserPlus className="w-5 h-5" /> Sign Up
                                     </li>
                                 </Link>
@@ -246,9 +246,9 @@ const NavBar = () => {
                                             null
                                         ) : (
                                             <Link 
-                                                to="/login" 
+                                                to="/auth?mode=login" 
                                                 onClick={closeMenu}
-                                                className={`flex text-lg hover:text-blue-500 transition-colors items-center gap-2 ${checkCurrentLocationMatch('/login') ? 'text-blue-600 font-semibold' : ''}`}
+                                                className={`flex text-lg hover:text-blue-500 transition-colors items-center gap-2 ${checkCurrentLocationMatch('/auth') ? 'text-blue-600 font-semibold' : ''}`}
                                             >
                                                 <LogIn className="w-5 h-5" /> Log In
                                             </Link>
@@ -304,9 +304,9 @@ const NavBar = () => {
                                             </button>
                                         ) : (
                                             <Link 
-                                                to="/signup" 
+                                                to="/auth?mode=signup" 
                                                 onClick={closeMenu}
-                                                className={`flex text-lg hover:text-blue-500 transition-colors items-center gap-2 ${checkCurrentLocationMatch('/signup') ? 'text-blue-600 font-semibold' : ''}`}
+                                                className={`flex text-lg hover:text-blue-500 transition-colors items-center gap-2 ${checkCurrentLocationMatch('/auth') ? 'text-blue-600 font-semibold' : ''}`}
                                             >
                                                 <UserPlus className="w-5 h-5" /> Sign Up
                                             </Link>

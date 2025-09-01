@@ -3,10 +3,11 @@ import { AnimatePresence, motion } from "framer-motion"
 import { Github, User, Mail, EyeOff, Eye, Lock, ArrowRight, CircleAlert } from "lucide-react";
 import { useToast } from "../utilities/Toaster";
 import { useAuth } from "../contexts/AuthContext";
-import { Navigate, useNavigate } from "react-router-dom";
+import { Navigate, useNavigate, useSearchParams } from "react-router-dom";
 const DualAuthForm = ({ isLogin, setIsLogin}) => {
     const { login } = useAuth();
     const navigate = useNavigate();
+    const [searchParams, setSearchParams] = useSearchParams();
     const [formData, setFormData] = useState({
         name: '',
         email: '',
@@ -109,6 +110,8 @@ const DualAuthForm = ({ isLogin, setIsLogin}) => {
     const changeForm = (isLogin) => {
         setIsLogin(isLogin)
         setError(null)
+        // Update URL to reflect the current mode
+        setSearchParams({ mode: isLogin ? 'login' : 'signup' })
     }
 
     const itemVariants = {

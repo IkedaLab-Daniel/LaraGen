@@ -2,11 +2,22 @@ import DualAuthForm from "../components/DualAuthForm";
 import { motion } from "framer-motion"
 import { ShieldCheck, User, KeyRound, Lock, Fingerprint, Zap } from "lucide-react";
 import LaragenGIF from '../assets/laragen.gif'
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 
 const Login = () => {
+    const [searchParams] = useSearchParams();
+    const [isLogin, setIsLogin] = useState(true);
 
-    const [isLogin, setIsLogin] = useState(true)
+    // Check URL params to determine initial state
+    useEffect(() => {
+        const mode = searchParams.get('mode');
+        if (mode === 'signup') {
+            setIsLogin(false);
+        } else {
+            setIsLogin(true); // Default to login
+        }
+    }, [searchParams]);
 
     const floatingVariants = {
         animate: {
