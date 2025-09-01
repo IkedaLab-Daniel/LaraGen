@@ -2,9 +2,11 @@ import { useState, useContext } from "react"
 import { AnimatePresence, motion } from "framer-motion"
 import { Github, User, Mail, EyeOff, Eye, Lock, ArrowRight, CircleAlert } from "lucide-react";
 import { useToast } from "../utilities/Toaster";
-import { Navigate } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext";
+import { Navigate, useNavigate } from "react-router-dom";
 const DualAuthForm = ({ isLogin, setIsLogin}) => {
-
+    const { login } = useAuth();
+    const navigate = useNavigate();
     const [formData, setFormData] = useState({
         name: '',
         email: '',
@@ -51,7 +53,8 @@ const DualAuthForm = ({ isLogin, setIsLogin}) => {
                 setError(data.message || "Authentication failed");
                 toast.error(data.message || "Authentication failed");
             } else {
-                localStorage.setItem("token", data.token)
+                // Use AuthContext login method
+                login(data.user, data.token);
                 console.log("Auth success:", data)
 
                 // Show success toast with personalized message
@@ -63,13 +66,18 @@ const DualAuthForm = ({ isLogin, setIsLogin}) => {
                     duration: 4000 // Custom duration for success message
                 });
                 
-                // Clear form
+                // Clear form and redirect to home
                 setFormData({
                     name: '',
                     email: '',
                     password: '',
                     confirmPassword: ''
                 });
+                
+                // Redirect to home page after successful authentication
+                setTimeout(() => {
+                    navigate('/');
+                }, 2000); // Wait 2 seconds to show the success message
                 
                 // Redirect after showing success toast
                 setTimeout(() => {

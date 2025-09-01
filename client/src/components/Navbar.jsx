@@ -1,11 +1,13 @@
 import { Link, useLocation } from 'react-router-dom'
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Home, BookOpen, LogIn, UserPlus } from 'lucide-react'
+import { Home, BookOpen, LogIn, UserPlus, User, LogOut } from 'lucide-react'
+import { useAuth } from '../contexts/AuthContext'
 
 const NavBar = () => {
     const [isOpen, setIsOpen] = useState(false)
     const currentLocation = useLocation().pathname
+    const { user, logout } = useAuth()
 
     const toggleMenu = () => {
         setIsOpen(!isOpen)
@@ -13,6 +15,11 @@ const NavBar = () => {
 
     const closeMenu = () => {
         setIsOpen(false)
+    }
+
+    const handleLogout = () => {
+        logout()
+        closeMenu()
     }
 
     const checkCurrentLocationMatch = (location) => {
@@ -38,16 +45,39 @@ const NavBar = () => {
                                     <BookOpen className="w-5 h-5" /> Contents
                             </li>
                         </Link>
-                        <Link to="/login">
-                            <li className={`hover:text-blue-500 transition-colors cursor-pointer flex items-center gap-2 ${checkCurrentLocationMatch('/login') ? 'text-blue-600 font-semibold' : ''}`}>
-                                <LogIn className="w-5 h-5" /> Log In
-                            </li>
-                        </Link>
-                        <Link to="/signup">
-                            <li className={`hover:text-blue-500 transition-colors cursor-pointer flex items-center gap-2 ${checkCurrentLocationMatch('/signup') ? 'text-blue-600 font-semibold' : ''}`}>
-                                <UserPlus className="w-5 h-5" /> Sign Up
-                            </li>
-                        </Link>
+                        
+                        {user ? (
+                            // Authenticated user
+                            <>
+                                <li className="flex items-center gap-2 text-blue-600">
+                                    <User className="w-5 h-5" />
+                                    <span className="font-medium">{user.name}</span>
+                                </li>
+                                <li>
+                                    <button
+                                        onClick={handleLogout}
+                                        className="flex items-center gap-2 px-4 py-2 text-red-600 hover:text-red-700 hover:bg-red-50 rounded-lg transition-colors cursor-pointer"
+                                    >
+                                        <LogOut className="w-5 h-5" />
+                                        Logout
+                                    </button>
+                                </li>
+                            </>
+                        ) : (
+                            // Non-authenticated user
+                            <>
+                                <Link to="/login">
+                                    <li className={`hover:text-blue-500 transition-colors cursor-pointer flex items-center gap-2 ${checkCurrentLocationMatch('/login') ? 'text-blue-600 font-semibold' : ''}`}>
+                                        <LogIn className="w-5 h-5" /> Log In
+                                    </li>
+                                </Link>
+                                <Link to="/signup">
+                                    <li className={`hover:text-blue-500 transition-colors cursor-pointer flex items-center gap-2 ${checkCurrentLocationMatch('/signup') ? 'text-blue-600 font-semibold' : ''}`}>
+                                        <UserPlus className="w-5 h-5" /> Sign Up
+                                    </li>
+                                </Link>
+                            </>
+                        )}
                     </ul>
                 </div>
 
@@ -150,26 +180,43 @@ const NavBar = () => {
                                         animate={{ opacity: 1, x: 0 }}
                                         transition={{ delay: 0.2 }}
                                     >
-                                        <Link 
-                                            to="/login" 
-                                            onClick={closeMenu}
-                                            className={`flex text-lg hover:text-blue-500 transition-colors items-center gap-2 ${checkCurrentLocationMatch('/login') ? 'text-blue-600 font-semibold' : ''}`}
-                                        >
-                                            <LogIn className="w-5 h-5" /> Log In
-                                        </Link>
+                                        {user ? (
+                                            <div className="flex items-center gap-2 text-blue-600 text-lg">
+                                                <User className="w-5 h-5" />
+                                                <span className="font-medium">{user.name}</span>
+                                            </div>
+                                        ) : (
+                                            <Link 
+                                                to="/login" 
+                                                onClick={closeMenu}
+                                                className={`flex text-lg hover:text-blue-500 transition-colors items-center gap-2 ${checkCurrentLocationMatch('/login') ? 'text-blue-600 font-semibold' : ''}`}
+                                            >
+                                                <LogIn className="w-5 h-5" /> Log In
+                                            </Link>
+                                        )}
                                     </motion.li>
                                     <motion.li
                                         initial={{ opacity: 0, x: 20 }}
                                         animate={{ opacity: 1, x: 0 }}
                                         transition={{ delay: 0.25 }}
                                     >
-                                        <Link 
-                                            to="/signup" 
-                                            onClick={closeMenu}
-                                            className={`flex text-lg hover:text-blue-500 transition-colors items-center gap-2 ${checkCurrentLocationMatch('/signup') ? 'text-blue-600 font-semibold' : ''}`}
-                                        >
-                                            <UserPlus className="w-5 h-5" /> Sign Up
-                                        </Link>
+                                        {user ? (
+                                            <button
+                                                onClick={handleLogout}
+                                                className="flex text-lg text-red-600 hover:text-red-700 transition-colors items-center gap-2 w-full"
+                                            >
+                                                <LogOut className="w-5 h-5" />
+                                                Logout
+                                            </button>
+                                        ) : (
+                                            <Link 
+                                                to="/signup" 
+                                                onClick={closeMenu}
+                                                className={`flex text-lg hover:text-blue-500 transition-colors items-center gap-2 ${checkCurrentLocationMatch('/signup') ? 'text-blue-600 font-semibold' : ''}`}
+                                            >
+                                                <UserPlus className="w-5 h-5" /> Sign Up
+                                            </Link>
+                                        )}
                                     </motion.li>
                                 </ul>
                             </nav>
