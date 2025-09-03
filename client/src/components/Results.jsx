@@ -126,7 +126,7 @@ const Results = ({ results }) => {
             {/* main project grid */}
             <motion.div
                 variants={containerVariants}
-                className="grid gap-6 grid-cols-1"
+                className="grid gap-6 grid-cols-1 lg:grid-cols-2"
             >
                 <AnimatePresence>
                     {projects.map((project, index) => (
@@ -134,158 +134,220 @@ const Results = ({ results }) => {
                             key={project.name}
                             variants={itemVariants}
                             layout
-                            className="w-[95%] md:w-full mx-auto bg-white/80 backdrop-blue-sm rounded-2xl shadow-xl p-6 border border-blue-100 hover:shadow-2xl transition-all duration-300 cursor-pointer group"
+                            className="w-[95%] md:w-full mx-auto bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl border border-blue-100 hover:shadow-2xl transition-all duration-300 group overflow-hidden"
                             whileHover={{ y: -5, scale: 1.02 }}
-                            onClick={() => setSelectedProject(selectedProject === index ? null : index)}
                         >
-                            <div className="space-y-4">
-                                {/* project heading here */}
+                            {/* Project Header - Always Visible */}
+                            <div className="p-6 space-y-4">
+                                {/* Project Title & Difficulty */}
                                 <div className="flex items-start justify-between">
                                     <h3 className="text-xl font-bold text-gray-800 group-hover:text-blue-600 transition-colors">
                                         {project.name}
                                     </h3>
-                                    <span className="px-2 py-1 rounded-full text-xs font-medium text-gray-400">
-                                        {project.difficulty}
+                                    <span className={`px-3 py-1 rounded-full text-xs font-medium ${
+                                        project.difficulty === 'beginner' ? 'bg-green-100 text-green-700' :
+                                        project.difficulty === 'intermediate' ? 'bg-yellow-100 text-yellow-700' :
+                                        'bg-red-100 text-red-700'
+                                    }`}>
+                                        {project.difficulty === 'beginner' ? 'Easy' : project.difficulty}
                                     </span>
                                 </div>
 
-                                <p className="text-gray-600 text-sm leading-relax">
+                                {/* Description */}
+                                <p className="text-gray-600 text-sm leading-relaxed">
                                     {project.description}
                                 </p>
 
-                                {/* time */}
-                                <div className="flex items-center gap-2 text-sm text-gray-500">
-                                    <Clock className="w-4 h-4" />
-                                    <span>{project.estimatedTime}</span>
+                                {/* Time & Tech Preview */}
+                                <div className="flex items-center justify-between">
+                                    <div className="flex items-center gap-2 text-sm text-gray-500">
+                                        <Clock className="w-4 h-4" />
+                                        <span>{project.estimatedTime}</span>
+                                    </div>
+                                    <div className="flex items-center gap-2 text-sm text-gray-500">
+                                        <Code className="w-4 h-4" />
+                                        <span>{project.features.length} features</span>
+                                    </div>
                                 </div>
 
-                                {/* key feature preview */}
+                                {/* Quick Features Preview */}
                                 <div className="space-y-2">
                                     <h4 className="text-sm font-semibold text-gray-700 flex items-center gap-2">
                                         <Star className="w-4 h-4" />
-                                        Key Feature
+                                        Key Features
                                     </h4>
                                     <div className="flex flex-wrap gap-1">
-                                        {project.features.slice(0,2).map((feature, index) => (
-                                            <span key={index} className="px-2 py-1 bg-blue-50 text-blue-700 rounded-md text-xs">
+                                        {project.features.slice(0,3).map((feature, idx) => (
+                                            <span key={idx} className="px-2 py-1 bg-blue-50 text-blue-700 rounded-md text-xs">
                                                 {feature}
                                             </span>
                                         ))}
-                                        {project.features.length > 2 && (
-                                            <span className="px-2 py-1 bg-gray-100 text-gray-600 rounded-md text-xs">
-                                                + {project.features.length - 2} more
-                                            </span>
+                                        {project.features.length > 3 && (
+                                            <motion.button
+                                                whileHover={{ scale: 1.05 }}
+                                                whileTap={{ scale: 0.95 }}
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    setSelectedProject(selectedProject === index ? null : index);
+                                                }}
+                                                className="px-2 py-1 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-md text-xs hover:shadow-lg transition-all duration-300"
+                                            >
+                                                + {project.features.length - 3} more
+                                            </motion.button>
                                         )}
                                     </div>
                                 </div>
 
-                                {/* Expand button here  */}
-                                <motion.button
-                                    whileHover={{ scale: 1.05 }}
-                                    whileTap={{ scale: 0.95 }}
-                                    className="w-full mt-4 py-2 bg-gradient-to-r from-blue-700 via-blue-500 to-indigo-600 text-white rounded-lg font-medium hover:shadow-lg transition-all duration-300 flex items-center justify-center gap-2"
-                                >
-                                    <Code className="w-4 h-4" />
-                                    {selectedProject === index ? "Show Less" : "Show More"}
-                                </motion.button>
-
-                                {/* expand details */}
-                                <AnimatePresence>
-                                    {selectedProject === index && (
-                                        <motion.div
-                                            initial={{ height: 0, opacity: 0 }}
-                                            animate={{ height: 'auto', opacity: 1 }}
-                                            exit={{ height: 0, opacity: 0 }}
-                                            transition={{ duration: 0.3 }}
-                                            className="overflow-hidden"
+                                {/* Action Buttons - Always Visible */}
+                                <div className="flex gap-3 pt-2">
+                                    <motion.button
+                                        whileHover={{ scale: 1.05 }}
+                                        whileTap={{ scale: 0.95 }}
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            setSelectedProject(selectedProject === index ? null : index);
+                                        }}
+                                        className="flex-1 py-2 bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-600 text-white rounded-lg font-medium hover:shadow-lg transition-all duration-300 flex items-center justify-center gap-2"
+                                    >
+                                        <Target className="w-4 h-4" />
+                                        View Details
+                                    </motion.button>
+                                    
+                                    {user ? (
+                                        <motion.button
+                                            whileHover={{ scale: 1.05 }}
+                                            whileTap={{ scale: 0.95 }}
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                saveProject(project, index);
+                                            }}
+                                            disabled={savingProject === index}
+                                            className="px-4 py-2 bg-yellow-200 rounded-lg font-medium border border-yellow-600 text-yellow-600 hover:shadow-lg transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
                                         >
-                                            <div className="pt-6 mt-6 border-t border-gray-200 space-y-4">
-                                                {/* All Features */}
-                                                <div>
-                                                    <h4 className="text-sm font-semibold text-gray-700 mb-2 flex items-center gap-2">
+                                            {savingProject === index ? (
+                                                <motion.div
+                                                    animate={{ rotate: 360 }}
+                                                    transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
+                                                    className="w-4 h-4 border-2 border-white border-t-transparent rounded-full"
+                                                />
+                                            ) : (
+                                                <BookmarkPlus className="w-4 h-4" />
+                                            )}
+                                        </motion.button>
+                                    ) : (
+                                        <motion.button
+                                            whileHover={{ scale: 1.05 }}
+                                            whileTap={{ scale: 0.95 }}
+                                            className="px-4 py-2 bg-gray-300 text-gray-500 rounded-lg font-medium cursor-not-allowed flex items-center justify-center gap-2"
+                                            disabled
+                                        >
+                                            <Heart className="w-4 h-4" />
+                                        </motion.button>
+                                    )}
+                                </div>
+                            </div>
+
+                            {/* Expandable Details Section */}
+                            <AnimatePresence>
+                                {selectedProject === index && (
+                                    <motion.div
+                                        initial={{ height: 0, opacity: 0 }}
+                                        animate={{ height: 'auto', opacity: 1 }}
+                                        exit={{ height: 0, opacity: 0 }}
+                                        transition={{ duration: 0.4, ease: "easeInOut" }}
+                                        className="overflow-hidden bg-gradient-to-br from-blue-50 to-indigo-50 border-t border-blue-100"
+                                    >
+                                        <div className="p-6 space-y-5">
+                                            {/* Complete Features */}
+                                            <div className="bg-white/60 rounded-xl p-4">
+                                                <h4 className="text-sm font-semibold text-gray-700 mb-3 flex items-center gap-2">
                                                     <CheckCircle className="w-4 h-4 text-green-500" />
                                                     Complete Feature List
-                                                    </h4>
-                                                    <ul className="space-y-1">
+                                                </h4>
+                                                <div className="grid grid-cols-1 gap-2">
                                                     {project.features.map((feature, idx) => (
-                                                        <li key={idx} className="text-sm text-gray-600 flex items-start gap-2">
-                                                        <div className="w-1.5 h-1.5 bg-blue-400 rounded-full mt-2 flex-shrink-0"></div>
-                                                        {feature}
-                                                        </li>
+                                                        <motion.div
+                                                            key={idx}
+                                                            initial={{ opacity: 0, x: -20 }}
+                                                            animate={{ opacity: 1, x: 0 }}
+                                                            transition={{ delay: idx * 0.1 }}
+                                                            className="flex items-start gap-2 text-sm text-gray-700 bg-white/80 rounded-lg p-2"
+                                                        >
+                                                            <div className="w-1.5 h-1.5 bg-green-400 rounded-full mt-2 flex-shrink-0"></div>
+                                                            {feature}
+                                                        </motion.div>
                                                     ))}
-                                                    </ul>
                                                 </div>
-
-                                                {/* Learning Outcomes */}
-                                                <div>
-                                                    <h4 className="text-sm font-semibold text-gray-700 mb-2 flex items-center gap-2">
-                                                    <Target className="w-4 h-4 text-purple-500" />
-                                                    Learning Outcomes
-                                                    </h4>
-                                                    <ul className="space-y-1">
-                                                    {project.learningOutcomes.map((outcome, idx) => (
-                                                        <li key={idx} className="text-sm text-gray-600 flex items-start gap-2">
-                                                        <div className="w-1.5 h-1.5 bg-purple-400 rounded-full mt-2 flex-shrink-0"></div>
-                                                        {outcome}
-                                                        </li>
-                                                    ))}
-                                                    </ul>
-                                                </div>
-
-                                                {/* Action Buttons */}
-                                                {user ? (
-                                                    <motion.button
-                                                        whileHover={{ scale: 1.05 }}
-                                                        whileTap={{ scale: 0.95 }}
-                                                        onClick={() => saveProject(project, index)}
-                                                        disabled={savingProject === index}
-                                                        className="w-full py-3 bg-gradient-to-r from-green-500 to-teal-600 text-white rounded-lg font-medium hover:shadow-lg transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
-                                                    >
-                                                        {savingProject === index ? (
-                                                            <>
-                                                                <motion.div
-                                                                    animate={{ rotate: 360 }}
-                                                                    transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
-                                                                    className="w-4 h-4 border-2 border-white border-t-transparent rounded-full"
-                                                                />
-                                                                Saving...
-                                                            </>
-                                                        ) : (
-                                                            <>
-                                                                <BookmarkPlus className="w-4 h-4" />
-                                                                Save Project
-                                                            </>
-                                                        )}
-                                                    </motion.button>
-                                                ) : (
-                                                    <SignInCard />
-                                                )}
-
-                                                {/* <motion.button
-                                                    whileHover={{ scale: 1.05 }}
-                                                    whileTap={{ scale: 0.95 }}
-                                                    className="w-full py-3 bg-gradient-to-r from-green-500 to-teal-600 text-white rounded-lg font-medium hover:shadow-lg transition-all duration-300 flex items-center justify-center gap-2"
-                                                >
-                                                    <ExternalLink className="w-4 h-4" />
-                                                    Start Building This Project
-                                                </motion.button> */}
                                             </div>
-                                        </motion.div>
-                                    )}
-                                </AnimatePresence>
-                            </div>
+
+                                            {/* Learning Outcomes */}
+                                            <div className="bg-white/60 rounded-xl p-4">
+                                                <h4 className="text-sm font-semibold text-gray-700 mb-3 flex items-center gap-2">
+                                                    <Target className="w-4 h-4 text-purple-500" />
+                                                    What You'll Learn
+                                                </h4>
+                                                <div className="grid grid-cols-1 gap-2">
+                                                    {project.learningOutcomes.map((outcome, idx) => (
+                                                        <motion.div
+                                                            key={idx}
+                                                            initial={{ opacity: 0, x: -20 }}
+                                                            animate={{ opacity: 1, x: 0 }}
+                                                            transition={{ delay: idx * 0.1 + 0.2 }}
+                                                            className="flex items-start gap-2 text-sm text-gray-700 bg-white/80 rounded-lg p-2"
+                                                        >
+                                                            <div className="w-1.5 h-1.5 bg-purple-400 rounded-full mt-2 flex-shrink-0"></div>
+                                                            {outcome}
+                                                        </motion.div>
+                                                    ))}
+                                                </div>
+                                            </div>
+
+                                            {/* Save Project Button for Non-Authenticated Users */}
+                                            {!user && (
+                                                <motion.div
+                                                    initial={{ opacity: 0, y: 20 }}
+                                                    animate={{ opacity: 1, y: 0 }}
+                                                    transition={{ delay: 0.3 }}
+                                                >
+                                                    <SignInCard />
+                                                </motion.div>
+                                            )}
+
+                                            {/* Close Button */}
+                                            <motion.button
+                                                whileHover={{ scale: 1.02 }}
+                                                whileTap={{ scale: 0.98 }}
+                                                onClick={() => setSelectedProject(null)}
+                                                className="w-full py-2 bg-white/80 text-gray-600 rounded-lg font-medium hover:bg-white transition-all duration-300 flex items-center justify-center gap-2 border border-gray-200"
+                                            >
+                                                <motion.div
+                                                    animate={{ rotate: selectedProject === index ? 180 : 0 }}
+                                                    transition={{ duration: 0.3 }}
+                                                >
+                                                    ▲
+                                                </motion.div>
+                                                Close Details
+                                            </motion.button>
+                                        </div>
+                                    </motion.div>
+                                )}
+                            </AnimatePresence>
                         </motion.div>
                     ))}
                 </AnimatePresence>
             </motion.div>
 
-            {/* Sign In Card for unauthenticated users - shown at bottom */}
-            {!user && (
+            {/* Fallback notification if applicable */}
+            {isFallback && (
                 <motion.div
                     variants={itemVariants}
-                    className="w-[95%] md:w-full mx-auto"
+                    className="w-[95%] md:w-full mx-auto bg-yellow-50 border border-yellow-200 rounded-lg p-4 flex items-center gap-3"
                 >
-                    <SignInCard />
+                    <AlertTriangle className="w-5 h-5 text-yellow-600 flex-shrink-0" />
+                    <div>
+                        <p className="text-sm text-yellow-800 font-medium">Using Fallback Ideas</p>
+                        <p className="text-xs text-yellow-700">{fallbackReason || 'API service temporarily unavailable'}</p>
+                    </div>
                 </motion.div>
             )}
         </motion.div>
