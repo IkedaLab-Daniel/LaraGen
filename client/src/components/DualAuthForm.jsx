@@ -129,13 +129,13 @@ const DualAuthForm = ({ isLogin, setIsLogin}) => {
     return(
         <motion.div
             variants={itemVariants}
-            className="w-[90%] md:min-w-[480px] mx-auto bg-white/80 backdrop-blur-sm rounded-xl p-3 md:p-5 shadow-2xl border boder-white/50"
+            className="w-[90%] md:min-w-[480px] lg:min-w-[600px] mx-auto bg-white/80 backdrop-blur-sm rounded-xl p-3 md:p-5p lg:p-8 shadow-2xl border boder-white/50"
         >
             {/* toggle tabs */}
             <div className="flex mb-3 p-1 bg-gray-100/80 rounded-2xl">
                 <button
                     onClick={() => changeForm(true)}
-                    className={`flex-1 py-2 px-3 md:px-4 rounded-xl font-semibold text-sm transition-all duration-300 ${
+                    className={`flex-1 py-2 px-3 md:px-4 lg:py-4 rounded-xl font-semibold text-sm transition-all duration-300 ${
                         isLogin
                             ? 'bg-white shadow-lg text-gray-900'
                             : 'text-gray-600 hover:text-gray-800'
@@ -145,7 +145,7 @@ const DualAuthForm = ({ isLogin, setIsLogin}) => {
                 </button>
                 <button
                     onClick={() => changeForm(false)}
-                    className={`flex-1 py-2 px-3 md:px-4 rounded-xl font-semibold text-sm transition-all duration-300 ${
+                    className={`flex-1 py-2 px-3 md:px-4 lg:px-6 rounded-xl font-semibold text-sm transition-all duration-300 ${
                         !isLogin
                             ? 'bg-white shadow-lg text-gray-900'
                             : 'text-gray-600 hover:text-gray-800'
@@ -163,7 +163,7 @@ const DualAuthForm = ({ isLogin, setIsLogin}) => {
                 <motion.button
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
-                    className="w-full flex items-center justify-center py-2 px-4 bg-gray-900 text-white rounded-xl font-medium hover:bg-gray-800 transition-colors duration-200 mb-3"
+                    className="w-full flex items-center justify-center py-2 lg:py-4 px-4 bg-gray-900 text-white rounded-xl font-medium hover:bg-gray-800 transition-colors duration-200 mb-3"
                 >
                     {/* ? GitHub icon marked as deplicated!!?? */}
                     <Github className="w-5 h-5 mr-3" /> 
@@ -198,7 +198,7 @@ const DualAuthForm = ({ isLogin, setIsLogin}) => {
                                         placeholder="Full Name"
                                         value={formData.name}
                                         onChange={handleInputChange}
-                                        className="w-full pl-12 pr-4 py-2.5 bg-gray-50/80 border border-gray-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-200 focus:border-blue-400 transition-all duration-300"
+                                        className="w-full pl-12 pr-4 py-2.5 lg:py-4 bg-gray-50/80 border border-gray-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-200 focus:border-blue-400 transition-all duration-300"
                                     />
                                 </div>
                             </motion.div>
@@ -213,7 +213,7 @@ const DualAuthForm = ({ isLogin, setIsLogin}) => {
                             placeholder="Email Address"
                             value={formData.email}
                             onChange={handleInputChange}
-                            className="w-full pl-12 pr-4 py-2.5 bg-gray-50/80 border border-gray-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-200 focus:border-blue-400 transition-all duration-300"
+                            className="w-full pl-12 pr-4 py-2.5 lg:py-4 bg-gray-50/80 border border-gray-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-200 focus:border-blue-400 transition-all duration-300"
                             required
                         />
                     </div>
@@ -227,7 +227,7 @@ const DualAuthForm = ({ isLogin, setIsLogin}) => {
                         placeholder="Password"
                         value={formData.password}
                         onChange={handleInputChange}
-                        className="w-full pl-12 pr-12 py-2.5 bg-gray-50/80 border border-gray-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-200 focus:border-blue-400 transition-all duration-300"
+                        className="w-full pl-12 pr-12 py-2.5 lg:py-4 bg-gray-50/80 border border-gray-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-200 focus:border-blue-400 transition-all duration-300"
                         required
                     />
                     <button
@@ -255,7 +255,7 @@ const DualAuthForm = ({ isLogin, setIsLogin}) => {
                             placeholder="Confirm Password"
                             value={formData.confirmPassword}
                             onChange={handleInputChange}
-                            className="w-full pl-12 pr-12 py-2.5 bg-gray-50/80 border border-gray-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-200 focus:border-blue-400 transition-all duration-300"
+                            className="w-full pl-12 pr-12 py-2.5 lg:py-4 bg-gray-50/80 border border-gray-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-200 focus:border-blue-400 transition-all duration-300"
                             required={!isLogin}
                         />
                         <button
@@ -297,7 +297,7 @@ const DualAuthForm = ({ isLogin, setIsLogin}) => {
                     disabled={isLoading}
                     whileHover={!isLoading ? { scale: 1.02 } : {}}
                     whileTap={!isLoading ? { scale: 0.98 } : {}}
-                    className="w-full py-2.5 md:py-3 px-6 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-xl font-semibold flex items-center justify-center space-x-2 hover:shadow-xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="w-full py-2.5 md:py-3 lg:py-4 px-6 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-xl font-semibold flex items-center justify-center space-x-2 hover:shadow-xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                     {isLoading ? (
                     <>
