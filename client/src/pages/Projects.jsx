@@ -217,7 +217,7 @@ const Projects = () => {
                                     {/* Project Header */}
                                     <div className="mb-4">
                                         <div className="flex items-start justify-between mb-2">
-                                            <h3 className="text-lg font-bold text-gray-800 group-hover:text-blue-600 transition-colors">
+                                            <h3 className="text-lg font-bold text-gray-800 group-hover:text-blue-600 transition-colors max-w-[70%]">
                                                 {project.name}
                                             </h3>
                                             <span className={`px-2 py-1 rounded-full text-xs font-medium ${
@@ -225,7 +225,7 @@ const Projects = () => {
                                                 project.difficulty === 'intermediate' ? 'bg-yellow-100 text-yellow-700' :
                                                 'bg-red-100 text-red-700'
                                             }`}>
-                                                {project.difficulty}
+                                                {project.difficulty === 'beginner' ? 'EASY' : project.difficulty.toUpperCase()}
                                             </span>
                                         </div>
                                         
@@ -272,7 +272,7 @@ const Projects = () => {
                                     </div>
 
                                     {/* Features Preview */}
-                                    <div className="space-y-2">
+                                    <div className="space-y-2 mb-4">
                                         <h4 className="text-sm font-semibold text-gray-700 flex items-center gap-2">
                                             <Star className="w-4 h-4" />
                                             Key Features
@@ -306,7 +306,7 @@ const Projects = () => {
                                                 whileTap={{ scale: 0.95 }}
                                                 onClick={() => toggleAura(project.id)}
                                                 disabled={togglingAura.has(project.id)}
-                                                className={`px-3 py-1 rounded-full text-xs font-medium transition-all duration-300 flex items-center gap-1 ${
+                                                className={`px-3 w-[50%] py-3 rounded-full text-sm font-medium transition-all duration-300 flex items-center justify-center gap-1 ${
                                                     project.has_aura
                                                         ? 'bg-purple-100 text-purple-700 border border-purple-300'
                                                         : 'bg-gray-100 text-gray-600 hover:bg-purple-50 hover:text-purple-600'
