@@ -68,7 +68,7 @@ const NavBar = () => {
                             </li>
                         </Link>
                         <Link to="/projects">
-                            <li className={`hover:text-blue-500 transition-colors cursor-pointer flex items-center gap-2 ${checkCurrentLocationMatch('/contents') ? 'text-blue-600 font-semibold' : ''}`}>
+                            <li className={`hover:text-blue-500 transition-colors cursor-pointer flex items-center gap-2 ${checkCurrentLocationMatch('/projects') ? 'text-blue-600 font-semibold' : ''}`}>
                                     <BookOpen className="w-5 h-5" /> Projects
                             </li>
                         </Link>
@@ -229,11 +229,11 @@ const NavBar = () => {
                                         transition={{ delay: 0.15 }}
                                     >
                                         <Link 
-                                            to="/contents" 
+                                            to="/projects" 
                                             onClick={closeMenu}
-                                            className={`flex text-lg hover:text-blue-500 transition-colors items-center gap-2 ${checkCurrentLocationMatch('/contents') ? 'text-blue-600 font-semibold' : ''}`}
+                                            className={`flex text-lg hover:text-blue-500 transition-colors items-center gap-2 ${checkCurrentLocationMatch('/projects') ? 'text-blue-600 font-semibold' : ''}`}
                                         >
-                                            <BookOpen className="w-5 h-5" /> Contents
+                                            <BookOpen className="w-5 h-5" /> Projects
                                         </Link>
                                     </motion.li>
                                     <motion.li
