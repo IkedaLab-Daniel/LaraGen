@@ -1,18 +1,24 @@
 import { AnimatePresence, motion } from "framer-motion";
-import { Lightbulb, Clock, Code, CheckCircle, Target, AlertTriangle, BookmarkPlus } from "lucide-react";
-import { useState } from "react";
+import { Lightbulb, Clock, Code, CheckCircle, Target, AlertTriangle, BookmarkPlus, Check } from "lucide-react";
+import { useState, useEffect } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import { useToast } from "../utilities/Toaster";
 import SignInCard from "./SignInCard";
 
 const Results = ({ results }) => {
     const [savingProject, setSavingProject] = useState(null)
+    const [savedProjects, setSavedProjects] = useState(new Set())
     const { user } = useAuth()
     const toast = useToast()
     let projects = [];
     if (results && results.data && results.data.projects && Array.isArray(results.data.projects.projects)) {
         projects = results.data.projects.projects;
     }
+
+    // Reset saved projects when new results are generated
+    useEffect(() => {
+        setSavedProjects(new Set());
+    }, [results]);
 
     const containerVariants = {
         hidden: { opacity: 0 },
@@ -44,6 +50,12 @@ const Results = ({ results }) => {
             return;
         }
 
+        // Check if project is already saved
+        if (savedProjects.has(index)) {
+            toast.info('Project already saved!');
+            return;
+        }
+
         setSavingProject(index);
         
         try {
@@ -69,6 +81,8 @@ const Results = ({ results }) => {
             const data = await response.json();
 
             if (response.ok) {
+                // Mark project as saved
+                setSavedProjects(prev => new Set(prev).add(index));
                 toast.success('Project saved successfully! 🎉');
             } else {
                 toast.error(data.message || 'Failed to save project');
@@ -133,9 +147,26 @@ const Results = ({ results }) => {
                             key={project.name}
                             variants={itemVariants}
                             layout
-                            className="w-[95%] md:w-full mx-auto bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl border border-blue-100 hover:shadow-2xl transition-all duration-300 group overflow-hidden"
+                            className={`w-[95%] md:w-full mx-auto bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl border transition-all duration-300 group overflow-hidden relative ${
+                                savedProjects.has(index) 
+                                    ? 'border-green-300 ring-2 ring-green-200' 
+                                    : 'border-blue-100 hover:shadow-2xl'
+                            }`}
                             whileHover={{ y: -5, scale: 1.02 }}
                         >
+                            {/* Saved Badge */}
+                            {savedProjects.has(index) && (
+                                <motion.div
+                                    initial={{ opacity: 0, scale: 0, rotate: -45 }}
+                                    animate={{ opacity: 1, scale: 1, rotate: 0 }}
+                                    transition={{ type: 'spring', stiffness: 500, damping: 30 }}
+                                    className="absolute top-4 right-4 bg-green-500 text-white px-2 py-1 rounded-full text-xs font-medium flex items-center gap-1 shadow-lg z-10"
+                                >
+                                    <Check className="w-3 h-3" />
+                                    Saved
+                                </motion.div>
+                            )}
+
                             {/* Complete Project Card */}
                             <div className="p-6 space-y-6">
                                 {/* Project Header */}
@@ -143,13 +174,6 @@ const Results = ({ results }) => {
                                     <h3 className="text-xl font-bold text-gray-800 group-hover:text-blue-600 transition-colors">
                                         {project.name}
                                     </h3>
-                                    <span className={`px-3 py-1 rounded-full text-xs font-medium ${
-                                        project.difficulty === 'beginner' ? 'bg-green-100 text-green-700' :
-                                        project.difficulty === 'intermediate' ? 'bg-yellow-100 text-yellow-700' :
-                                        'bg-red-100 text-red-700'
-                                    }`}>
-                                        {project.difficulty === 'beginner' ? 'Easy' : project.difficulty}
-                                    </span>
                                 </div>
 
                                 {/* Description */}
@@ -216,11 +240,17 @@ const Results = ({ results }) => {
                                 {/* Action Buttons */}
                                 {user ? (
                                     <motion.button
-                                        whileHover={{ scale: 1.05 }}
-                                        whileTap={{ scale: 0.95 }}
+                                        whileHover={!savedProjects.has(index) ? { scale: 1.05 } : {}}
+                                        whileTap={!savedProjects.has(index) ? { scale: 0.95 } : {}}
                                         onClick={() => saveProject(project, index)}
-                                        disabled={savingProject === index}
-                                        className="w-full py-3 bg-blue-600 text-white rounded-lg font-medium hover:shadow-lg transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                                        disabled={savingProject === index || savedProjects.has(index)}
+                                        className={`w-full py-3 rounded-lg font-medium transition-all duration-300 flex items-center justify-center gap-2 ${
+                                            savedProjects.has(index)
+                                                ? 'bg-green-100 text-green-700 border-2 border-green-300 cursor-default'
+                                                : savingProject === index
+                                                ? 'bg-blue-400 text-white cursor-not-allowed opacity-75'
+                                                : 'bg-blue-600 text-white hover:bg-blue-700 hover:shadow-lg'
+                                        }`}
                                     >
                                         {savingProject === index ? (
                                             <>
@@ -230,6 +260,17 @@ const Results = ({ results }) => {
                                                     className="w-4 h-4 border-2 border-white border-t-transparent rounded-full"
                                                 />
                                                 Saving Project...
+                                            </>
+                                        ) : savedProjects.has(index) ? (
+                                            <>
+                                                <motion.div
+                                                    initial={{ scale: 0 }}
+                                                    animate={{ scale: 1 }}
+                                                    transition={{ type: 'spring', stiffness: 500, damping: 30 }}
+                                                >
+                                                    <Check className="w-4 h-4" />
+                                                </motion.div>
+                                                Project Saved!
                                             </>
                                         ) : (
                                             <>
