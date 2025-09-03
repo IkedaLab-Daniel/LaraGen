@@ -67,9 +67,9 @@ const NavBar = () => {
                                 <Home className="w-5 h-5" /> Home
                             </li>
                         </Link>
-                        <Link to="/contents">
+                        <Link to="/projects">
                             <li className={`hover:text-blue-500 transition-colors cursor-pointer flex items-center gap-2 ${checkCurrentLocationMatch('/contents') ? 'text-blue-600 font-semibold' : ''}`}>
-                                    <BookOpen className="w-5 h-5" /> Contents
+                                    <BookOpen className="w-5 h-5" /> Projects
                             </li>
                         </Link>
                         

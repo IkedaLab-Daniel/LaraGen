@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\ProjectIdeaController;
+use App\Http\Controllers\Api\SavedProjectController;
 use App\Http\Controllers\AuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -9,6 +10,10 @@ use Illuminate\Support\Facades\Route;
 // ? Project Ideas API routes
 Route::post('generate-ideas', [ProjectIdeaController::class, 'generate']);
 Route::get('options', [ProjectIdeaController::class, 'options']);
+
+// ? Public saved projects (no auth required)
+Route::get('projects', [SavedProjectController::class, 'index']);
+Route::get('projects/{savedProject}', [SavedProjectController::class, 'show']);
 
 // ? Auths
 Route::post('/register', [AuthController::class, 'register']);
@@ -19,5 +24,11 @@ Route::middleware('auth:sanctum')->group(function() {
         return $request->user();
     });
 
-   Route::post('/logout', [AuthController::class, 'logout']);
+    Route::post('/logout', [AuthController::class, 'logout']);
+    
+    // ? Protected saved projects routes
+    Route::get('/my-projects', [SavedProjectController::class, 'myProjects']);
+    Route::post('/projects', [SavedProjectController::class, 'store']);
+    Route::put('/projects/{savedProject}', [SavedProjectController::class, 'update']);
+    Route::delete('/projects/{savedProject}', [SavedProjectController::class, 'destroy']);
 });

@@ -1,12 +1,15 @@
 import { AnimatePresence, motion } from "framer-motion";
-import { Lightbulb, Clock, Star, Code, CheckCircle, Target, ExternalLink, AlertTriangle } from "lucide-react";
+import { Lightbulb, Clock, Star, Code, CheckCircle, Target, ExternalLink, AlertTriangle, Heart, BookmarkPlus } from "lucide-react";
 import { useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
+import { useToast } from "../utilities/Toaster";
 import SignInCard from "./SignInCard";
 
 const Results = ({ results }) => {
     const [selectedProject, setSelectedProject] = useState(null)
+    const [savingProject, setSavingProject] = useState(null)
     const { user } = useAuth()
+    const toast = useToast()
     let projects = [];
     if (results && results.data && results.data.projects && Array.isArray(results.data.projects.projects)) {
         projects = results.data.projects.projects;
@@ -35,6 +38,52 @@ const Results = ({ results }) => {
         console.log(projects)
         console.log(results)
     }
+
+    const saveProject = async (project, index) => {
+        if (!user) {
+            toast.error('Please sign in to save projects');
+            return;
+        }
+
+        setSavingProject(index);
+        
+        try {
+            const token = localStorage.getItem('token');
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/projects`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    name: project.name,
+                    description: project.description,
+                    features: project.features,
+                    estimated_time: project.estimatedTime,
+                    learning_outcomes: project.learningOutcomes,
+                    difficulty: project.difficulty || results?.data?.request_difficulty || 'intermediate',
+                    tech_stack: results?.data?.requested_techs || [],
+                    is_public: true
+                })
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                toast.success('Project saved successfully! 🎉');
+            } else {
+                toast.error(data.message || 'Failed to save project');
+            }
+        } catch (error) {
+            toast.error('Network error while saving project');
+        } finally {
+            setSavingProject(null);
+        }
+    };
+
+    // Check if fallback was used
+    const isFallback = results?.data?.is_fallback;
+    const fallbackReason = results?.data?.fallback_reason;
 
     // Error handling
     if (results && results.error) {
@@ -183,8 +232,35 @@ const Results = ({ results }) => {
                                                     </ul>
                                                 </div>
 
-                                                {/* Action Button
-                                                */}
+                                                {/* Action Buttons */}
+                                                {user ? (
+                                                    <motion.button
+                                                        whileHover={{ scale: 1.05 }}
+                                                        whileTap={{ scale: 0.95 }}
+                                                        onClick={() => saveProject(project, index)}
+                                                        disabled={savingProject === index}
+                                                        className="w-full py-3 bg-gradient-to-r from-green-500 to-teal-600 text-white rounded-lg font-medium hover:shadow-lg transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                                                    >
+                                                        {savingProject === index ? (
+                                                            <>
+                                                                <motion.div
+                                                                    animate={{ rotate: 360 }}
+                                                                    transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
+                                                                    className="w-4 h-4 border-2 border-white border-t-transparent rounded-full"
+                                                                />
+                                                                Saving...
+                                                            </>
+                                                        ) : (
+                                                            <>
+                                                                <BookmarkPlus className="w-4 h-4" />
+                                                                Save Project
+                                                            </>
+                                                        )}
+                                                    </motion.button>
+                                                ) : (
+                                                    <SignInCard />
+                                                )}
+
                                                 {/* <motion.button
                                                     whileHover={{ scale: 1.05 }}
                                                     whileTap={{ scale: 0.95 }}
@@ -193,10 +269,6 @@ const Results = ({ results }) => {
                                                     <ExternalLink className="w-4 h-4" />
                                                     Start Building This Project
                                                 </motion.button> */}
-
-                                                {!user && (
-                                                    <SignInCard />
-                                                )}
                                             </div>
                                         </motion.div>
                                     )}
