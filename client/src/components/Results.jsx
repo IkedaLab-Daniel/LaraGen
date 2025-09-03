@@ -1,12 +1,11 @@
 import { AnimatePresence, motion } from "framer-motion";
-import { Lightbulb, Clock, Star, Code, CheckCircle, Target, ExternalLink, AlertTriangle, Heart, BookmarkPlus } from "lucide-react";
+import { Lightbulb, Clock, Code, CheckCircle, Target, AlertTriangle, BookmarkPlus } from "lucide-react";
 import { useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import { useToast } from "../utilities/Toaster";
 import SignInCard from "./SignInCard";
 
 const Results = ({ results }) => {
-    const [selectedProject, setSelectedProject] = useState(null)
     const [savingProject, setSavingProject] = useState(null)
     const { user } = useAuth()
     const toast = useToast()
@@ -137,9 +136,9 @@ const Results = ({ results }) => {
                             className="w-[95%] md:w-full mx-auto bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl border border-blue-100 hover:shadow-2xl transition-all duration-300 group overflow-hidden"
                             whileHover={{ y: -5, scale: 1.02 }}
                         >
-                            {/* Project Header - Always Visible */}
-                            <div className="p-6 space-y-4">
-                                {/* Project Title & Difficulty */}
+                            {/* Complete Project Card */}
+                            <div className="p-6 space-y-6">
+                                {/* Project Header */}
                                 <div className="flex items-start justify-between">
                                     <h3 className="text-xl font-bold text-gray-800 group-hover:text-blue-600 transition-colors">
                                         {project.name}
@@ -158,180 +157,93 @@ const Results = ({ results }) => {
                                     {project.description}
                                 </p>
 
-                                {/* Time & Tech Preview */}
-                                <div className="flex items-center justify-between">
-                                    <div className="flex items-center gap-2 text-sm text-gray-500">
-                                        <Clock className="w-4 h-4" />
-                                        <span>{project.estimatedTime}</span>
+                                {/* Time & Feature Count */}
+                                <div className="flex items-center justify-between p-3 bg-blue-50 rounded-lg">
+                                    <div className="flex items-center gap-2 text-sm text-gray-600">
+                                        <Clock className="w-4 h-4 text-blue-500" />
+                                        <span className="font-medium">{project.estimatedTime}</span>
                                     </div>
-                                    <div className="flex items-center gap-2 text-sm text-gray-500">
-                                        <Code className="w-4 h-4" />
-                                        <span>{project.features.length} features</span>
+                                    <div className="flex items-center gap-2 text-sm text-gray-600">
+                                        <Code className="w-4 h-4 text-blue-500" />
+                                        <span className="font-medium">{project.features.length} features</span>
                                     </div>
                                 </div>
 
-                                {/* Quick Features Preview */}
-                                <div className="space-y-2">
-                                    <h4 className="text-sm font-semibold text-gray-700 flex items-center gap-2">
-                                        <Star className="w-4 h-4" />
-                                        Key Features
+                                {/* Complete Features */}
+                                <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl p-4 border border-green-100">
+                                    <h4 className="text-sm font-semibold text-gray-700 mb-3 flex items-center gap-2">
+                                        <CheckCircle className="w-4 h-4 text-green-500" />
+                                        Complete Feature List
                                     </h4>
-                                    <div className="flex flex-wrap gap-1">
-                                        {project.features.slice(0,3).map((feature, idx) => (
-                                            <span key={idx} className="px-2 py-1 bg-blue-50 text-blue-700 rounded-md text-xs">
-                                                {feature}
-                                            </span>
-                                        ))}
-                                        {project.features.length > 3 && (
-                                            <motion.button
-                                                whileHover={{ scale: 1.05 }}
-                                                whileTap={{ scale: 0.95 }}
-                                                onClick={(e) => {
-                                                    e.stopPropagation();
-                                                    setSelectedProject(selectedProject === index ? null : index);
-                                                }}
-                                                className="px-2 py-1 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-md text-xs hover:shadow-lg transition-all duration-300"
+                                    <div className="grid grid-cols-1 gap-2">
+                                        {project.features.map((feature, idx) => (
+                                            <motion.div
+                                                key={idx}
+                                                initial={{ opacity: 0, x: -20 }}
+                                                animate={{ opacity: 1, x: 0 }}
+                                                transition={{ delay: idx * 0.05 }}
+                                                className="flex items-start gap-2 text-sm text-gray-700 bg-white/80 rounded-lg p-3 shadow-sm"
                                             >
-                                                + {project.features.length - 3} more
-                                            </motion.button>
-                                        )}
+                                                <div className="w-1.5 h-1.5 bg-green-400 rounded-full mt-2 flex-shrink-0"></div>
+                                                {feature}
+                                            </motion.div>
+                                        ))}
                                     </div>
                                 </div>
 
-                                {/* Action Buttons - Always Visible */}
-                                <div className="flex gap-3 pt-2">
+                                {/* Learning Outcomes */}
+                                <div className="bg-gradient-to-br from-purple-50 to-indigo-50 rounded-xl p-4 border border-purple-100">
+                                    <h4 className="text-sm font-semibold text-gray-700 mb-3 flex items-center gap-2">
+                                        <Target className="w-4 h-4 text-purple-500" />
+                                        What You'll Learn
+                                    </h4>
+                                    <div className="grid grid-cols-1 gap-2">
+                                        {project.learningOutcomes.map((outcome, idx) => (
+                                            <motion.div
+                                                key={idx}
+                                                initial={{ opacity: 0, x: -20 }}
+                                                animate={{ opacity: 1, x: 0 }}
+                                                transition={{ delay: idx * 0.05 + 0.2 }}
+                                                className="flex items-start gap-2 text-sm text-gray-700 bg-white/80 rounded-lg p-3 shadow-sm"
+                                            >
+                                                <div className="w-1.5 h-1.5 bg-purple-400 rounded-full mt-2 flex-shrink-0"></div>
+                                                {outcome}
+                                            </motion.div>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                {/* Action Buttons */}
+                                {user ? (
                                     <motion.button
                                         whileHover={{ scale: 1.05 }}
                                         whileTap={{ scale: 0.95 }}
-                                        onClick={(e) => {
-                                            e.stopPropagation();
-                                            setSelectedProject(selectedProject === index ? null : index);
-                                        }}
-                                        className="flex-1 py-2 bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-600 text-white rounded-lg font-medium hover:shadow-lg transition-all duration-300 flex items-center justify-center gap-2"
+                                        onClick={() => saveProject(project, index)}
+                                        disabled={savingProject === index}
+                                        className="w-full py-3 bg-gradient-to-r from-green-500 to-teal-600 text-white rounded-lg font-medium hover:shadow-lg transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
                                     >
-                                        <Target className="w-4 h-4" />
-                                        View Details
-                                    </motion.button>
-                                    
-                                    {user ? (
-                                        <motion.button
-                                            whileHover={{ scale: 1.05 }}
-                                            whileTap={{ scale: 0.95 }}
-                                            onClick={(e) => {
-                                                e.stopPropagation();
-                                                saveProject(project, index);
-                                            }}
-                                            disabled={savingProject === index}
-                                            className="px-4 py-2 bg-yellow-200 rounded-lg font-medium border border-yellow-600 text-yellow-600 hover:shadow-lg transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
-                                        >
-                                            {savingProject === index ? (
+                                        {savingProject === index ? (
+                                            <>
                                                 <motion.div
                                                     animate={{ rotate: 360 }}
                                                     transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
                                                     className="w-4 h-4 border-2 border-white border-t-transparent rounded-full"
                                                 />
-                                            ) : (
+                                                Saving Project...
+                                            </>
+                                        ) : (
+                                            <>
                                                 <BookmarkPlus className="w-4 h-4" />
-                                            )}
-                                        </motion.button>
-                                    ) : (
-                                        <motion.button
-                                            whileHover={{ scale: 1.05 }}
-                                            whileTap={{ scale: 0.95 }}
-                                            className="px-4 py-2 bg-gray-300 text-gray-500 rounded-lg font-medium cursor-not-allowed flex items-center justify-center gap-2"
-                                            disabled
-                                        >
-                                            <Heart className="w-4 h-4" />
-                                        </motion.button>
-                                    )}
-                                </div>
-                            </div>
-
-                            {/* Expandable Details Section */}
-                            <AnimatePresence>
-                                {selectedProject === index && (
-                                    <motion.div
-                                        initial={{ height: 0, opacity: 0 }}
-                                        animate={{ height: 'auto', opacity: 1 }}
-                                        exit={{ height: 0, opacity: 0 }}
-                                        transition={{ duration: 0.4, ease: "easeInOut" }}
-                                        className="overflow-hidden bg-gradient-to-br from-blue-50 to-indigo-50 border-t border-blue-100"
-                                    >
-                                        <div className="p-6 space-y-5">
-                                            {/* Complete Features */}
-                                            <div className="bg-white/60 rounded-xl p-4">
-                                                <h4 className="text-sm font-semibold text-gray-700 mb-3 flex items-center gap-2">
-                                                    <CheckCircle className="w-4 h-4 text-green-500" />
-                                                    Complete Feature List
-                                                </h4>
-                                                <div className="grid grid-cols-1 gap-2">
-                                                    {project.features.map((feature, idx) => (
-                                                        <motion.div
-                                                            key={idx}
-                                                            initial={{ opacity: 0, x: -20 }}
-                                                            animate={{ opacity: 1, x: 0 }}
-                                                            transition={{ delay: idx * 0.1 }}
-                                                            className="flex items-start gap-2 text-sm text-gray-700 bg-white/80 rounded-lg p-2"
-                                                        >
-                                                            <div className="w-1.5 h-1.5 bg-green-400 rounded-full mt-2 flex-shrink-0"></div>
-                                                            {feature}
-                                                        </motion.div>
-                                                    ))}
-                                                </div>
-                                            </div>
-
-                                            {/* Learning Outcomes */}
-                                            <div className="bg-white/60 rounded-xl p-4">
-                                                <h4 className="text-sm font-semibold text-gray-700 mb-3 flex items-center gap-2">
-                                                    <Target className="w-4 h-4 text-purple-500" />
-                                                    What You'll Learn
-                                                </h4>
-                                                <div className="grid grid-cols-1 gap-2">
-                                                    {project.learningOutcomes.map((outcome, idx) => (
-                                                        <motion.div
-                                                            key={idx}
-                                                            initial={{ opacity: 0, x: -20 }}
-                                                            animate={{ opacity: 1, x: 0 }}
-                                                            transition={{ delay: idx * 0.1 + 0.2 }}
-                                                            className="flex items-start gap-2 text-sm text-gray-700 bg-white/80 rounded-lg p-2"
-                                                        >
-                                                            <div className="w-1.5 h-1.5 bg-purple-400 rounded-full mt-2 flex-shrink-0"></div>
-                                                            {outcome}
-                                                        </motion.div>
-                                                    ))}
-                                                </div>
-                                            </div>
-
-                                            {/* Save Project Button for Non-Authenticated Users */}
-                                            {!user && (
-                                                <motion.div
-                                                    initial={{ opacity: 0, y: 20 }}
-                                                    animate={{ opacity: 1, y: 0 }}
-                                                    transition={{ delay: 0.3 }}
-                                                >
-                                                    <SignInCard />
-                                                </motion.div>
-                                            )}
-
-                                            {/* Close Button */}
-                                            <motion.button
-                                                whileHover={{ scale: 1.02 }}
-                                                whileTap={{ scale: 0.98 }}
-                                                onClick={() => setSelectedProject(null)}
-                                                className="w-full py-2 bg-white/80 text-gray-600 rounded-lg font-medium hover:bg-white transition-all duration-300 flex items-center justify-center gap-2 border border-gray-200"
-                                            >
-                                                <motion.div
-                                                    animate={{ rotate: selectedProject === index ? 180 : 0 }}
-                                                    transition={{ duration: 0.3 }}
-                                                >
-                                                    ▲
-                                                </motion.div>
-                                                Close Details
-                                            </motion.button>
-                                        </div>
-                                    </motion.div>
+                                                Save Project
+                                            </>
+                                        )}
+                                    </motion.button>
+                                ) : (
+                                    <div className="space-y-3">
+                                        <SignInCard />
+                                    </div>
                                 )}
-                            </AnimatePresence>
+                            </div>
                         </motion.div>
                     ))}
                 </AnimatePresence>
