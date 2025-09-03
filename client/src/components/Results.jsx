@@ -220,7 +220,7 @@ const Results = ({ results }) => {
                                         whileTap={{ scale: 0.95 }}
                                         onClick={() => saveProject(project, index)}
                                         disabled={savingProject === index}
-                                        className="w-full py-3 bg-gradient-to-r from-green-500 to-teal-600 text-white rounded-lg font-medium hover:shadow-lg transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                                        className="w-full py-3 bg-blue-600 text-white rounded-lg font-medium hover:shadow-lg transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
                                     >
                                         {savingProject === index ? (
                                             <>
