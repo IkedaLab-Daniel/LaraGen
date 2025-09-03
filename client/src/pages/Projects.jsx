@@ -1,15 +1,18 @@
 
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Clock, Star, User, Heart, Calendar, Code, Eye, Users } from 'lucide-react';
+import { Clock, Star, User, Heart, Calendar, Code, Eye, Users, Sparkles } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
+import { useToast } from '../utilities/Toaster';
 
 const Projects = () => {
     const [projects, setProjects] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [filter, setFilter] = useState('all'); // 'all', 'my'
+    const [togglingAura, setTogglingAura] = useState(new Set());
     const { user } = useAuth();
+    const toast = useToast();
 
     const fetchProjects = async () => {
         try {
@@ -38,6 +41,63 @@ const Projects = () => {
             setError('Network error while fetching projects');
         } finally {
             setLoading(false);
+        }
+    };
+
+    const toggleAura = async (projectId) => {
+        if (!user) {
+            toast.error('Please sign in to give aura');
+            return;
+        }
+
+        if (togglingAura.has(projectId)) {
+            return; // Prevent double clicks
+        }
+
+        setTogglingAura(prev => new Set(prev).add(projectId));
+
+        try {
+            const token = localStorage.getItem('token');
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/projects/${projectId}/aura`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                }
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                // Update the project in the list
+                setProjects(prevProjects => 
+                    prevProjects.map(project => 
+                        project.id === projectId 
+                            ? { 
+                                ...project, 
+                                aura_count: data.data.aura_count, 
+                                has_aura: data.data.has_aura 
+                              }
+                            : project
+                    )
+                );
+                
+                if (data.data.has_aura) {
+                    toast.success('Aura given! ✨');
+                } else {
+                    toast.info('Aura removed');
+                }
+            } else {
+                toast.error(data.message || 'Failed to toggle aura');
+            }
+        } catch (error) {
+            toast.error('Network error while toggling aura');
+        } finally {
+            setTogglingAura(prev => {
+                const newSet = new Set(prev);
+                newSet.delete(projectId);
+                return newSet;
+            });
         }
     };
 
@@ -229,6 +289,43 @@ const Projects = () => {
                                                 </span>
                                             )}
                                         </div>
+                                    </div>
+
+                                    {/* Aura Section */}
+                                    <div className="flex items-center justify-between pt-4 border-t border-gray-100">
+                                        <div className="flex items-center gap-2">
+                                            <Sparkles className="w-4 h-4 text-purple-500" />
+                                            <span className="text-sm font-medium text-gray-600">
+                                                {project.aura_count || 0} Aura
+                                            </span>
+                                        </div>
+                                        
+                                        {user ? (
+                                            <motion.button
+                                                whileHover={{ scale: 1.05 }}
+                                                whileTap={{ scale: 0.95 }}
+                                                onClick={() => toggleAura(project.id)}
+                                                disabled={togglingAura.has(project.id)}
+                                                className={`px-3 py-1 rounded-full text-xs font-medium transition-all duration-300 flex items-center gap-1 ${
+                                                    project.has_aura
+                                                        ? 'bg-purple-100 text-purple-700 border border-purple-300'
+                                                        : 'bg-gray-100 text-gray-600 hover:bg-purple-50 hover:text-purple-600'
+                                                } disabled:opacity-50 disabled:cursor-not-allowed`}
+                                            >
+                                                {togglingAura.has(project.id) ? (
+                                                    <motion.div
+                                                        animate={{ rotate: 360 }}
+                                                        transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
+                                                        className="w-3 h-3 border border-current border-t-transparent rounded-full"
+                                                    />
+                                                ) : (
+                                                    <Sparkles className={`w-3 h-3 ${project.has_aura ? 'fill-current' : ''}`} />
+                                                )}
+                                                {project.has_aura ? 'Aura Given' : 'Give Aura'}
+                                            </motion.button>
+                                        ) : (
+                                            <span className="text-xs text-gray-400">Sign in to give aura</span>
+                                        )}
                                     </div>
                                 </motion.div>
                             ))}

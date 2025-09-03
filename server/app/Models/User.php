@@ -5,6 +5,7 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -51,5 +52,16 @@ class User extends Authenticatable
     public function savedProjects(): HasMany
     {
         return $this->hasMany(SavedProject::class);
+    }
+
+    public function auras(): HasMany
+    {
+        return $this->hasMany(ProjectAura::class);
+    }
+
+    public function auraProjects(): BelongsToMany
+    {
+        return $this->belongsToMany(SavedProject::class, 'project_auras', 'user_id', 'saved_project_id')
+                    ->withTimestamps();
     }
 }

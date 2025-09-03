@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\SavedProject;
+use App\Models\ProjectAura;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -14,12 +15,21 @@ class SavedProjectController extends Controller
     /**
      * Get all public projects for gallery
      */
-    public function index(): JsonResponse
+    public function index(Request $request): JsonResponse
     {
         $projects = SavedProject::with('user:id,name')
             ->where('is_public', true)
+            ->orderByDesc('aura_count')
             ->latest()
             ->paginate(12);
+
+        // Add aura status for authenticated users
+        if ($request->user()) {
+            $projects->getCollection()->transform(function ($project) use ($request) {
+                $project->has_aura = $project->hasAuraFrom($request->user());
+                return $project;
+            });
+        }
 
         return response()->json([
             'success' => true,
@@ -31,9 +41,9 @@ class SavedProjectController extends Controller
     /**
      * Get current user's saved projects
      */
-    public function myProjects(): JsonResponse
+    public function myProjects(Request $request): JsonResponse
     {
-        $projects = Auth::user()->savedProjects()
+        $projects = $request->user()->savedProjects()
             ->latest()
             ->get();
 
@@ -63,7 +73,7 @@ class SavedProjectController extends Controller
             'is_public' => 'boolean'
         ]);
 
-        $project = Auth::user()->savedProjects()->create($validated);
+        $project = $request->user()->savedProjects()->create($validated);
 
         return response()->json([
             'success' => true,
