@@ -266,7 +266,7 @@ const Projects = () => {
                                             Tech Stack
                                         </h4>
                                         <div className="flex flex-wrap gap-2">
-                                            {project.tech_stack?.slice(0, 4).map((tech, index) => (
+                                            {project.tech_stack?.slice(0, 10).map((tech, index) => (
                                                 <TechIcon 
                                                     key={index} 
                                                     tech={tech} 
@@ -274,9 +274,9 @@ const Projects = () => {
                                                     showName={true}
                                                 />
                                             ))}
-                                            {project.tech_stack?.length > 4 && (
+                                            {project.tech_stack?.length > 10 && (
                                                 <div className="px-2 py-1 bg-gray-100/80 backdrop-blur-sm text-gray-600 rounded-md text-xs font-medium border border-gray-200/50">
-                                                    +{project.tech_stack.length - 4} more
+                                                    +{project.tech_stack.length - 10} more
                                                 </div>
                                             )}
                                         </div>
