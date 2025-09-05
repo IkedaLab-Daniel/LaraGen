@@ -23,13 +23,12 @@ class SavedProjectController extends Controller
             ->latest()
             ->paginate(12);
 
-        // Add aura status for authenticated users
-        if ($request->user()) {
-            $projects->getCollection()->transform(function ($project) use ($request) {
-                $project->has_aura = $project->hasAuraFrom($request->user());
-                return $project;
-            });
-        }
+        // Add aura status for all projects, defaulting to false for unauthenticated users
+        $user = $request->user();
+        $projects->getCollection()->transform(function ($project) use ($user) {
+            $project->has_aura = $user ? $project->hasAuraFrom($user) : false;
+            return $project;
+        });
 
         return response()->json([
             'success' => true,

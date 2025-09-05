@@ -21,9 +21,12 @@ const Projects = () => {
             const endpoint = filter === 'my' && user ? '/my-projects' : '/projects';
             const headers = {};
             
-            if (filter === 'my' && user) {
+            // Always send authorization header if user is logged in
+            if (user) {
                 const token = localStorage.getItem('token');
-                headers['Authorization'] = `Bearer ${token}`;
+                if (token) {
+                    headers['Authorization'] = `Bearer ${token}`;
+                }
             }
 
             const response = await fetch(`${import.meta.env.VITE_API_URL}${endpoint}`, {

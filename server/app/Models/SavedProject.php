@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Support\Facades\Log;
 
 class SavedProject extends Model
 {
@@ -47,6 +48,12 @@ class SavedProject extends Model
 
     public function hasAuraFrom(User $user): bool
     {
-        return $this->auras()->where('user_id', $user->id)->exists();
+        try {
+            return $this->auras()->where('user_id', $user->id)->exists();
+        } catch (\Exception $e) {
+            // Log error and return false as fallback
+            Log::warning('Error checking aura status for project ' . $this->id . ' and user ' . $user->id . ': ' . $e->getMessage());
+            return false;
+        }
     }
 }
