@@ -41,25 +41,25 @@ class StatsController extends Controller
     private function getTopTechnologies()
     {
         try {
-            // Debug: Let's see what we're working with
+            // ? Debug: Let's see what we're working with
             $totalProjects = SavedProject::count();
             $projectsWithTechStack = SavedProject::whereNotNull('tech_stack')->count();
             
             Log::info("Debug getTopTechnologies - Total projects: {$totalProjects}, Projects with tech_stack: {$projectsWithTechStack}");
             
-            // Get a sample of raw tech_stack data
+            // ? Get a sample of raw tech_stack data
             $sampleData = SavedProject::whereNotNull('tech_stack')
                 ->limit(3)
                 ->get(['tech_stack']);
             
             Log::info('Sample tech_stack data:', $sampleData->toArray());
             
-            // Get all tech stacks from saved projects and count them
+            // ? Get all tech stacks from saved projects and count them
             $allTechs = SavedProject::whereNotNull('tech_stack')
                 ->get()
                 ->pluck('tech_stack')
                 ->filter(function ($techStack) {
-                    // Since tech_stack is cast as array, it will already be an array
+                    // > Since tech_stack is cast as array, it will already be an array
                     $isValid = is_array($techStack) && !empty($techStack);
                     Log::info('Filtering tech_stack:', ['techStack' => $techStack, 'is_valid' => $isValid]);
                     return $isValid;

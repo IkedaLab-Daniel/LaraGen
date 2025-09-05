@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Zap, Users, Rocket, Heart, TrendingUp, Calendar } from "lucide-react";
+import { getTechIcon } from "../utilities/TechIcons";
 const Hero = () => {
     const [serverStatus, setServerStatus] = useState("pending"); // 'pending', 'up', 'down'
     const [stats, setStats] = useState(null);
@@ -172,19 +173,94 @@ const Hero = () => {
                             <div className="mt-6 pt-6 border-t border-white/30">
                                 <div className="text-center">
                                     <p className="text-sm text-gray-500 mb-4 font-medium">Most Popular Technologies</p>
-                                    <div className="flex flex-wrap justify-center gap-3">
-                                        {stats.top_technologies.slice(0, 5).map((tech, index) => (
-                                            <motion.span 
-                                                key={tech.name}
-                                                initial={{ opacity: 0, scale: 0.8 }}
-                                                animate={{ opacity: 1, scale: 1 }}
-                                                transition={{ delay: 0.6 + index * 0.1 }}
-                                                className="relative px-4 py-2 bg-gradient-to-r from-blue-500/10 to-purple-500/10 backdrop-blur-sm border border-blue-200/50 text-blue-700 text-sm font-semibold rounded-full hover:scale-105 transition-transform duration-200 cursor-default"
-                                            >
-                                                {tech.name}
-                                                <span className="ml-2 text-xs opacity-70">({tech.count})</span>
-                                            </motion.span>
-                                        ))}
+                                    <div className="flex flex-wrap justify-center gap-4">
+                                        {stats.top_technologies.slice(0, 5).map((tech, index) => {
+                                            const techInfo = getTechIcon(tech.name);
+                                            const IconComponent = techInfo.icon;
+                                            const rank = index + 1;
+                                            
+                                            // Ranking colors and styles
+                                            const getRankingStyle = (position) => {
+                                                switch(position) {
+                                                    case 1:
+                                                        return {
+                                                            bgGradient: "bg-gradient-to-r from-yellow-400/20 to-yellow-600/20",
+                                                            border: "border-yellow-400/50",
+                                                            rankBg: "bg-gradient-to-r from-yellow-400 to-yellow-500",
+                                                            rankText: "text-yellow-900",
+                                                            iconGlow: "drop-shadow-lg",
+                                                            textColor: "text-yellow-800"
+                                                        };
+                                                    case 2:
+                                                        return {
+                                                            bgGradient: "bg-gradient-to-r from-gray-300/20 to-gray-500/20",
+                                                            border: "border-gray-400/50",
+                                                            rankBg: "bg-gradient-to-r from-gray-400 to-gray-500",
+                                                            rankText: "text-gray-100",
+                                                            iconGlow: "drop-shadow-md",
+                                                            textColor: "text-gray-700"
+                                                        };
+                                                    case 3:
+                                                        return {
+                                                            bgGradient: "bg-gradient-to-r from-amber-600/20 to-amber-800/20",
+                                                            border: "border-amber-600/50",
+                                                            rankBg: "bg-gradient-to-r from-amber-600 to-amber-700",
+                                                            rankText: "text-amber-100",
+                                                            iconGlow: "drop-shadow",
+                                                            textColor: "text-amber-800"
+                                                        };
+                                                    default:
+                                                        return {
+                                                            bgGradient: "bg-blue-100",
+                                                            border: "border-blue-200/50",
+                                                            rankBg: "bg-indigo-400",
+                                                            rankText: "text-white",
+                                                            iconGlow: "",
+                                                            textColor: "text-blue-700"
+                                                        };
+                                                }
+                                            };
+                                            
+                                            const rankStyle = getRankingStyle(rank);
+                                            
+                                            return (
+                                                <motion.div 
+                                                    key={tech.name}
+                                                    initial={{ opacity: 0, scale: 0.8, y: 20 }}
+                                                    animate={{ opacity: 1, scale: 1, y: 0 }}
+                                                    transition={{ delay: 0.6 + index * 0.1, type: "spring", stiffness: 100 }}
+                                                    className={`relative flex items-center gap-2 ${rankStyle.bgGradient} backdrop-blur-sm border ${rankStyle.border} rounded-sm hover:scale-105 transition-all duration-300 cursor-default shadow-lg hover:shadow-xl`}
+                                                >
+                                                    {/* Ranking Number */}
+                                                    <div className={`flex items-center justify-center w-6 h-6 ${rankStyle.rankBg} rounded-sm  text-xs font-bold ${rankStyle.rankText} shadow-md`}>
+                                                        {rank}
+                                                    </div>
+                                                    
+                                                    {/* Tech Icon */}
+                                                    <div className={`flex items-center justify-center ${rankStyle.iconGlow}`}>
+                                                        <IconComponent 
+                                                            className="w-5 h-5" 
+                                                            style={{ color: techInfo.color }}
+                                                        />
+                                                    </div>
+                                                    
+                                                    {/* Tech Name and Count */}
+                                                    <div className="flex items-center gap-2">
+                                                        <span className={`text-sm font-semibold ${rankStyle.textColor}`}>
+                                                            {tech.name}
+                                                        </span>
+                                                        <span className={`text-xs opacity-70 ${rankStyle.textColor} bg-white/20 px-2 py-0.5 rounded-full`}>
+                                                            {tech.count}
+                                                        </span>
+                                                    </div>
+                                                    
+                                                    {/* Subtle glow effect for top 3 */}
+                                                    {rank <= 3 && (
+                                                        <div className={`absolute inset-0 ${rankStyle.bgGradient} rounded-full blur-lg opacity-30 -z-10`}></div>
+                                                    )}
+                                                </motion.div>
+                                            );
+                                        })}
                                     </div>
                                 </div>
                             </div>
