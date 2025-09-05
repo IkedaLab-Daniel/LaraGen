@@ -5,6 +5,7 @@ import { Clock, Star, User, Heart, Calendar, Code, Eye, Users, Sparkles, Zap, Pa
 import { useAuth } from '../contexts/AuthContext';
 import { useToast } from '../utilities/Toaster';
 import { TechIcon } from '../utilities/TechIcons';
+import Footer from '../components/Footer';
 
 const Projects = () => {
     const [projects, setProjects] = useState([]);
@@ -182,7 +183,7 @@ const Projects = () => {
     }
 
     return (
-        <div className="relative min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 pt-20">
+        <div className="relative min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 pt-20 pb-6">
             {/* Floating Background Animations */}
             <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
                 <motion.div
@@ -273,7 +274,7 @@ const Projects = () => {
                 </motion.div>
             </div>
 
-            <div className="relative container mx-auto px-3 md:px-6 py-12 ">
+            <div className="relative container mx-auto px-3 md:px-6 pt-12 ">
                 <motion.div
                     variants={containerVariants}
                     initial="hidden"
@@ -341,7 +342,7 @@ const Projects = () => {
                                     key={project.id}
                                     variants={itemVariants}
                                     layout
-                                    className="bg-white/30 backdrop-blur-sm rounded-xl shadow-lg border border-blue-100 p-6 hover:shadow-xl transition-all duration-300 group flex flex-col h-full"
+                                    className="bg-white/50 backdrop-blur-sm rounded-xl shadow-lg border border-blue-100 p-6 hover:shadow-xl transition-all duration-300 group flex flex-col h-full"
                                     whileHover={{ y: -5, scale: 1.02 }}
                                 >
                                     {/* Project Content - flex-grow to push footer down */}
@@ -492,6 +493,7 @@ const Projects = () => {
                     )}
                 </motion.div>
             </div>
+            <Footer />
         </div>
     );
 };
