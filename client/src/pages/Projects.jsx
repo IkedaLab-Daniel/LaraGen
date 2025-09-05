@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Clock, Star, User, Heart, Calendar, Code, Eye, Users, Sparkles } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { useToast } from '../utilities/Toaster';
+import { TechIcon } from '../utilities/TechIcons';
 
 const Projects = () => {
     const [projects, setProjects] = useState([]);
@@ -257,16 +258,23 @@ const Projects = () => {
 
                                     {/* Tech Stack */}
                                     <div className="mb-4">
-                                        <div className="flex flex-wrap gap-1">
-                                            {project.tech_stack?.slice(0, 3).map((tech, index) => (
-                                                <span key={index} className="px-2 py-1 bg-blue-50 text-blue-700 rounded-md text-xs">
-                                                    {tech}
-                                                </span>
+                                        <h4 className="text-sm font-semibold text-gray-700 mb-2 flex items-center gap-2">
+                                            <Code className="w-4 h-4" />
+                                            Tech Stack
+                                        </h4>
+                                        <div className="flex flex-wrap gap-2">
+                                            {project.tech_stack?.slice(0, 4).map((tech, index) => (
+                                                <TechIcon 
+                                                    key={index} 
+                                                    tech={tech} 
+                                                    size="sm" 
+                                                    showName={true}
+                                                />
                                             ))}
-                                            {project.tech_stack?.length > 3 && (
-                                                <span className="px-2 py-1 bg-gray-100 text-gray-600 rounded-md text-xs">
-                                                    +{project.tech_stack.length - 3} more
-                                                </span>
+                                            {project.tech_stack?.length > 4 && (
+                                                <div className="px-2 py-1 bg-gray-100/80 backdrop-blur-sm text-gray-600 rounded-md text-xs font-medium border border-gray-200/50">
+                                                    +{project.tech_stack.length - 4} more
+                                                </div>
                                             )}
                                         </div>
                                     </div>
@@ -277,16 +285,16 @@ const Projects = () => {
                                             <Star className="w-4 h-4" />
                                             Key Features
                                         </h4>
-                                        <div className="flex flex-wrap gap-1">
-                                            {project.features?.slice(0, 2).map((feature, index) => (
-                                                <span key={index} className="px-2 py-1 bg-green-50 text-green-700 rounded-md text-xs">
+                                        <div className="flex flex-wrap gap-2">
+                                            {project.features?.slice(0, 3).map((feature, index) => (
+                                                <div key={index} className="px-2 py-1 bg-green-50/80 backdrop-blur-sm text-green-700 rounded-md text-xs font-medium border border-green-200/50">
                                                     {feature}
-                                                </span>
+                                                </div>
                                             ))}
-                                            {project.features?.length > 2 && (
-                                                <span className="px-2 py-1 bg-gray-100 text-gray-600 rounded-md text-xs">
-                                                    +{project.features.length - 2} more
-                                                </span>
+                                            {project.features?.length > 3 && (
+                                                <div className="px-2 py-1 bg-gray-100/80 backdrop-blur-sm text-gray-600 rounded-md text-xs font-medium border border-gray-200/50">
+                                                    +{project.features.length - 3} more
+                                                </div>
                                             )}
                                         </div>
                                     </div>
