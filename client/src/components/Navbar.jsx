@@ -57,10 +57,12 @@ const NavBar = () => {
         <>
             <nav className="flex justify-between items-center px-6 md:px-12 py-4 bg-white/70 backdrop-blur-md shadow-md fixed w-full z-[2] shadow-blue-100">
                 <div className='flex items-center gap-4'>
-                    <h1 className="text-xl font-bold">
-                        <span className='text-blue-600'>Lara</span>
-                        <span className='text-slate-600'>Gen</span>
-                    </h1>
+                    <Link to="/">
+                        <h1 className="text-xl font-bold">
+                            <span className='text-blue-600'>Lara</span>
+                            <span className='text-slate-600'>Gen</span>
+                        </h1>
+                    </Link>
                 </div>
                 
                 <div className="hidden md:block">
