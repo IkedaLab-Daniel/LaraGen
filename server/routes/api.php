@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\ProjectIdeaController;
 use App\Http\Controllers\Api\SavedProjectController;
 use App\Http\Controllers\Api\ProjectAuraController;
 use App\Http\Controllers\Api\StatsController;
+use App\Http\Controllers\Api\OAuthController;
 use App\Http\Controllers\AuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -24,6 +25,13 @@ Route::get('projects/{savedProject}/aura', [ProjectAuraController::class, 'statu
 // ? Auths
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
+
+// ? OAuth routes (using web middleware for session support)
+Route::middleware('web')->group(function () {
+    Route::get('/auth/github/url', [OAuthController::class, 'getGitHubAuthUrl']);
+    Route::get('/auth/github/redirect', [OAuthController::class, 'redirectToGitHub']);
+    Route::get('/auth/github/callback', [OAuthController::class, 'handleGitHubCallback']);
+});
 
 Route::middleware('auth:sanctum')->group(function() {
     Route::get('/user', function (Request $request) {
