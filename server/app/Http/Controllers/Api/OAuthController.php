@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Laravel\Socialite\Facades\Socialite;
@@ -34,26 +35,14 @@ class OAuthController extends Controller
     public function handleGitHubCallback(Request $request)
     {
         try {
-            // Verify state parameter
-            $state = $request->get('state');
-            $sessionState = $request->session()->get('github_oauth_state');
-            
-            if (!$state || $state !== $sessionState) {
-                Log::warning('GitHub OAuth state mismatch', [
-                    'provided_state' => $state,
-                    'session_state' => $sessionState
-                ]);
-                
-                // Continue with OAuth flow even if state doesn't match for now
-                // In production, you might want to reject this
-            }
-            
-            // Clear the state from session
-            $request->session()->forget('github_oauth_state');
-            
-            // Handle OAuth error
+            Log::info('GitHub OAuth callback started', [
+                'all_params' => $request->all(),
+                'url' => $request->fullUrl()
+            ]);
+
+            // Handle OAuth error from GitHub
             if ($request->has('error')) {
-                Log::error('GitHub OAuth error: ' . $request->get('error_description', $request->get('error')));
+                Log::error('GitHub OAuth error from GitHub: ' . $request->get('error_description', $request->get('error')));
                 
                 $frontendUrl = env('FRONTEND_URL', 'http://localhost:5173');
                 $redirectUrl = $frontendUrl . '/auth/callback?' . http_build_query([
@@ -63,10 +52,102 @@ class OAuthController extends Controller
 
                 return redirect($redirectUrl);
             }
+
+            // Check if we have the authorization code
+            if (!$request->has('code')) {
+                Log::error('No authorization code received from GitHub');
+                
+                $frontendUrl = env('FRONTEND_URL', 'http://localhost:5173');
+                $redirectUrl = $frontendUrl . '/auth/callback?' . http_build_query([
+                    'error' => 'true',
+                    'message' => 'No authorization code received from GitHub.'
+                ]);
+
+                return redirect($redirectUrl);
+            }
             
-            $githubUser = Socialite::driver('github')->user();
+            Log::info('About to call Socialite to get GitHub user');
             
-            Log::info('GitHub user data:', [
+            // Validate state parameter manually
+            $receivedState = $request->get('state');
+            $sessionState = $request->session()->get('github_oauth_state');
+            
+            Log::info('State validation', [
+                'received_state' => $receivedState,
+                'session_state' => $sessionState,
+                'session_id' => $request->session()->getId()
+            ]);
+            
+            if (!$receivedState || !$sessionState || $receivedState !== $sessionState) {
+                Log::error('State validation failed', [
+                    'received_state' => $receivedState,
+                    'session_state' => $sessionState
+                ]);
+                
+                $frontendUrl = env('FRONTEND_URL', 'http://localhost:5173');
+                $redirectUrl = $frontendUrl . '/auth/callback?' . http_build_query([
+                    'error' => 'true',
+                    'message' => 'OAuth state validation failed. Please try again.'
+                ]);
+
+                return redirect($redirectUrl);
+            }
+            
+            // Clear the state from session
+            $request->session()->forget('github_oauth_state');
+            
+            try {
+                // Get the authorization code
+                $code = $request->get('code');
+                
+                // Exchange code for access token manually
+                $clientId = config('services.github.client_id');
+                $clientSecret = config('services.github.client_secret');
+                
+                $tokenResponse = Http::post('https://github.com/login/oauth/access_token', [
+                    'client_id' => $clientId,
+                    'client_secret' => $clientSecret,
+                    'code' => $code,
+                ])->header('Accept', 'application/json');
+                
+                if (!$tokenResponse->successful()) {
+                    throw new \Exception('Failed to get access token from GitHub');
+                }
+                
+                $tokenData = $tokenResponse->json();
+                $accessToken = $tokenData['access_token'] ?? null;
+                
+                if (!$accessToken) {
+                    throw new \Exception('No access token received from GitHub');
+                }
+                
+                // Get user data from GitHub API
+                $userResponse = Http::withToken($accessToken)
+                    ->get('https://api.github.com/user');
+                
+                if (!$userResponse->successful()) {
+                    throw new \Exception('Failed to get user data from GitHub');
+                }
+                
+                $githubUserData = $userResponse->json();
+                
+                // Create a user object similar to Socialite's format
+                $githubUser = (object) [
+                    'id' => $githubUserData['id'],
+                    'nickname' => $githubUserData['login'],
+                    'name' => $githubUserData['name'] ?? $githubUserData['login'],
+                    'email' => $githubUserData['email'],
+                    'avatar' => $githubUserData['avatar_url'],
+                ];
+                
+                Log::info('Successfully retrieved GitHub user manually');
+            } catch (\Exception $e) {
+                Log::error('Socialite error: ' . $e->getMessage());
+                Log::error('Exception class: ' . get_class($e));
+                throw $e;
+            }
+            
+            Log::info('GitHub user data received:', [
                 'id' => $githubUser->getId(),
                 'email' => $githubUser->getEmail(),
                 'name' => $githubUser->getName(),

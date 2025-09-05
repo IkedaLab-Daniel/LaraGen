@@ -41,17 +41,17 @@ const TOAST_TYPES = {
 }
 
 const Toast = ({ toast, onClose }) => {
-    const { id, message, type, position } = toast; // destructure data from parent
+    const { id, message, type, position, duration } = toast; // destructure data from parent
     const config = TOAST_TYPES[type] || TOAST_TYPES.info;
     const Icon = config.icon
 
     // auto dismiss
     useEffect(()=>{
-        if (toast.duration > 0){
-            const timer = setTimeout(() => onClose(id), toast.duration)
+        if (duration > 0){
+            const timer = setTimeout(() => onClose(id), duration)
             return () => clearTimeout(timer);
         }
-    }, [id, toast.duration, onClose]);
+    }, [id, duration, onClose]);
 
     // f motion variant
     const getAnimationVariants = () => {

@@ -26,13 +26,6 @@ Route::get('projects/{savedProject}/aura', [ProjectAuraController::class, 'statu
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
-// ? OAuth routes (using web middleware for session support)
-Route::middleware('web')->group(function () {
-    Route::get('/auth/github/url', [OAuthController::class, 'getGitHubAuthUrl']);
-    Route::get('/auth/github/redirect', [OAuthController::class, 'redirectToGitHub']);
-    Route::get('/auth/github/callback', [OAuthController::class, 'handleGitHubCallback']);
-});
-
 Route::middleware('auth:sanctum')->group(function() {
     Route::get('/user', function (Request $request) {
         return $request->user();

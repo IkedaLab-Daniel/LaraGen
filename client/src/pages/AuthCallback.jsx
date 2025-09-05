@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useCallback, useRef } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { useToast } from '../utilities/Toaster';
@@ -10,56 +10,61 @@ const AuthCallback = () => {
     const navigate = useNavigate();
     const { login } = useAuth();
     const toast = useToast();
+    const hasProcessed = useRef(false); // Prevent multiple executions
 
-    useEffect(() => {
-        const handleCallback = () => {
-            const success = searchParams.get('success');
-            const error = searchParams.get('error');
-            const token = searchParams.get('token');
-            const userBase64 = searchParams.get('user');
-            const errorMessage = searchParams.get('message');
+    const handleCallback = useCallback(() => {
+        // Prevent multiple executions
+        if (hasProcessed.current) return;
+        hasProcessed.current = true;
 
-            if (success === 'true' && token && userBase64) {
-                try {
-                    // Decode user data
-                    const userData = JSON.parse(atob(userBase64));
-                    
-                    // Login user
-                    login(userData, token);
-                    
-                    // Show success message
-                    toast.success(`Welcome back, ${userData.name}! Successfully signed in with GitHub.`, {
-                        duration: 4000
-                    });
-                    
-                    // Redirect to home after a short delay
-                    setTimeout(() => {
-                        navigate('/', { replace: true });
-                    }, 2000);
-                } catch (err) {
-                    console.error('Error parsing callback data:', err);
-                    toast.error('Authentication data error. Please try again.');
-                    setTimeout(() => {
-                        navigate('/login', { replace: true });
-                    }, 2000);
-                }
-            } else if (error === 'true') {
-                // Handle error
-                toast.error(errorMessage || 'GitHub authentication failed. Please try again.');
+        const success = searchParams.get('success');
+        const error = searchParams.get('error');
+        const token = searchParams.get('token');
+        const userBase64 = searchParams.get('user');
+        const errorMessage = searchParams.get('message');
+
+        if (success === 'true' && token && userBase64) {
+            try {
+                // Decode user data
+                const userData = JSON.parse(atob(userBase64));
+                
+                // Login user
+                login(userData, token);
+                
+                // Show success message
+                toast.success(`Welcome back, ${userData.name}! Successfully signed in with GitHub.`, {
+                    duration: 4000
+                });
+                
+                // Redirect to home after a short delay
                 setTimeout(() => {
-                    navigate('/login', { replace: true });
-                }, 3000);
-            } else {
-                // Invalid callback
-                toast.error('Invalid authentication callback.');
+                    navigate('/', { replace: true });
+                }, 2000);
+            } catch (err) {
+                console.error('Error parsing callback data:', err);
+                toast.error('Authentication data error. Please try again.');
                 setTimeout(() => {
-                    navigate('/login', { replace: true });
+                    navigate('/auth?mode=login', { replace: true });
                 }, 2000);
             }
-        };
-
-        handleCallback();
+        } else if (error === 'true') {
+            // Handle error
+            toast.error(errorMessage || 'GitHub authentication failed. Please try again.');
+            setTimeout(() => {
+                navigate('/auth?mode=login', { replace: true });
+            }, 3000);
+        } else {
+            // Invalid callback
+            toast.error('Invalid authentication callback.');
+            setTimeout(() => {
+                navigate('/auth?mode=login', { replace: true });
+            }, 2000);
+        }
     }, [searchParams, navigate, login, toast]);
+
+    useEffect(() => {
+        handleCallback();
+    }, [handleCallback]);
 
     const success = searchParams.get('success') === 'true';
     const error = searchParams.get('error') === 'true';
