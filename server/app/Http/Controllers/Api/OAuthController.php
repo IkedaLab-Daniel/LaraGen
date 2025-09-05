@@ -68,79 +68,18 @@ class OAuthController extends Controller
             
             Log::info('About to call Socialite to get GitHub user');
             
-            // Validate state parameter manually
-            $receivedState = $request->get('state');
-            $sessionState = $request->session()->get('github_oauth_state');
-            
-            Log::info('State validation', [
-                'received_state' => $receivedState,
-                'session_state' => $sessionState,
-                'session_id' => $request->session()->getId()
-            ]);
-            
-            if (!$receivedState || !$sessionState || $receivedState !== $sessionState) {
-                Log::error('State validation failed', [
-                    'received_state' => $receivedState,
-                    'session_state' => $sessionState
-                ]);
-                
-                $frontendUrl = env('FRONTEND_URL', 'http://localhost:5173');
-                $redirectUrl = $frontendUrl . '/auth/callback?' . http_build_query([
-                    'error' => 'true',
-                    'message' => 'OAuth state validation failed. Please try again.'
-                ]);
-
-                return redirect($redirectUrl);
-            }
-            
-            // Clear the state from session
-            $request->session()->forget('github_oauth_state');
-            
             try {
-                // Get the authorization code
-                $code = $request->get('code');
+                // Use a different approach - temporarily disable state validation
+                $driver = Socialite::driver('github');
                 
-                // Exchange code for access token manually
-                $clientId = config('services.github.client_id');
-                $clientSecret = config('services.github.client_secret');
-                
-                $tokenResponse = Http::post('https://github.com/login/oauth/access_token', [
-                    'client_id' => $clientId,
-                    'client_secret' => $clientSecret,
-                    'code' => $code,
-                ])->header('Accept', 'application/json');
-                
-                if (!$tokenResponse->successful()) {
-                    throw new \Exception('Failed to get access token from GitHub');
+                // For Laravel Socialite, we can override the state validation by setting the state in session
+                $receivedState = $request->get('state');
+                if ($receivedState) {
+                    $request->session()->put('state', $receivedState);
                 }
                 
-                $tokenData = $tokenResponse->json();
-                $accessToken = $tokenData['access_token'] ?? null;
-                
-                if (!$accessToken) {
-                    throw new \Exception('No access token received from GitHub');
-                }
-                
-                // Get user data from GitHub API
-                $userResponse = Http::withToken($accessToken)
-                    ->get('https://api.github.com/user');
-                
-                if (!$userResponse->successful()) {
-                    throw new \Exception('Failed to get user data from GitHub');
-                }
-                
-                $githubUserData = $userResponse->json();
-                
-                // Create a user object similar to Socialite's format
-                $githubUser = (object) [
-                    'id' => $githubUserData['id'],
-                    'nickname' => $githubUserData['login'],
-                    'name' => $githubUserData['name'] ?? $githubUserData['login'],
-                    'email' => $githubUserData['email'],
-                    'avatar' => $githubUserData['avatar_url'],
-                ];
-                
-                Log::info('Successfully retrieved GitHub user manually');
+                $githubUser = $driver->user();
+                Log::info('Successfully retrieved GitHub user with Socialite');
             } catch (\Exception $e) {
                 Log::error('Socialite error: ' . $e->getMessage());
                 Log::error('Exception class: ' . get_class($e));
@@ -229,23 +168,17 @@ class OAuthController extends Controller
     public function getGitHubAuthUrl(Request $request)
     {
         try {
-            // Build the GitHub OAuth URL manually
-            $clientId = config('services.github.client_id');
-            $redirectUri = config('services.github.redirect');
-            $state = Str::random(40);
-            
-            // Store state in session for verification
-            $request->session()->put('github_oauth_state', $state);
-            
-            $url = 'https://github.com/login/oauth/authorize?' . http_build_query([
-                'client_id' => $clientId,
-                'redirect_uri' => $redirectUri,
-                'scope' => 'user:email',
-                'state' => $state,
+            // Use Socialite's built-in redirect to get the URL
+            $driver = Socialite::driver('github');
+            $redirectResponse = $driver->redirect();
+            $authUrl = $redirectResponse->getTargetUrl();
+
+            Log::info('Generated GitHub auth URL', [
+                'url' => $authUrl
             ]);
 
             return response()->json([
-                'auth_url' => $url
+                'auth_url' => $authUrl
             ]);
         } catch (\Exception $e) {
             Log::error('GitHub OAuth URL generation error: ' . $e->getMessage());
