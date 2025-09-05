@@ -20,6 +20,11 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->api(append: [
             EnsureFrontendRequestsAreStateful::class,
         ]);
+
+        // Register custom middleware aliases
+        $middleware->alias([
+            'timeout' => \App\Http\Middleware\SetExecutionTimeLimit::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
