@@ -1,7 +1,7 @@
 import { Link, useLocation } from 'react-router-dom'
 import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Home, BookOpen, LogIn, UserPlus, User, LogOut, ChevronDown, UserCircle, FolderOpen } from 'lucide-react'
+import { Home, BookOpen, LogIn, UserPlus, User, LogOut, ChevronDown, UserCircle, FolderOpen, Sparkle } from 'lucide-react'
 import { useAuth } from '../contexts/AuthContext'
 import { useToast } from '../utilities/Toaster'
 
@@ -56,7 +56,18 @@ const NavBar = () => {
     return (
         <>
             <nav className="flex justify-between items-center px-6 md:px-12 py-4 bg-white/70 backdrop-blur-md shadow-md fixed w-full z-[2] shadow-blue-100">
-                <div className='flex items-center gap-4'>
+                <div className='flex items-center gap-1'>
+                    <motion.div
+                        initial={{ y: -1, rotate: 0 }}
+                        animate={{ y: [ -1, 1, -1 ], rotate: 360 }}
+                        transition={{
+                            duration: 10,
+                            repeat: Infinity,
+                            ease: "easeInOut"
+                        }}
+                    >
+                        <Sparkle className='h-4 w-4 text-blue-600' />
+                    </motion.div>
                     <Link to="/">
                         <h1 className="text-xl font-bold">
                             <span className='text-blue-600'>Lara</span>
