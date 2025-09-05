@@ -131,7 +131,7 @@ const Results = ({ results }) => {
                     </h2>
                 </div>
                 {/* subtitle here */}
-                <p className="text-gray-600 max-w-2xl mx-auto">
+                <p className="text-gray-600 max-w-[80%] md:max-w-2xl mx-auto">
                     Based on your selected tech stack, here are personalized project recommendations to help you build real-world experience and advance your skills.
                 </p>
             </motion.div>
