@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Route;
 
 
 // ? Project Ideas API routes
-Route::post('generate-ideas', [ProjectIdeaController::class, 'generate']);
+Route::post('generate-ideas', [ProjectIdeaController::class, 'generate'])->middleware('timeout:90');
 Route::get('options', [ProjectIdeaController::class, 'options']);
 
 // ? Public saved projects (no auth required)

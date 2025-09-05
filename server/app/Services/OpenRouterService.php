@@ -23,24 +23,25 @@ class OpenRouterService
         $prompt = $this->buildPrompt($techs, $difficulty);
 
         try {
-            $response = Http::withHeaders([
-                'Authorization' => 'Bearer ' . $this->apiKey,
-                'Content-Type' => 'application/json',
-            ])->post($this->apiUrl, [
-                'model' => $this->model,
-                'messages' => [
-                    [
-                        'role' => 'system',
-                        'content' => 'You are a helpful assistant that generates creative and practical project ideas for developers based on their tech stack and skill level. Always respond with valid JSON containing an array of project ideas.'
+            $response = Http::timeout(90)
+                ->withHeaders([
+                    'Authorization' => 'Bearer ' . $this->apiKey,
+                    'Content-Type' => 'application/json',
+                ])->post($this->apiUrl, [
+                    'model' => $this->model,
+                    'messages' => [
+                        [
+                            'role' => 'system',
+                            'content' => 'You are a helpful assistant that generates creative and practical project ideas for developers based on their tech stack and skill level. Always respond with valid JSON containing an array of project ideas.'
+                        ],
+                        [
+                            'role' => 'user',
+                            'content' => $prompt
+                        ]
                     ],
-                    [
-                        'role' => 'user',
-                        'content' => $prompt
-                    ]
-                ],
-                'max_tokens' => 1500,
-                'temperature' => 0.7
-            ]);
+                    'max_tokens' => 1500,
+                    'temperature' => 0.7
+                ]);
 
             if ($response->successful()) {
                 $data = $response->json();

@@ -23,6 +23,9 @@ class ProjectIdeaController extends Controller
 
     public function generate(GenerateProjectIdeasRequest $request): JsonResponse
     {
+        // Set execution time limit to 90 seconds (1 minute 30 seconds)
+        set_time_limit(90);
+        
         // ? validate payload first
         $validated = $request->validate([
             'techs' => 'required|array|min:1',

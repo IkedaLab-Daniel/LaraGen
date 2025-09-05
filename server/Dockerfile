@@ -14,6 +14,11 @@ RUN apt-get update && apt-get install -y \
     libpq-dev \
     && docker-php-ext-install pdo pdo_mysql pdo_pgsql pgsql mbstring exif pcntl bcmath gd zip
 
+# Configure PHP settings
+RUN echo "max_execution_time = 90" >> /usr/local/etc/php/conf.d/custom.ini \
+    && echo "memory_limit = 256M" >> /usr/local/etc/php/conf.d/custom.ini \
+    && echo "max_input_time = 90" >> /usr/local/etc/php/conf.d/custom.ini
+
 # Install Composer
 COPY --from=composer:2.5 /usr/bin/composer /usr/bin/composer
 

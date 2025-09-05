@@ -1,13 +1,13 @@
 import { useState } from "react";
-import { animate, motion } from "framer-motion";
+import { motion } from "framer-motion";
 import Hero from "../components/Hero";
 import TechChoose from "../components/TechChoose";
 import Difficulty from "../components/Difficulty";
-import EpicGenerateButton from "../components/EpicGenerateButton";
+import GenerateButton from "../components/GenerateButton";
 import Results from "../components/Results";
 import Footer from "../components/Footer";
 import LaragenGIF from '../assets/laragen.gif'
-import { Brain, DiffIcon, Lightbulb, Rocket, Sparkle } from "lucide-react";
+import { Brain, Lightbulb, Rocket, Sparkle } from "lucide-react";
 
 const Home = () => {
     
@@ -103,9 +103,9 @@ const Home = () => {
                     setSelectedDifficulty={setSelectedDifficulty}
                 />
 
-                {/* EpicGenerateButton replaces previous button */}
-                <div className="w-full md:w-6xl md:max-w-6xl mt-10 mx-auto">
-                    <EpicGenerateButton
+                {/* Generate Button */}
+                <div className="w-full max-w-4xl mt-10 mx-auto px-6">
+                    <GenerateButton
                         selectedTech={droppedTech}
                         selectedDifficulty={selectedDifficulty}
                         onGenerate={handleGenerate}

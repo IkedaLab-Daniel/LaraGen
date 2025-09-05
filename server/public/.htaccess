@@ -5,6 +5,11 @@
 
     RewriteEngine On
 
+    # Set PHP execution time limit to 90 seconds
+    <IfModule mod_php.c>
+        php_value max_execution_time 90
+    </IfModule>
+
     # Handle Authorization Header
     RewriteCond %{HTTP:Authorization} .
     RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
