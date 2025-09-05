@@ -1,6 +1,6 @@
 import { motion } from "framer-motion"
 import { useState, useEffect } from "react"
-import { SiReact, SiTailwindcss, SiFramer, SiLaravel } from 'react-icons/si'
+import { SiReact, SiTailwindcss, SiFramer, SiLaravel, SiSupabase } from 'react-icons/si'
 import ice from '../assets/ice.jpeg'
 
 const Footer = () => {
@@ -17,7 +17,8 @@ const Footer = () => {
     { id: "react", name: "React", icon: SiReact, color: "#61dafb" },
     { id: "tailwind", name: "Tailwind", icon: SiTailwindcss, color: "#38bdf8" },
     { id: "framer", name: "Framer", icon: SiFramer, color: "#0055ff" },
-    { id: "laravel", name: "Laravel", icon: SiLaravel, color: "#ff2d20" }
+    { id: "laravel", name: "Laravel", icon: SiLaravel, color: "#ff2d20" },
+    { id: "supabase", name: "Supabase", icon: SiSupabase, color: "#3ecf8e" }
   ]
 
   useEffect(() => {
