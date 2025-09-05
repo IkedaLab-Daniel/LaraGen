@@ -12,8 +12,8 @@ use Illuminate\Support\Facades\Route;
 Route::post('generate-ideas', [ProjectIdeaController::class, 'generate'])->middleware('timeout:90');
 Route::get('options', [ProjectIdeaController::class, 'options']);
 
-// ? Public saved projects (no auth required)
-Route::get('projects', [SavedProjectController::class, 'index']);
+// ? Public saved projects (optionally authenticated for aura status)
+Route::get('projects', [SavedProjectController::class, 'index'])->middleware('optional.auth');
 Route::get('projects/{savedProject}', [SavedProjectController::class, 'show']);
 Route::get('projects/{savedProject}/aura', [ProjectAuraController::class, 'status']);
 

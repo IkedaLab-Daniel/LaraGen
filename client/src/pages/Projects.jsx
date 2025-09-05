@@ -21,9 +21,12 @@ const Projects = () => {
             const endpoint = filter === 'my' && user ? '/my-projects' : '/projects';
             const headers = {};
             
-            if (filter === 'my' && user) {
+            // Always send authorization header if user is logged in
+            if (user) {
                 const token = localStorage.getItem('token');
-                headers['Authorization'] = `Bearer ${token}`;
+                if (token) {
+                    headers['Authorization'] = `Bearer ${token}`;
+                }
             }
 
             const response = await fetch(`${import.meta.env.VITE_API_URL}${endpoint}`, {
@@ -144,7 +147,7 @@ const Projects = () => {
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 pt-20">
-            <div className="container mx-auto px-6 py-12">
+            <div className="container mx-auto px-3 md:px-6 py-12 ">
                 <motion.div
                     variants={containerVariants}
                     initial="hidden"
@@ -212,95 +215,98 @@ const Projects = () => {
                                     key={project.id}
                                     variants={itemVariants}
                                     layout
-                                    className="bg-white/80 backdrop-blur-sm rounded-xl shadow-lg border border-blue-100 p-6 hover:shadow-xl transition-all duration-300 group"
+                                    className="bg-white/80 backdrop-blur-sm rounded-xl shadow-lg border border-blue-100 p-6 hover:shadow-xl transition-all duration-300 group flex flex-col h-full"
                                     whileHover={{ y: -5, scale: 1.02 }}
                                 >
-                                    {/* Project Header */}
-                                    <div className="mb-4">
-                                        <div className="flex items-start justify-between mb-2">
-                                            <h3 className="text-lg font-bold text-gray-800 group-hover:text-blue-600 transition-colors max-w-[70%]">
-                                                {project.name}
-                                            </h3>
-                                            <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                                                project.difficulty === 'beginner' ? 'bg-green-100 text-green-700' :
-                                                project.difficulty === 'intermediate' ? 'bg-yellow-100 text-yellow-700' :
-                                                'bg-red-100 text-red-700'
-                                            }`}>
-                                                {project.difficulty === 'beginner' ? 'EASY' : project.difficulty.toUpperCase()}
-                                            </span>
-                                        </div>
-                                        
-                                        {project.user && (
-                                            <div className="flex items-center gap-2 text-sm text-gray-500 mb-2">
-                                                <User className="w-3 h-3" />
-                                                <span>by {project.user.name}</span>
+                                    {/* Project Content - flex-grow to push footer down */}
+                                    <div className="flex-grow">
+                                        {/* Project Header */}
+                                        <div className="mb-4">
+                                            <div className="flex items-start justify-between mb-2">
+                                                <h3 className="text-lg font-bold text-gray-800 group-hover:text-blue-600 transition-colors max-w-[70%]">
+                                                    {project.name}
+                                                </h3>
+                                                <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                                                    project.difficulty === 'beginner' ? 'bg-green-100 text-green-700' :
+                                                    project.difficulty === 'intermediate' ? 'bg-yellow-100 text-yellow-700' :
+                                                    'bg-red-100 text-red-700'
+                                                }`}>
+                                                    {project.difficulty === 'beginner' ? 'EASY' : project.difficulty.toUpperCase()}
+                                                </span>
                                             </div>
-                                        )}
-                                    </div>
-
-                                    {/* Description */}
-                                    <p className="text-gray-600 text-sm mb-4 line-clamp-3">
-                                        {project.description}
-                                    </p>
-
-                                    {/* Meta Info */}
-                                    <div className="space-y-2 mb-4">
-                                        <div className="flex items-center gap-2 text-sm text-gray-500">
-                                            <Clock className="w-4 h-4" />
-                                            <span>{project.estimated_time}</span>
-                                        </div>
-                                        
-                                        <div className="flex items-center gap-2 text-sm text-gray-500">
-                                            <Calendar className="w-4 h-4" />
-                                            <span>{new Date(project.created_at).toLocaleDateString()}</span>
-                                        </div>
-                                    </div>
-
-                                    {/* Tech Stack */}
-                                    <div className="mb-4">
-                                        <h4 className="text-sm font-semibold text-gray-700 mb-2 flex items-center gap-2">
-                                            <Code className="w-4 h-4" />
-                                            Tech Stack
-                                        </h4>
-                                        <div className="flex flex-wrap gap-2">
-                                            {project.tech_stack?.slice(0, 4).map((tech, index) => (
-                                                <TechIcon 
-                                                    key={index} 
-                                                    tech={tech} 
-                                                    size="sm" 
-                                                    showName={true}
-                                                />
-                                            ))}
-                                            {project.tech_stack?.length > 4 && (
-                                                <div className="px-2 py-1 bg-gray-100/80 backdrop-blur-sm text-gray-600 rounded-md text-xs font-medium border border-gray-200/50">
-                                                    +{project.tech_stack.length - 4} more
+                                            
+                                            {project.user && (
+                                                <div className="flex items-center gap-2 text-sm text-gray-500 mb-2">
+                                                    <User className="w-3 h-3" />
+                                                    <span>by {project.user.name}</span>
                                                 </div>
                                             )}
                                         </div>
-                                    </div>
 
-                                    {/* Features Preview */}
-                                    <div className="space-y-2 mb-4">
-                                        <h4 className="text-sm font-semibold text-gray-700 flex items-center gap-2">
-                                            <Star className="w-4 h-4" />
-                                            Key Features
-                                        </h4>
-                                        <div className="flex flex-wrap gap-2">
-                                            {project.features?.slice(0, 3).map((feature, index) => (
-                                                <div key={index} className="px-2 py-1 bg-green-50/80 backdrop-blur-sm text-green-700 rounded-md text-xs font-medium border border-green-200/50">
-                                                    {feature}
-                                                </div>
-                                            ))}
-                                            {project.features?.length > 3 && (
-                                                <div className="px-2 py-1 bg-gray-100/80 backdrop-blur-sm text-gray-600 rounded-md text-xs font-medium border border-gray-200/50">
-                                                    +{project.features.length - 3} more
-                                                </div>
-                                            )}
+                                        {/* Description */}
+                                        <p className="text-gray-600 text-sm mb-4 line-clamp-3">
+                                            {project.description}
+                                        </p>
+
+                                        {/* Meta Info */}
+                                        <div className="space-y-2 mb-4">
+                                            <div className="flex items-center gap-2 text-sm text-gray-500">
+                                                <Clock className="w-4 h-4" />
+                                                <span>{project.estimated_time}</span>
+                                            </div>
+                                            
+                                            <div className="flex items-center gap-2 text-sm text-gray-500">
+                                                <Calendar className="w-4 h-4" />
+                                                <span>{new Date(project.created_at).toLocaleDateString()}</span>
+                                            </div>
+                                        </div>
+
+                                        {/* Tech Stack */}
+                                        <div className="mb-4">
+                                            <h4 className="text-sm font-semibold text-gray-700 mb-2 flex items-center gap-2">
+                                                <Code className="w-4 h-4" />
+                                                Tech Stack
+                                            </h4>
+                                            <div className="flex flex-wrap gap-2">
+                                                {project.tech_stack?.slice(0, 10).map((tech, index) => (
+                                                    <TechIcon 
+                                                        key={index} 
+                                                        tech={tech} 
+                                                        size="sm" 
+                                                        showName={true}
+                                                    />
+                                                ))}
+                                                {project.tech_stack?.length > 10 && (
+                                                    <div className="px-2 py-1 bg-gray-100/80 backdrop-blur-sm text-gray-600 rounded-md text-xs font-medium border border-gray-200/50">
+                                                        +{project.tech_stack.length - 10} more
+                                                    </div>
+                                                )}
+                                            </div>
+                                        </div>
+
+                                        {/* Features Preview */}
+                                        <div className="space-y-2 mb-4">
+                                            <h4 className="text-sm font-semibold text-gray-700 flex items-center gap-2">
+                                                <Star className="w-4 h-4" />
+                                                Key Features
+                                            </h4>
+                                            <div className="flex flex-wrap gap-2">
+                                                {project.features?.slice(0, 3).map((feature, index) => (
+                                                    <div key={index} className="px-2 py-1 bg-green-50/80 backdrop-blur-sm text-green-700 rounded-md text-xs font-medium border border-green-200/50">
+                                                        {feature}
+                                                    </div>
+                                                ))}
+                                                {project.features?.length > 3 && (
+                                                    <div className="px-2 py-1 bg-gray-100/80 backdrop-blur-sm text-gray-600 rounded-md text-xs font-medium border border-gray-200/50">
+                                                        +{project.features.length - 3} more
+                                                    </div>
+                                                )}
+                                            </div>
                                         </div>
                                     </div>
 
-                                    {/* Aura Section */}
-                                    <div className="flex items-center justify-between pt-4 border-t border-gray-100">
+                                    {/* Aura Section - Always at bottom */}
+                                    <div className="flex items-center justify-between pt-4 border-t-2 border-gray-200 mt-auto">
                                         <div className="flex items-center gap-2">
                                             <Sparkles className="w-4 h-4 text-purple-500" />
                                             <span className="text-sm font-medium text-gray-600">

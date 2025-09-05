@@ -24,6 +24,7 @@ return Application::configure(basePath: dirname(__DIR__))
         // Register custom middleware aliases
         $middleware->alias([
             'timeout' => \App\Http\Middleware\SetExecutionTimeLimit::class,
+            'optional.auth' => \App\Http\Middleware\OptionalAuth::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
