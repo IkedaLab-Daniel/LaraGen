@@ -1,7 +1,9 @@
 
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Clock, Star, User, Heart, Calendar, Code, Eye, Users, Sparkles, Zap, Palette, Globe, Database, Layers, Monitor, Settings, Cpu, Workflow, Target } from 'lucide-react';
+import { Clock, Star, User, Calendar, Code, Users, Sparkles, Zap, Palette,
+    Globe, Database, Layers, Monitor, Settings, Cpu, Workflow, Target
+} from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { useToast } from '../utilities/Toaster';
 import { TechIcon } from '../utilities/TechIcons';
