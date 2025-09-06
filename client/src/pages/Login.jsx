@@ -74,7 +74,7 @@ const Login = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5, ease: "easeOut" }}
-            className="relative bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 min-h-screen pb-2 md:pb-4 pt-20 md:pt-[90px]"
+            className="relative bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 min-h-screen pb-2 md:pb-4 pt-[30%] md:pt-[90px]"
         >
             {/* animation bg elements*/}
             <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">

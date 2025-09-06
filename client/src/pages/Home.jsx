@@ -113,7 +113,7 @@ const Home = () => {
                 <motion.div
                     variants={floatingVariantsAlt}
                     animate="animate"
-                    className="absolute top-[150px] md:top-[100px] right-[100px] md:right-[150px] text-purple-300/60"
+                    className="absolute top-[120px] md:top-[100px] right-[30px] md:right-[150px] text-purple-300/60"
                 >
                     <Star className="w-[40px] h-[40px] md:w-[75px] md:h-[75px]" />
                 </motion.div>
@@ -134,7 +134,7 @@ const Home = () => {
                 <motion.div
                     variants={floatingVariants}
                     animate="animate"
-                    className="absolute top-[500px] md:top-[400px] left-[150px] md:left-[250px] text-pink-300/60"
+                    className="absolute top-[420px] md:top-[400px] left-[50px] md:left-[250px] text-pink-300/60"
                 >
                     <Globe className="w-[42px] h-[42px] md:w-[78px] md:h-[78px]" />
                 </motion.div>
@@ -162,7 +162,7 @@ const Home = () => {
                 <motion.div
                     variants={floatingVariantsSlow}
                     animate="animate"
-                    className="absolute top-[250px] md:top-[180px] right-[250px] md:right-[400px] text-rose-300/60"
+                    className="absolute top-[50%] md:top-[180px] right-[50px] md:right-[400px] text-rose-300/60"
                 >
                     <Palette className="w-[41px] h-[41px] md:w-[76px] md:h-[76px]" />
                 </motion.div>

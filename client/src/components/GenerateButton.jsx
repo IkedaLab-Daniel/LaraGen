@@ -36,8 +36,8 @@ const GenerateButton = ({ selectedTech = [], selectedDifficulty = '', onGenerate
                     group relative w-full max-w-md px-8 py-4 rounded-xl font-medium text-lg
                     transition-all duration-300 ease-out
                     ${isDisabled 
-                        ? 'bg-gray-100 text-gray-400 cursor-not-allowed' 
-                        : 'bg-blue-600 hover:bg-blue-700 text-white shadow-lg hover:shadow-xl'
+                        ? 'bg-gray-100 text-gray-400 cursor-not-allowed outline outline-2 outline-slate-300' 
+                        : 'bg-blue-600 hover:bg-blue-700 text-white shadow-lg hover:shadow-xl '
                     }
                 `}
         >
