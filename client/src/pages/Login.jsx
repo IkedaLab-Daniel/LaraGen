@@ -20,13 +20,27 @@ const Login = () => {
     }, [searchParams]);
 
     const floatingVariants = {
+        hidden: { opacity: 0, scale: 0.8, y: 20 },
         animate: {
+            opacity: 1,
+            scale: 1,
             y: [-10, 10, -10],
             rotate: [0, 5, 0, -5, 0],
             transition: {
-                duration: 6,
-                repeat: Infinity,
-                ease: "easeInOut"
+                opacity: { duration: 0.6, ease: "easeOut" },
+                scale: { duration: 0.6, ease: "easeOut" },
+                y: { 
+                    duration: 6,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                    delay: 0.8
+                },
+                rotate: {
+                    duration: 6,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                    delay: 0.8
+                }
             }
         }
     }
@@ -56,47 +70,64 @@ const Login = () => {
     };
 
     return(
-        <div className="relative bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 min-h-screen pb-2 md:pb-4 pt-20 md:pt-[90px]">
+        <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5, ease: "easeOut" }}
+            className="relative bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 min-h-screen pb-2 md:pb-4 pt-20 md:pt-[90px]"
+        >
             {/* animation bg elements*/}
             <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
                 <motion.div
                     variants={floatingVariants}
+                    initial="hidden"
                     animate="animate"
+                    transition={{ delay: 0.1 }}
                     className="absolute top-10 left-1/2 transform -translate-x-1/2 text-indigo-300"
                 >
                     <ShieldCheck className="w-[60px] h-[60px] md:w-[80px] md:h-[80px]" />
                 </motion.div>
                 <motion.div
                     variants={floatingVariants}
+                    initial="hidden"
                     animate="animate"
+                    transition={{ delay: 0.2 }}
                     className="absolute top-1/3 left-10 text-indigo-300"
                 >
                     <User className="w-[40px] h-[40px] md:w-[60px] md:h-[60px]" />
                 </motion.div>
                 <motion.div
                     variants={floatingVariants}
+                    initial="hidden"
                     animate="animate"
+                    transition={{ delay: 0.3 }}
                     className="absolute bottom-10 right-1/4 text-indigo-300"
                 >
                     <KeyRound className="w-[50px] h-[50px] md:w-[70px] md:h-[70px]" />
                 </motion.div>
                 <motion.div
                     variants={floatingVariants}
+                    initial="hidden"
                     animate="animate"
+                    transition={{ delay: 0.4 }}
                     className="absolute bottom-1/3 left-1/4 text-indigo-300"
                 >
                     <Lock className="w-[40px] h-[40px] md:w-[60px] md:h-[60px]" />
                 </motion.div>
                 <motion.div
                     variants={floatingVariants}
+                    initial="hidden"
                     animate="animate"
+                    transition={{ delay: 0.5 }}
                     className="absolute top-1/2 right-10 text-indigo-300"
                 >
                     <Fingerprint className="w-[50px] h-[50px] md:w-[70px] md:h-[70px]" />
                 </motion.div>
                 <motion.div
                     variants={floatingVariants}
+                    initial="hidden"
                     animate="animate"
+                    transition={{ delay: 0.6 }}
                     className="absolute bottom-1/2 left-1/2 transform -translate-x-1/2 text-indigo-300"
                 >
                     <img src={LaragenGIF} className="w-[50px] h-[50px] md:w-[150px] md:h-[150px] opacity-[0.15]" />
@@ -105,6 +136,8 @@ const Login = () => {
             <div className="relative flex items-start justify-center py-2">
                 <motion.div
                     variants={containerVariants}
+                    initial="hidden"
+                    animate="visible"
                     className="text-center mb-2"
                 >
                     {/* <div className="inline-flex items-center px-4 py-2 mb-6 bg-white/70 backdrop-blur-sm border border-blue-200 rounded-full shadow-lg">
@@ -135,7 +168,7 @@ const Login = () => {
                     />
                 </motion.div>
             </div>
-        </div>
+        </motion.div>
     )
 }
 
