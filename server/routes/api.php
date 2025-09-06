@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\ProjectIdeaController;
 use App\Http\Controllers\Api\SavedProjectController;
 use App\Http\Controllers\Api\ProjectAuraController;
+use App\Http\Controllers\Api\StatsController;
 use App\Http\Controllers\AuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -11,6 +12,9 @@ use Illuminate\Support\Facades\Route;
 // ? Project Ideas API routes
 Route::post('generate-ideas', [ProjectIdeaController::class, 'generate'])->middleware('timeout:90');
 Route::get('options', [ProjectIdeaController::class, 'options']);
+
+// ? Site statistics
+Route::get('stats', [StatsController::class, 'index']);
 
 // ? Public saved projects (optionally authenticated for aura status)
 Route::get('projects', [SavedProjectController::class, 'index'])->middleware('optional.auth');

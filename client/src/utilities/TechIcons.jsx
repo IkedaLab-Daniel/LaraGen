@@ -35,6 +35,7 @@ import {
     SiWebpack,
     SiEslint,
     SiPrettier,
+    SiFramer,
     // Backend & Frameworks
     SiExpress,
     SiFastapi,
@@ -120,6 +121,7 @@ export const techIconMap = {
     'bootstrap': { icon: FaBootstrap, color: '#7952B3', name: 'Bootstrap' },
     'vite': { icon: SiVite, color: '#646CFF', name: 'Vite' },
     'webpack': { icon: SiWebpack, color: '#8DD6F9', name: 'Webpack' },
+    'framer': { icon: SiFramer, color: '#3355ff', name: 'Framer Motion' },
 
     // Backend Technologies
     'node': { icon: FaNodeJs, color: '#339933', name: 'Node.js' },

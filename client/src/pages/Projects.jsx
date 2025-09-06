@@ -450,7 +450,7 @@ const Projects = () => {
                                                 className={`px-3 w-[50%] py-3 rounded-full text-sm font-medium transition-all duration-300 flex items-center justify-center gap-1 ${
                                                     project.has_aura
                                                         ? 'bg-purple-100 text-purple-700 border border-purple-300'
-                                                        : 'bg-gray-100 text-gray-600 hover:bg-purple-50 hover:text-purple-600'
+                                                        : 'bg-gray-100 text-purple-600 hover:bg-purple-50 '
                                                 } disabled:opacity-50 disabled:cursor-not-allowed`}
                                             >
                                                 {togglingAura.has(project.id) ? (
