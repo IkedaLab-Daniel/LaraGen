@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\ProjectIdeaController;
 use App\Http\Controllers\Api\SavedProjectController;
 use App\Http\Controllers\Api\ProjectAuraController;
 use App\Http\Controllers\Api\StatsController;
+use App\Http\Controllers\Api\OAuthController;
 use App\Http\Controllers\AuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;

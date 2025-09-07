@@ -94,10 +94,24 @@ const NavBar = () => {
                             <div className="relative" ref={dropdownRef}>
                                 <button
                                     onClick={toggleUserDropdown}
-                                    className="hidden md:flex md:items-center gap-2 text-slate-600 hover:text-blue-600 transition-colors cursor-pointer rounded-lg hover:bg-blue-50"
+                                    className="hidden md:flex md:items-center gap-2 text-slate-600 hover:text-blue-600 transition-colors cursor-pointer rounded-lg hover:bg-blue-50 p-2"
                                 >
-                                    <User className="w-5 h-5" />
+                                    {user.avatar_url ? (
+                                        <img 
+                                            src={user.avatar_url} 
+                                            alt={`${user.name}'s profile`}
+                                            className="w-8 h-8 rounded-full border-2 border-gray-200 hover:border-blue-300 transition-colors"
+                                            onError={(e) => {
+                                                e.target.style.display = 'none';
+                                                e.target.nextSibling.style.display = 'block';
+                                            }}
+                                        />
+                                    ) : null}
+                                    <User className={`w-5 h-5 ${user.avatar_url ? 'hidden' : ''}`} />
                                     <span className="font-medium">{user.name}</span>
+                                    {user.github_username && (
+                                        <span className="text-xs text-gray-400">@{user.github_username}</span>
+                                    )}
                                     <ChevronDown className={`w-4 h-4 transition-transform ${isUserDropdownOpen ? 'rotate-180' : ''}`} />
                                 </button>
                                 
@@ -108,9 +122,36 @@ const NavBar = () => {
                                             animate={{ opacity: 1, y: 0 }}
                                             exit={{ opacity: 0, y: -10 }}
                                             transition={{ duration: 0.2 }}
-                                            className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border z-20"
+                                            className="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-lg border z-20"
                                         >
                                             <div className="py-2">
+                                                {/* User info header */}
+                                                <div className="px-4 py-3 border-b border-gray-100">
+                                                    <div className="flex items-center gap-3">
+                                                        {user.avatar_url ? (
+                                                            <img 
+                                                                src={user.avatar_url} 
+                                                                alt={`${user.name}'s profile`}
+                                                                className="w-10 h-10 rounded-full border-2 border-gray-200"
+                                                                onError={(e) => {
+                                                                    e.target.style.display = 'none';
+                                                                    e.target.nextSibling.style.display = 'flex';
+                                                                }}
+                                                            />
+                                                        ) : null}
+                                                        <div className={`w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center ${user.avatar_url ? 'hidden' : ''}`}>
+                                                            <User className="w-5 h-5 text-gray-500" />
+                                                        </div>
+                                                        <div className="flex-1 min-w-0">
+                                                            <p className="text-sm font-medium text-gray-900 truncate">{user.name}</p>
+                                                            <p className="text-xs text-gray-500 truncate">{user.email}</p>
+                                                            {user.github_username && (
+                                                                <p className="text-xs text-blue-600 truncate">@{user.github_username}</p>
+                                                            )}
+                                                        </div>
+                                                    </div>
+                                                </div>
+
                                                 <Link
                                                     to="/profile"
                                                     onClick={closeUserDropdown}
@@ -224,7 +265,7 @@ const NavBar = () => {
                                 </button>
                             </div>
                             
-                            <nav className="p-6 text-slate-500">
+                            <nav className="p-6 text-slate-500 relative h-full pb-0">
                                 <ul className="space-y-6">
                                     <motion.li
                                         initial={{ opacity: 0, x: 20 }}
@@ -329,6 +370,40 @@ const NavBar = () => {
                                         )}
                                     </motion.li>
                                 </ul>
+                                
+                                {/* Mobile User Info Section at Bottom */}
+                                {user && (
+                                    <motion.div
+                                        initial={{ opacity: 0, y: 20 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        transition={{ delay: 0.3 }}
+                                        className="absolute bottom-[100px] left-6 right-6 border-t pt-4 mt-6"
+                                    >
+                                        <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
+                                            {user.avatar_url ? (
+                                                <img 
+                                                    src={user.avatar_url} 
+                                                    alt={`${user.name}'s profile`}
+                                                    className="w-12 h-12 rounded-full border-2 border-gray-200"
+                                                    onError={(e) => {
+                                                        e.target.style.display = 'none';
+                                                        e.target.nextSibling.style.display = 'flex';
+                                                    }}
+                                                />
+                                            ) : null}
+                                            <div className={`w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center ${user.avatar_url ? 'hidden' : ''}`}>
+                                                <User className="w-6 h-6 text-gray-500" />
+                                            </div>
+                                            <div className="flex-1 min-w-0">
+                                                <p className="text-sm font-medium text-gray-900 truncate">{user.name}</p>
+                                                <p className="text-xs text-gray-500 truncate">{user.email}</p>
+                                                {user.github_username && (
+                                                    <p className="text-xs text-blue-600 truncate">@{user.github_username}</p>
+                                                )}
+                                            </div>
+                                        </div>
+                                    </motion.div>
+                                )}
                             </nav>
                         </motion.div>
                     </>

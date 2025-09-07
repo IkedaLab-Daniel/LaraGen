@@ -18,6 +18,7 @@ const DualAuthForm = ({ isLogin, setIsLogin}) => {
     const [showPassword, setShowPassword] = useState(false)
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [isLoading, setIsLoading] = useState(false)
+    const [isGitHubLoading, setIsGitHubLoading] = useState(false);
     const [error, setError] = useState(null);
     const apiURL = import.meta.env.VITE_API_URL;
 
@@ -114,6 +115,29 @@ const DualAuthForm = ({ isLogin, setIsLogin}) => {
         setSearchParams({ mode: isLogin ? 'login' : 'signup' })
     }
 
+    const handleGitHubAuth = async () => {
+        setIsGitHubLoading(true);
+        setError(null);
+
+        try {
+            // Get GitHub auth URL from backend
+            const response = await fetch(`${apiURL}/auth/github/url`);
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.message || 'Failed to get GitHub auth URL');
+            }
+
+            // Redirect to GitHub OAuth
+            window.location.href = data.auth_url;
+        } catch (err) {
+            console.error('GitHub auth error:', err);
+            setError(err.message || 'Failed to connect to GitHub. Please try again.');
+            toast.error(err.message || 'Failed to connect to GitHub. Please try again.');
+            setIsGitHubLoading(false);
+        }
+    };
+
     const itemVariants = {
         hidden: { opacity: 0, y: 30 },
         visible: {
@@ -161,13 +185,27 @@ const DualAuthForm = ({ isLogin, setIsLogin}) => {
                 className="space-y-2 mb-3"
             >
                 <motion.button
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                    className="w-full flex items-center justify-center py-2 lg:py-4 px-4 bg-gray-900 text-white rounded-xl font-medium hover:bg-gray-800 transition-colors duration-200 mb-3"
+                    onClick={handleGitHubAuth}
+                    disabled={isGitHubLoading || isLoading}
+                    whileHover={!isGitHubLoading ? { scale: 1.02 } : {}}
+                    whileTap={!isGitHubLoading ? { scale: 0.98 } : {}}
+                    className="w-full flex items-center justify-center py-2 lg:py-4 px-4 bg-gray-900 text-white rounded-xl font-medium hover:bg-gray-800 transition-colors duration-200 mb-3 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                    {/* ? GitHub icon marked as deplicated!!?? */}
-                    <Github className="w-5 h-5 mr-3" /> 
-                    GitHub to be implemented
+                    {isGitHubLoading ? (
+                        <>
+                            <motion.div
+                                animate={{ rotate: 360 }}
+                                transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
+                                className="w-5 h-5 border-2 border-white border-t-transparent rounded-full mr-3"
+                            />
+                            Continue with GitHub...
+                        </>
+                    ) : (
+                        <>
+                            <Github className="w-5 h-5 mr-3" /> 
+                            Continue with GitHub
+                        </>
+                    )}
                 </motion.button>
 
                 {/* cool divider */}
