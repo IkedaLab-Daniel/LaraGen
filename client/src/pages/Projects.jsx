@@ -1,8 +1,8 @@
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Clock, Star, User, Calendar, Code, Users, Sparkles, Zap, Palette,
-    Globe, Database, Layers, Monitor, Settings, Cpu, Workflow, Target
+    Globe, Database, Layers, Monitor, Settings, Cpu, Workflow, Target, Loader2
 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { useToast } from '../utilities/Toaster';
@@ -12,15 +12,25 @@ import Footer from '../components/Footer';
 const Projects = () => {
     const [projects, setProjects] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [loadingMore, setLoadingMore] = useState(false);
     const [error, setError] = useState(null);
-    const [filter, setFilter] = useState('all'); // 'all', 'my'
+    const [filter, setFilter] = useState('all'); // ? 'all', 'my'
     const [togglingAura, setTogglingAura] = useState(new Set());
+    const [currentPage, setCurrentPage] = useState(1);
+    const [hasMore, setHasMore] = useState(true);
     const { user } = useAuth();
     const toast = useToast();
+    const observerRef = useRef(null);
+    const loadingRef = useRef(null);
 
-    const fetchProjects = async () => {
+    const fetchProjects = async (page = 1, isLoadMore = false) => {
         try {
-            setLoading(true);
+            if (!isLoadMore) {
+                setLoading(true);
+            } else {
+                setLoadingMore(true);
+            }
+
             const endpoint = filter === 'my' && user ? '/my-projects' : '/projects';
             const headers = {};
             
@@ -32,14 +42,26 @@ const Projects = () => {
                 }
             }
 
-            const response = await fetch(`${import.meta.env.VITE_API_URL}${endpoint}`, {
-                headers
-            });
+            const url = new URL(`${import.meta.env.VITE_API_URL}${endpoint}`);
+            url.searchParams.append('page', page.toString());
+            url.searchParams.append('per_page', '6');
 
+            const response = await fetch(url.toString(), { headers });
             const data = await response.json();
 
             if (response.ok) {
-                setProjects(filter === 'my' ? data.data : data.data.data);
+                const newProjects = filter === 'my' ? data.data : data.data.data;
+                const pagination = filter === 'my' ? data.meta : data.data;
+
+                if (isLoadMore) {
+                    setProjects(prevProjects => [...prevProjects, ...newProjects]);
+                } else {
+                    setProjects(newProjects);
+                }
+
+                // Check if there are more pages
+                setHasMore(pagination.current_page < pagination.last_page);
+                setCurrentPage(pagination.current_page);
                 setError(null);
             } else {
                 setError(data.message || 'Failed to fetch projects');
@@ -48,8 +70,43 @@ const Projects = () => {
             setError('Network error while fetching projects');
         } finally {
             setLoading(false);
+            setLoadingMore(false);
         }
     };
+
+    const loadMoreProjects = useCallback(() => {
+        if (!loadingMore && hasMore) {
+            fetchProjects(currentPage + 1, true);
+        }
+    }, [loadingMore, hasMore, currentPage, filter, user]);
+
+    // Intersection Observer for lazy loading
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            (entries) => {
+                const first = entries[0];
+                if (first.isIntersecting && hasMore && !loadingMore) {
+                    loadMoreProjects();
+                }
+            },
+            {
+                threshold: 0.1,
+                rootMargin: '100px', // Trigger 100px before reaching the bottom
+            }
+        );
+
+        if (loadingRef.current) {
+            observer.observe(loadingRef.current);
+        }
+
+        observerRef.current = observer;
+
+        return () => {
+            if (observerRef.current) {
+                observerRef.current.disconnect();
+            }
+        };
+    }, [loadMoreProjects, hasMore, loadingMore]);
 
     const toggleAura = async (projectId) => {
         if (!user) {
@@ -109,7 +166,11 @@ const Projects = () => {
     };
 
     useEffect(() => {
-        fetchProjects();
+        // Reset pagination when filter changes
+        setCurrentPage(1);
+        setHasMore(true);
+        setProjects([]);
+        fetchProjects(1, false);
     }, [filter, user]);
 
     const containerVariants = {
@@ -493,6 +554,40 @@ const Projects = () => {
                             </p>
                         </motion.div>
                     )}
+
+                    {/* Loading More Indicator */}
+                    {loadingMore && (
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            className="flex items-center justify-center py-8"
+                        >
+                            <motion.div
+                                animate={{ rotate: 360 }}
+                                transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
+                                className="w-6 h-6 border-2 border-blue-600 border-t-transparent rounded-full mr-3"
+                            />
+                            <span className="text-gray-600">Loading more projects...</span>
+                        </motion.div>
+                    )}
+
+                    {/* End of Results Indicator */}
+                    {!loading && !hasMore && projects.length > 0 && (
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            className="text-center py-8"
+                        >
+                            <div className="flex items-center justify-center gap-2 text-gray-500">
+                                <div className="h-px bg-gray-300 flex-1 max-w-32"></div>
+                                <span className="text-sm">You've reached the end</span>
+                                <div className="h-px bg-gray-300 flex-1 max-w-32"></div>
+                            </div>
+                        </motion.div>
+                    )}
+
+                    {/* Invisible loading trigger for intersection observer */}
+                    <div ref={loadingRef} className="h-4"></div>
                 </motion.div>
             </div>
             <Footer />

@@ -17,11 +17,14 @@ class SavedProjectController extends Controller
      */
     public function index(Request $request): JsonResponse
     {
+        $perPage = $request->get('per_page', 12);
+        $perPage = min(max($perPage, 1), 50); // Limit between 1 and 50
+
         $projects = SavedProject::with('user:id,name')
             ->where('is_public', true)
             ->orderByDesc('aura_count')
             ->latest()
-            ->paginate(12);
+            ->paginate($perPage);
 
         // Add aura status for all projects, defaulting to false for unauthenticated users
         $user = $request->user();
@@ -42,13 +45,24 @@ class SavedProjectController extends Controller
      */
     public function myProjects(Request $request): JsonResponse
     {
+        $perPage = $request->get('per_page', 12);
+        $perPage = min(max($perPage, 1), 50); // Limit between 1 and 50
+
         $projects = $request->user()->savedProjects()
             ->latest()
-            ->get();
+            ->paginate($perPage);
 
         return response()->json([
             'success' => true,
-            'data' => $projects,
+            'data' => $projects->items(),
+            'meta' => [
+                'current_page' => $projects->currentPage(),
+                'last_page' => $projects->lastPage(),
+                'per_page' => $projects->perPage(),
+                'total' => $projects->total(),
+                'from' => $projects->firstItem(),
+                'to' => $projects->lastItem(),
+            ],
             'message' => 'Your saved projects retrieved successfully'
         ]);
     }
