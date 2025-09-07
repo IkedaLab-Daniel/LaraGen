@@ -265,7 +265,7 @@ const NavBar = () => {
                                 </button>
                             </div>
                             
-                            <nav className="p-6 text-slate-500">
+                            <nav className="p-6 text-slate-500 relative h-full pb-0">
                                 <ul className="space-y-6">
                                     <motion.li
                                         initial={{ opacity: 0, x: 20 }}
@@ -370,6 +370,40 @@ const NavBar = () => {
                                         )}
                                     </motion.li>
                                 </ul>
+                                
+                                {/* Mobile User Info Section at Bottom */}
+                                {user && (
+                                    <motion.div
+                                        initial={{ opacity: 0, y: 20 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        transition={{ delay: 0.3 }}
+                                        className="absolute bottom-[100px] left-6 right-6 border-t pt-4 mt-6"
+                                    >
+                                        <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
+                                            {user.avatar_url ? (
+                                                <img 
+                                                    src={user.avatar_url} 
+                                                    alt={`${user.name}'s profile`}
+                                                    className="w-12 h-12 rounded-full border-2 border-gray-200"
+                                                    onError={(e) => {
+                                                        e.target.style.display = 'none';
+                                                        e.target.nextSibling.style.display = 'flex';
+                                                    }}
+                                                />
+                                            ) : null}
+                                            <div className={`w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center ${user.avatar_url ? 'hidden' : ''}`}>
+                                                <User className="w-6 h-6 text-gray-500" />
+                                            </div>
+                                            <div className="flex-1 min-w-0">
+                                                <p className="text-sm font-medium text-gray-900 truncate">{user.name}</p>
+                                                <p className="text-xs text-gray-500 truncate">{user.email}</p>
+                                                {user.github_username && (
+                                                    <p className="text-xs text-blue-600 truncate">@{user.github_username}</p>
+                                                )}
+                                            </div>
+                                        </div>
+                                    </motion.div>
+                                )}
                             </nav>
                         </motion.div>
                     </>
