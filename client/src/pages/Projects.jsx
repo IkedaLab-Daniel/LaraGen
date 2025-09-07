@@ -53,10 +53,19 @@ const Projects = () => {
                 const newProjects = filter === 'my' ? data.data : data.data.data;
                 const pagination = filter === 'my' ? data.meta : data.data;
 
+                //  ? Ensure aura data is properly handled for both endpoints
+                const processedProjects = newProjects.map(project => ({
+                    ...project,
+                    // ? Ensure aura_count is a number
+                    aura_count: Number(project.aura_count) || 0,
+                    // ? For my projects, if has_aura is undefined, check if aura_count > 0 or use existing value
+                    has_aura: project.has_aura !== undefined ? project.has_aura : (project.aura_count > 0)
+                }));
+
                 if (isLoadMore) {
-                    setProjects(prevProjects => [...prevProjects, ...newProjects]);
+                    setProjects(prevProjects => [...prevProjects, ...processedProjects]);
                 } else {
-                    setProjects(newProjects);
+                    setProjects(processedProjects);
                 }
 
                 // Check if there are more pages
@@ -406,7 +415,7 @@ const Projects = () => {
                         <AnimatePresence>
                             {projects.map((project) => (
                                 <motion.div
-                                    key={project.id}
+                                    key={`${filter}-${project.id}`}
                                     variants={itemVariants}
                                     className="bg-white/50 backdrop-blur-sm rounded-xl shadow-lg border border-blue-100 p-6 group flex flex-col h-full"
                                 >
