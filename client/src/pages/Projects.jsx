@@ -44,7 +44,7 @@ const Projects = () => {
 
             const url = new URL(`${import.meta.env.VITE_API_URL}${endpoint}`);
             url.searchParams.append('page', page.toString());
-            url.searchParams.append('per_page', '6');
+            url.searchParams.append('per_page', '9');
 
             const response = await fetch(url.toString(), { headers });
             const data = await response.json();
@@ -95,18 +95,22 @@ const Projects = () => {
             }
         );
 
-        if (loadingRef.current) {
-            observer.observe(loadingRef.current);
-        }
+        // ? Use a timeout to ensure the DOM is rendered
+        const timeoutId = setTimeout(() => {
+            if (loadingRef.current) {
+                observer.observe(loadingRef.current);
+            }
+        }, 100);
 
         observerRef.current = observer;
 
         return () => {
+            clearTimeout(timeoutId);
             if (observerRef.current) {
                 observerRef.current.disconnect();
             }
         };
-    }, [loadMoreProjects, hasMore, loadingMore]);
+    }, [loadMoreProjects, hasMore, loadingMore, projects.length]);
 
     const toggleAura = async (projectId) => {
         if (!user) {
@@ -586,7 +590,7 @@ const Projects = () => {
                         </motion.div>
                     )}
 
-                    {/* Invisible loading trigger for intersection observer */}
+                    {/* Loading trigger for intersection observer */}
                     <div ref={loadingRef} className="h-4"></div>
                 </motion.div>
             </div>
