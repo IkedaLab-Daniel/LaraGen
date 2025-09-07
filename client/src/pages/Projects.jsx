@@ -408,9 +408,7 @@ const Projects = () => {
                                 <motion.div
                                     key={project.id}
                                     variants={itemVariants}
-                                    layout
-                                    className="bg-white/50 backdrop-blur-sm rounded-xl shadow-lg border border-blue-100 p-6 hover:shadow-xl transition-all duration-300 group flex flex-col h-full"
-                                    whileHover={{ y: -5, scale: 1.02 }}
+                                    className="bg-white/50 backdrop-blur-sm rounded-xl shadow-lg border border-blue-100 p-6 group flex flex-col h-full"
                                 >
                                     {/* Project Content - flex-grow to push footer down */}
                                     <div className="flex-grow">
