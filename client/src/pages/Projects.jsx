@@ -24,6 +24,7 @@ const Projects = () => {
     
     // Filter states
     const [searchTerm, setSearchTerm] = useState('');
+    const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('');
     const [difficultyFilter, setDifficultyFilter] = useState('all');
     const [techFilter, setTechFilter] = useState('all');
     const [sortBy, setSortBy] = useState('newest'); // newest, oldest, most_aura, name
@@ -109,15 +110,15 @@ const Projects = () => {
         let filtered = [...projects];
 
         // Apply search filter
-        if (searchTerm) {
+        if (debouncedSearchTerm) {
             filtered = filtered.filter(project =>
-                project.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                project.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                project.name.toLowerCase().includes(debouncedSearchTerm.toLowerCase()) ||
+                project.description.toLowerCase().includes(debouncedSearchTerm.toLowerCase()) ||
                 project.tech_stack?.some(tech => 
-                    tech.toLowerCase().includes(searchTerm.toLowerCase())
+                    tech.toLowerCase().includes(debouncedSearchTerm.toLowerCase())
                 ) ||
                 project.features?.some(feature =>
-                    feature.toLowerCase().includes(searchTerm.toLowerCase())
+                    feature.toLowerCase().includes(debouncedSearchTerm.toLowerCase())
                 )
             );
         }
@@ -154,7 +155,7 @@ const Projects = () => {
         }
 
         setFilteredProjects(filtered);
-    }, [projects, searchTerm, difficultyFilter, techFilter, sortBy]);
+    }, [projects, debouncedSearchTerm, difficultyFilter, techFilter, sortBy]);
 
     // Apply filters whenever projects or filter criteria change
     useEffect(() => {
@@ -164,13 +165,14 @@ const Projects = () => {
     // Clear all filters
     const clearFilters = () => {
         setSearchTerm('');
+        setDebouncedSearchTerm('');
         setDifficultyFilter('all');
         setTechFilter('all');
         setSortBy('newest');
     };
 
     // Check if any filters are active
-    const hasActiveFilters = searchTerm || difficultyFilter !== 'all' || techFilter !== 'all' || sortBy !== 'newest';
+    const hasActiveFilters = debouncedSearchTerm || difficultyFilter !== 'all' || techFilter !== 'all' || sortBy !== 'newest';
 
     // Calculate display text for results count
     const getResultsText = () => {
@@ -294,6 +296,15 @@ const Projects = () => {
         }
         fetchProjects(1, false);
     }, [filter, user]);
+
+    // Debounce search term - wait 2 seconds after user stops typing
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setDebouncedSearchTerm(searchTerm);
+        }, 2000); // 2 second delay
+
+        return () => clearTimeout(timer);
+    }, [searchTerm]);
 
     const containerVariants = {
         hidden: { opacity: 0 },
@@ -537,7 +548,7 @@ const Projects = () => {
                                 Filters
                                 {hasActiveFilters && (
                                     <span className="bg-blue-600 text-white text-xs px-2 py-1 rounded-full">
-                                        {[searchTerm, difficultyFilter !== 'all', techFilter !== 'all', sortBy !== 'newest'].filter(Boolean).length}
+                                        {[debouncedSearchTerm, difficultyFilter !== 'all', techFilter !== 'all', sortBy !== 'newest'].filter(Boolean).length}
                                     </span>
                                 )}
                                 <ChevronDown className={`w-4 h-4 transition-transform ${showFilters ? 'rotate-180' : ''}`} />
