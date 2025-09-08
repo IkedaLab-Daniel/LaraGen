@@ -2,7 +2,8 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Clock, Star, User, Calendar, Code, Users, Sparkles, Zap, Palette,
-    Globe, Database, Layers, Monitor, Settings, Cpu, Workflow, Target, Loader2
+    Globe, Database, Layers, Monitor, Settings, Cpu, Workflow, Target, Loader2,
+    Search, Filter, X, ChevronDown, SortAsc, SortDesc
 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { useToast } from '../utilities/Toaster';
@@ -11,6 +12,7 @@ import Footer from '../components/Footer';
 
 const Projects = () => {
     const [projects, setProjects] = useState([]);
+    const [filteredProjects, setFilteredProjects] = useState([]);
     const [loading, setLoading] = useState(true);
     const [loadingMore, setLoadingMore] = useState(false);
     const [error, setError] = useState(null);
@@ -18,10 +20,26 @@ const Projects = () => {
     const [togglingAura, setTogglingAura] = useState(new Set());
     const [currentPage, setCurrentPage] = useState(1);
     const [hasMore, setHasMore] = useState(true);
+    
+    // Filter states
+    const [searchTerm, setSearchTerm] = useState('');
+    const [difficultyFilter, setDifficultyFilter] = useState('all');
+    const [techFilter, setTechFilter] = useState('all');
+    const [sortBy, setSortBy] = useState('newest'); // newest, oldest, most_aura, name
+    const [showFilters, setShowFilters] = useState(false);
+    
     const { user } = useAuth();
     const toast = useToast();
     const observerRef = useRef(null);
     const loadingRef = useRef(null);
+
+    // Popular technologies for filter dropdown
+    const popularTechs = [
+        'React', 'Vue', 'Angular', 'Node.js', 'Express', 'Laravel', 'Django', 
+        'Flask', 'Spring Boot', 'MongoDB', 'PostgreSQL', 'MySQL', 'Redis',
+        'Docker', 'Kubernetes', 'AWS', 'TypeScript', 'JavaScript', 'Python',
+        'Java', 'PHP', 'Go', 'Rust', 'Swift', 'Kotlin'
+    ];
 
     const fetchProjects = async (page = 1, isLoadMore = false) => {
         try {
@@ -83,6 +101,74 @@ const Projects = () => {
         }
     };
 
+    // Filter and sort projects based on current filters
+    const applyFilters = useCallback(() => {
+        let filtered = [...projects];
+
+        // Apply search filter
+        if (searchTerm) {
+            filtered = filtered.filter(project =>
+                project.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                project.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                project.tech_stack?.some(tech => 
+                    tech.toLowerCase().includes(searchTerm.toLowerCase())
+                ) ||
+                project.features?.some(feature =>
+                    feature.toLowerCase().includes(searchTerm.toLowerCase())
+                )
+            );
+        }
+
+        // Apply difficulty filter
+        if (difficultyFilter !== 'all') {
+            filtered = filtered.filter(project => project.difficulty === difficultyFilter);
+        }
+
+        // Apply tech filter
+        if (techFilter !== 'all') {
+            filtered = filtered.filter(project =>
+                project.tech_stack?.some(tech =>
+                    tech.toLowerCase().includes(techFilter.toLowerCase())
+                )
+            );
+        }
+
+        // Apply sorting
+        switch (sortBy) {
+            case 'oldest':
+                filtered.sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
+                break;
+            case 'most_aura':
+                filtered.sort((a, b) => (b.aura_count || 0) - (a.aura_count || 0));
+                break;
+            case 'name':
+                filtered.sort((a, b) => a.name.localeCompare(b.name));
+                break;
+            case 'newest':
+            default:
+                filtered.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+                break;
+        }
+
+        setFilteredProjects(filtered);
+    }, [projects, searchTerm, difficultyFilter, techFilter, sortBy]);
+
+    // Apply filters whenever projects or filter criteria change
+    useEffect(() => {
+        applyFilters();
+    }, [applyFilters]);
+
+    // Clear all filters
+    const clearFilters = () => {
+        setSearchTerm('');
+        setDifficultyFilter('all');
+        setTechFilter('all');
+        setSortBy('newest');
+    };
+
+    // Check if any filters are active
+    const hasActiveFilters = searchTerm || difficultyFilter !== 'all' || techFilter !== 'all' || sortBy !== 'newest';
+
     const loadMoreProjects = useCallback(() => {
         if (!loadingMore && hasMore) {
             fetchProjects(currentPage + 1, true);
@@ -119,7 +205,7 @@ const Projects = () => {
                 observerRef.current.disconnect();
             }
         };
-    }, [loadMoreProjects, hasMore, loadingMore, projects.length]);
+    }, [loadMoreProjects, hasMore, loadingMore, filteredProjects.length]);
 
     const toggleAura = async (projectId) => {
         if (!user) {
@@ -183,6 +269,10 @@ const Projects = () => {
         setCurrentPage(1);
         setHasMore(true);
         setProjects([]);
+        // Clear local filters when switching between All/My projects
+        if (filter !== 'all') {
+            clearFilters();
+        }
         fetchProjects(1, false);
     }, [filter, user]);
 
@@ -397,6 +487,126 @@ const Projects = () => {
                         </div>
                     </motion.div>
 
+                    {/* Search and Filters */}
+                    <motion.div variants={itemVariants} className="space-y-4">
+                        {/* Search Bar */}
+                        <div className="flex justify-center">
+                            <div className="relative w-full max-w-md">
+                                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+                                <input
+                                    type="text"
+                                    placeholder="Search projects..."
+                                    value={searchTerm}
+                                    onChange={(e) => setSearchTerm(e.target.value)}
+                                    className="w-full pl-10 pr-4 py-3 bg-white/80 backdrop-blur-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                                />
+                            </div>
+                        </div>
+
+                        {/* Filter Controls */}
+                        <div className="flex flex-wrap items-center justify-center gap-4">
+                            {/* Filter Toggle Button */}
+                            <button
+                                onClick={() => setShowFilters(!showFilters)}
+                                className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all duration-300 ${
+                                    showFilters || hasActiveFilters
+                                        ? 'bg-blue-100 text-blue-700 border border-blue-300'
+                                        : 'bg-white/80 text-gray-600 border border-gray-200 hover:border-blue-300'
+                                }`}
+                            >
+                                <Filter className="w-4 h-4" />
+                                Filters
+                                {hasActiveFilters && (
+                                    <span className="bg-blue-600 text-white text-xs px-2 py-1 rounded-full">
+                                        {[searchTerm, difficultyFilter !== 'all', techFilter !== 'all', sortBy !== 'newest'].filter(Boolean).length}
+                                    </span>
+                                )}
+                                <ChevronDown className={`w-4 h-4 transition-transform ${showFilters ? 'rotate-180' : ''}`} />
+                            </button>
+
+                            {/* Clear Filters */}
+                            {hasActiveFilters && (
+                                <button
+                                    onClick={clearFilters}
+                                    className="flex items-center gap-2 px-4 py-2 bg-gray-100 text-gray-600 rounded-lg hover:bg-gray-200 transition-all duration-300"
+                                >
+                                    <X className="w-4 h-4" />
+                                    Clear All
+                                </button>
+                            )}
+
+                            {/* Results Count */}
+                            <div className="text-sm text-gray-500 bg-white/80 px-3 py-2 rounded-lg">
+                                {filteredProjects.length} project{filteredProjects.length !== 1 ? 's' : ''} found
+                            </div>
+                        </div>
+
+                        {/* Expandable Filter Panel */}
+                        <AnimatePresence>
+                            {showFilters && (
+                                <motion.div
+                                    initial={{ opacity: 0, height: 0 }}
+                                    animate={{ opacity: 1, height: 'auto' }}
+                                    exit={{ opacity: 0, height: 0 }}
+                                    className="bg-white/80 backdrop-blur-sm rounded-xl p-6 shadow-lg border border-gray-200"
+                                >
+                                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                        {/* Difficulty Filter */}
+                                        <div>
+                                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                                                Difficulty Level
+                                            </label>
+                                            <select
+                                                value={difficultyFilter}
+                                                onChange={(e) => setDifficultyFilter(e.target.value)}
+                                                className="w-full px-3 py-2 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                            >
+                                                <option value="all">All Levels</option>
+                                                <option value="beginner">Beginner</option>
+                                                <option value="intermediate">Intermediate</option>
+                                                <option value="advanced">Advanced</option>
+                                            </select>
+                                        </div>
+
+                                        {/* Technology Filter */}
+                                        <div>
+                                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                                                Technology
+                                            </label>
+                                            <select
+                                                value={techFilter}
+                                                onChange={(e) => setTechFilter(e.target.value)}
+                                                className="w-full px-3 py-2 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                            >
+                                                <option value="all">All Technologies</option>
+                                                {popularTechs.map(tech => (
+                                                    <option key={tech} value={tech}>{tech}</option>
+                                                ))}
+                                            </select>
+                                        </div>
+
+                                        {/* Sort Options */}
+                                        <div>
+                                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                                                Sort By
+                                            </label>
+                                            <select
+                                                value={sortBy}
+                                                onChange={(e) => setSortBy(e.target.value)}
+                                                className="w-full px-3 py-2 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                            >
+                                                <option value="newest">Newest First</option>
+                                                <option value="oldest">Oldest First</option>
+                                                <option value="most_aura">Most Aura</option>
+                                                <option value="name">Name (A-Z)</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </motion.div>
+                            )}
+                        </AnimatePresence>
+                    </motion.div>
+
                     {/* Error State */}
                     {error && (
                         <motion.div
@@ -413,7 +623,7 @@ const Projects = () => {
                         className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
                     >
                         <AnimatePresence>
-                            {projects.map((project) => (
+                            {filteredProjects.map((project) => (
                                 <motion.div
                                     key={`${filter}-${project.id}`}
                                     variants={itemVariants}
@@ -548,6 +758,28 @@ const Projects = () => {
                     </motion.div>
 
                     {/* Empty State */}
+                    {!loading && filteredProjects.length === 0 && projects.length > 0 && (
+                        <motion.div
+                            variants={itemVariants}
+                            className="text-center py-12"
+                        >
+                            <Search className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+                            <h3 className="text-xl font-semibold text-gray-600 mb-2">
+                                No projects match your filters
+                            </h3>
+                            <p className="text-gray-500 mb-4">
+                                Try adjusting your search terms or filters to find more projects.
+                            </p>
+                            <button
+                                onClick={clearFilters}
+                                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                            >
+                                Clear All Filters
+                            </button>
+                        </motion.div>
+                    )}
+
+                    {/* No Projects State */}
                     {!loading && projects.length === 0 && (
                         <motion.div
                             variants={itemVariants}
@@ -583,7 +815,7 @@ const Projects = () => {
                     )}
 
                     {/* End of Results Indicator */}
-                    {!loading && !hasMore && projects.length > 0 && (
+                    {!loading && !hasMore && filteredProjects.length > 0 && (
                         <motion.div
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
