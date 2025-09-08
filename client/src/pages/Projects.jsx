@@ -13,6 +13,7 @@ import Footer from '../components/Footer';
 const Projects = () => {
     const [projects, setProjects] = useState([]);
     const [filteredProjects, setFilteredProjects] = useState([]);
+    const [totalProjectsCount, setTotalProjectsCount] = useState(0);
     const [loading, setLoading] = useState(true);
     const [loadingMore, setLoadingMore] = useState(false);
     const [error, setError] = useState(null);
@@ -84,6 +85,8 @@ const Projects = () => {
                     setProjects(prevProjects => [...prevProjects, ...processedProjects]);
                 } else {
                     setProjects(processedProjects);
+                    // Only update total count when loading first page
+                    setTotalProjectsCount(pagination.total);
                 }
 
                 // Check if there are more pages
@@ -168,6 +171,21 @@ const Projects = () => {
 
     // Check if any filters are active
     const hasActiveFilters = searchTerm || difficultyFilter !== 'all' || techFilter !== 'all' || sortBy !== 'newest';
+
+    // Calculate display text for results count
+    const getResultsText = () => {
+        if (hasActiveFilters) {
+            // Only when filters are active, show filtered count out of loaded projects
+            return `${filteredProjects.length} of ${projects.length} loaded projects`;
+        } else {
+            // When no filters, show loaded count out of total
+            if (projects.length === totalProjectsCount) {
+                return `${totalProjectsCount} project${totalProjectsCount !== 1 ? 's' : ''}`;
+            } else {
+                return `${projects.length} of ${totalProjectsCount} projects loaded`;
+            }
+        }
+    };
 
     const loadMoreProjects = useCallback(() => {
         if (!loadingMore && hasMore) {
@@ -269,6 +287,7 @@ const Projects = () => {
         setCurrentPage(1);
         setHasMore(true);
         setProjects([]);
+        setTotalProjectsCount(0);
         // Clear local filters when switching between All/My projects
         if (filter !== 'all') {
             clearFilters();
@@ -537,7 +556,7 @@ const Projects = () => {
 
                             {/* Results Count */}
                             <div className="text-sm text-gray-500 bg-white/80 px-3 py-2 rounded-lg">
-                                {filteredProjects.length} project{filteredProjects.length !== 1 ? 's' : ''} found
+                                {getResultsText()}
                             </div>
                         </div>
 
