@@ -1,5 +1,5 @@
 
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Clock, Star, User, Calendar, Code, Users, Sparkles, Zap, Palette,
     Globe, Database, Layers, Monitor, Settings, Cpu, Workflow, Target, Loader2,
@@ -9,6 +9,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { useToast } from '../utilities/Toaster';
 import { TechIcon } from '../utilities/TechIcons';
 import Footer from '../components/Footer';
+import React from 'react';
 
 const Projects = () => {
     const [projects, setProjects] = useState([]);
@@ -35,13 +36,22 @@ const Projects = () => {
     const observerRef = useRef(null);
     const loadingRef = useRef(null);
 
-    // Popular technologies for filter dropdown
-    const popularTechs = [
+    // Detect mobile/low-end devices to reduce animations
+    const isMobile = useMemo(() => {
+        return typeof window !== 'undefined' && (
+            /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
+            window.innerWidth < 768 ||
+            navigator.hardwareConcurrency <= 2 // Low-end CPU detection
+        );
+    }, []);
+
+    // Popular technologies for filter dropdown - memoized to prevent recreation
+    const popularTechs = useMemo(() => [
         'React', 'Vue', 'Angular', 'Node.js', 'Express', 'Laravel', 'Django', 
         'Flask', 'Spring Boot', 'MongoDB', 'PostgreSQL', 'MySQL', 'Redis',
         'Docker', 'Kubernetes', 'AWS', 'TypeScript', 'JavaScript', 'Python',
         'Java', 'PHP', 'Go', 'Rust', 'Swift', 'Kotlin'
-    ];
+    ], []);
 
     const fetchProjects = async (page = 1, isLoadMore = false) => {
         try {
@@ -301,7 +311,7 @@ const Projects = () => {
     useEffect(() => {
         const timer = setTimeout(() => {
             setDebouncedSearchTerm(searchTerm);
-        }, 2000); // 2 second delay
+        }, 500); // 500ms delay for better responsiveness
 
         return () => clearTimeout(timer);
     }, [searchTerm]);
@@ -380,101 +390,39 @@ const Projects = () => {
 
     return (
         <div className="relative min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 pt-20 pb-6">
-            {/* Floating Background Animations */}
-            <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
-                <motion.div
-                    variants={floatingVariants}
-                    animate="animate"
-                    className="absolute top-32 right-16 text-blue-300/40"
-                >
-                    <Star className="w-[60px] h-[60px] md:w-[100px] md:h-[100px]" />
-                </motion.div>
-                <motion.div
-                    variants={floatingVariants}
-                    animate="animate"
-                    className="absolute top-[350px] md:top-48 left-8 md:left-16 text-purple-300/40"
-                >
-                    <Code className="w-[45px] h-[45px] md:w-[80px] md:h-[80px]" />
-                </motion.div>
-                <motion.div
-                    variants={floatingVariantsAlt}
-                    animate="animate"
-                    className="absolute bottom-32 md:bottom-48 right-8 md:right-24 text-indigo-300/40"
-                >
-                    <Globe className="w-[55px] h-[55px] md:w-[90px] md:h-[90px]" />
-                </motion.div>
-                <motion.div
-                    variants={floatingVariantsSlow}
-                    animate="animate"
-                    className="absolute bottom-[400px] md:bottom-72 left-12 md:left-32 text-cyan-300/40"
-                >
-                    <Database className="w-[40px] h-[40px] md:w-[70px] md:h-[70px]" />
-                </motion.div>
-                <motion.div
-                    variants={floatingVariantsAlt}
-                    animate="animate"
-                    className="absolute top-[500px] md:top-96 right-[60px] md:right-48 text-pink-300/40"
-                >
-                    <Palette className="w-[50px] h-[50px] md:w-[85px] md:h-[85px]" />
-                </motion.div>
-                <motion.div
-                    variants={floatingVariants}
-                    animate="animate"
-                    className="absolute bottom-16 left-[30px] md:left-[200px] text-yellow-300/40"
-                >
-                    <Zap className="w-[35px] h-[35px] md:w-[65px] md:h-[65px]" />
-                </motion.div>
-                
-                {/* Additional floating elements */}
-                <motion.div
-                    variants={floatingVariantsSlow}
-                    animate="animate"
-                    className="absolute top-[200px] md:top-32 left-[50%] text-emerald-300/35"
-                >
-                    <Layers className="w-[38px] h-[38px] md:w-[75px] md:h-[75px]" />
-                </motion.div>
-                <motion.div
-                    variants={floatingVariantsAlt}
-                    animate="animate"
-                    className="absolute top-[600px] md:top-[500px] left-[80px] md:left-[120px] text-orange-300/35"
-                >
-                    <Monitor className="w-[42px] h-[42px] md:w-[78px] md:h-[78px]" />
-                </motion.div>
-                <motion.div
-                    variants={floatingVariants}
-                    animate="animate"
-                    className="absolute bottom-[200px] md:bottom-[300px] right-[120px] md:right-[300px] text-violet-300/35"
-                >
-                    <Settings className="w-[36px] h-[36px] md:w-[68px] md:h-[68px]" />
-                </motion.div>
-                <motion.div
-                    variants={floatingVariantsSlow}
-                    animate="animate"
-                    className="absolute top-[750px] md:top-[650px] right-[20px] md:right-[80px] text-teal-300/35"
-                >
-                    <Cpu className="w-[44px] h-[44px] md:w-[82px] md:h-[82px]" />
-                </motion.div>
-                <motion.div
-                    variants={floatingVariantsAlt}
-                    animate="animate"
-                    className="absolute bottom-[300px] md:bottom-[150px] left-[200px] md:left-[350px] text-rose-300/35"
-                >
-                    <Workflow className="w-[39px] h-[39px] md:w-[72px] md:h-[72px]" />
-                </motion.div>
-                <motion.div
-                    variants={floatingVariants}
-                    animate="animate"
-                    className="absolute top-[400px] md:top-[250px] right-[200px] md:right-[450px] text-amber-300/35"
-                >
-                    <Target className="w-[33px] h-[33px] md:w-[62px] md:h-[62px]" />
-                </motion.div>
-            </div>
+            {/* Floating Background Animations - Only on desktop for performance */}
+            {!isMobile && (
+                <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
+                    <motion.div
+                        variants={floatingVariants}
+                        animate="animate"
+                        className="absolute top-32 right-16 text-blue-300/30"
+                    >
+                        <Star className="w-[80px] h-[80px]" />
+                    </motion.div>
+                    <motion.div
+                        variants={floatingVariantsAlt}
+                        animate="animate"
+                        className="absolute top-48 left-16 text-purple-300/30"
+                    >
+                        <Code className="w-[70px] h-[70px]" />
+                    </motion.div>
+                    <motion.div
+                        variants={floatingVariantsSlow}
+                        animate="animate"
+                        className="absolute bottom-48 right-24 text-indigo-300/30"
+                    >
+                        <Globe className="w-[75px] h-[75px]" />
+                    </motion.div>
+                    {/* Reduced number of floating elements for better performance */}
+                </div>
+            )}
 
             <div className="relative container mx-auto px-3 md:px-6 pt-12 ">
                 <motion.div
-                    variants={containerVariants}
-                    initial="hidden"
-                    animate="visible"
+                    variants={isMobile ? {} : containerVariants}
+                    initial={isMobile ? false : "hidden"}
+                    animate={isMobile ? false : "visible"}
                     className="space-y-8"
                 >
                     {/* Header */}
@@ -489,7 +437,7 @@ const Projects = () => {
 
                     {/* Filter Tabs */}
                     <motion.div variants={itemVariants} className="flex justify-center">
-                        <div className="bg-white/80 backdrop-blur-sm rounded-xl p-2 shadow-lg">
+                        <div className={`${isMobile ? 'bg-white' : 'bg-white/80 backdrop-blur-sm'} rounded-xl p-2 shadow-lg`}>
                             <button
                                 onClick={() => setFilter('all')}
                                 className={`px-6 py-2 rounded-lg font-medium transition-all duration-300 ${
@@ -528,7 +476,7 @@ const Projects = () => {
                                     placeholder="Search projects..."
                                     value={searchTerm}
                                     onChange={(e) => setSearchTerm(e.target.value)}
-                                    className="w-full pl-10 pr-4 py-3 bg-white/80 backdrop-blur-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                                    className={`w-full pl-10 pr-4 py-3 ${isMobile ? 'bg-white' : 'bg-white/80 backdrop-blur-sm'} border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all`}
                                 />
                             </div>
                         </div>
@@ -541,7 +489,7 @@ const Projects = () => {
                                 className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all duration-300 ${
                                     showFilters || hasActiveFilters
                                         ? 'bg-blue-100 text-blue-700 border border-blue-300'
-                                        : 'bg-white/80 text-gray-600 border border-gray-200 hover:border-blue-300'
+                                        : `${isMobile ? 'bg-white' : 'bg-white/80'} text-gray-600 border border-gray-200 hover:border-blue-300`
                                 }`}
                             >
                                 <Filter className="w-4 h-4" />
@@ -566,7 +514,7 @@ const Projects = () => {
                             )}
 
                             {/* Results Count */}
-                            <div className="text-sm text-gray-500 bg-white/80 px-3 py-2 rounded-lg">
+                            <div className={`text-sm text-gray-500 ${isMobile ? 'bg-white' : 'bg-white/80'} px-3 py-2 rounded-lg`}>
                                 {getResultsText()}
                             </div>
                         </div>
@@ -578,7 +526,7 @@ const Projects = () => {
                                     initial={{ opacity: 0, height: 0 }}
                                     animate={{ opacity: 1, height: 'auto' }}
                                     exit={{ opacity: 0, height: 0 }}
-                                    className="bg-white/80 backdrop-blur-sm rounded-xl p-6 shadow-lg border border-gray-200"
+                                    className={`${isMobile ? 'bg-white' : 'bg-white/80 backdrop-blur-sm'} rounded-xl p-6 shadow-lg border border-gray-200`}
                                 >
                                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                                         {/* Difficulty Filter */}
@@ -654,135 +602,15 @@ const Projects = () => {
                     >
                         <AnimatePresence>
                             {filteredProjects.map((project) => (
-                                <motion.div
+                                <ProjectCard
                                     key={`${filter}-${project.id}`}
-                                    variants={itemVariants}
-                                    className="bg-white/50 backdrop-blur-sm rounded-xl shadow-lg border border-blue-100 p-6 group flex flex-col h-full"
-                                >
-                                    {/* Project Content - flex-grow to push footer down */}
-                                    <div className="flex-grow">
-                                        {/* Project Header */}
-                                        <div className="mb-4">
-                                            <div className="flex items-start justify-between mb-2">
-                                                <h3 className="text-lg font-bold text-gray-800 group-hover:text-blue-600 transition-colors max-w-[70%]">
-                                                    {project.name}
-                                                </h3>
-                                                <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                                                    project.difficulty === 'beginner' ? 'bg-green-100 text-green-700' :
-                                                    project.difficulty === 'intermediate' ? 'bg-yellow-100 text-yellow-700' :
-                                                    'bg-red-100 text-red-700'
-                                                }`}>
-                                                    {project.difficulty === 'beginner' ? 'EASY' : project.difficulty.toUpperCase()}
-                                                </span>
-                                            </div>
-                                            
-                                            {project.user && (
-                                                <div className="flex items-center gap-2 text-sm text-gray-500 mb-2">
-                                                    <User className="w-3 h-3" />
-                                                    <span>by {project.user.name}</span>
-                                                </div>
-                                            )}
-                                        </div>
-
-                                        {/* Description */}
-                                        <p className="text-gray-600 text-sm mb-4 line-clamp-3">
-                                            {project.description}
-                                        </p>
-
-                                        {/* Meta Info */}
-                                        <div className="space-y-2 mb-4">
-                                            <div className="flex items-center gap-2 text-sm text-gray-500">
-                                                <Clock className="w-4 h-4" />
-                                                <span>{project.estimated_time}</span>
-                                            </div>
-                                            
-                                            <div className="flex items-center gap-2 text-sm text-gray-500">
-                                                <Calendar className="w-4 h-4" />
-                                                <span>{new Date(project.created_at).toLocaleDateString()}</span>
-                                            </div>
-                                        </div>
-
-                                        {/* Tech Stack */}
-                                        <div className="mb-4">
-                                            <h4 className="text-sm font-semibold text-gray-700 mb-2 flex items-center gap-2">
-                                                <Code className="w-4 h-4" />
-                                                Tech Stack
-                                            </h4>
-                                            <div className="flex flex-wrap gap-2">
-                                                {project.tech_stack?.slice(0, 10).map((tech, index) => (
-                                                    <TechIcon 
-                                                        key={index} 
-                                                        tech={tech} 
-                                                        size="sm" 
-                                                        showName={true}
-                                                    />
-                                                ))}
-                                                {project.tech_stack?.length > 10 && (
-                                                    <div className="px-2 py-1 bg-gray-100/80 backdrop-blur-sm text-gray-600 rounded-md text-xs font-medium border border-gray-200/50">
-                                                        +{project.tech_stack.length - 10} more
-                                                    </div>
-                                                )}
-                                            </div>
-                                        </div>
-
-                                        {/* Features Preview */}
-                                        <div className="space-y-2 mb-4">
-                                            <h4 className="text-sm font-semibold text-gray-700 flex items-center gap-2">
-                                                <Star className="w-4 h-4" />
-                                                Key Features
-                                            </h4>
-                                            <div className="flex flex-wrap gap-2">
-                                                {project.features?.slice(0, 3).map((feature, index) => (
-                                                    <div key={index} className="px-2 py-1 bg-green-50/80 backdrop-blur-sm text-green-700 rounded-md text-xs font-medium border border-green-200/50">
-                                                        {feature}
-                                                    </div>
-                                                ))}
-                                                {project.features?.length > 3 && (
-                                                    <div className="px-2 py-1 bg-gray-100/80 backdrop-blur-sm text-gray-600 rounded-md text-xs font-medium border border-gray-200/50">
-                                                        +{project.features.length - 3} more
-                                                    </div>
-                                                )}
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    {/* Aura Section - Always at bottom */}
-                                    <div className="flex items-center justify-between pt-4 border-t-2 border-gray-200 mt-auto">
-                                        <div className="flex items-center gap-2">
-                                            <Sparkles className="w-4 h-4 text-purple-500" />
-                                            <span className="text-sm font-medium text-gray-600">
-                                                {project.aura_count || 0} Aura
-                                            </span>
-                                        </div>
-                                        
-                                        {user ? (
-                                            <motion.button
-                                                whileHover={{ scale: 1.05 }}
-                                                whileTap={{ scale: 0.95 }}
-                                                onClick={() => toggleAura(project.id)}
-                                                disabled={togglingAura.has(project.id)}
-                                                className={`px-3 w-[50%] py-3 rounded-full text-sm font-medium transition-all duration-300 flex items-center justify-center gap-1 ${
-                                                    project.has_aura
-                                                        ? 'bg-purple-100 text-purple-700 border border-purple-300'
-                                                        : 'bg-gray-100 text-purple-600 hover:bg-purple-50 '
-                                                } disabled:opacity-50 disabled:cursor-not-allowed`}
-                                            >
-                                                {togglingAura.has(project.id) ? (
-                                                    <motion.div
-                                                        animate={{ rotate: 360 }}
-                                                        transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
-                                                        className="w-3 h-3 border border-current border-t-transparent rounded-full"
-                                                    />
-                                                ) : (
-                                                    <Sparkles className={`w-3 h-3 ${project.has_aura ? 'fill-current' : ''}`} />
-                                                )}
-                                                {project.has_aura ? 'Aura Given' : 'Give Aura'}
-                                            </motion.button>
-                                        ) : (
-                                            <span className="text-xs text-gray-400">Sign in to give aura</span>
-                                        )}
-                                    </div>
-                                </motion.div>
+                                    project={project}
+                                    filter={filter}
+                                    isMobile={isMobile}
+                                    user={user}
+                                    togglingAura={togglingAura}
+                                    toggleAura={toggleAura}
+                                />
                             ))}
                         </AnimatePresence>
                     </motion.div>
@@ -867,5 +695,138 @@ const Projects = () => {
         </div>
     );
 };
+
+// Memoized ProjectCard component to prevent unnecessary re-renders
+const ProjectCard = React.memo(({ project, filter, isMobile, user, togglingAura, toggleAura }) => {
+    const formattedDate = useMemo(() => new Date(project.created_at).toLocaleDateString(), [project.created_at]);
+    
+    return (
+        <motion.div
+            key={`${filter}-${project.id}`}
+            variants={isMobile ? {} : {
+                hidden: { opacity: 0, y: 20 },
+                visible: { opacity: 1, y: 0, transition: { duration: 0.5 } }
+            }}
+            className={`${isMobile ? 'bg-white' : 'bg-white/50 backdrop-blur-sm'} rounded-xl shadow-lg border border-blue-100 p-6 group flex flex-col h-full`}
+        >
+            <div className="flex-grow">
+                <div className="mb-4">
+                    <div className="flex items-start justify-between mb-2">
+                        <h3 className="text-lg font-bold text-gray-800 group-hover:text-blue-600 transition-colors max-w-[70%]">
+                            {project.name}
+                        </h3>
+                        <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                            project.difficulty === 'beginner' ? 'bg-green-100 text-green-700' :
+                            project.difficulty === 'intermediate' ? 'bg-yellow-100 text-yellow-700' :
+                            'bg-red-100 text-red-700'
+                        }`}>
+                            {project.difficulty === 'beginner' ? 'EASY' : project.difficulty.toUpperCase()}
+                        </span>
+                    </div>
+                    
+                    {project.user && (
+                        <div className="flex items-center gap-2 text-sm text-gray-500 mb-2">
+                            <User className="w-3 h-3" />
+                            <span>by {project.user.name}</span>
+                        </div>
+                    )}
+                </div>
+
+                <p className="text-gray-600 text-sm mb-4 line-clamp-3">
+                    {project.description}
+                </p>
+
+                <div className="space-y-2 mb-4">
+                    <div className="flex items-center gap-2 text-sm text-gray-500">
+                        <Clock className="w-4 h-4" />
+                        <span>{project.estimated_time}</span>
+                    </div>
+                    
+                    <div className="flex items-center gap-2 text-sm text-gray-500">
+                        <Calendar className="w-4 h-4" />
+                        <span>{formattedDate}</span>
+                    </div>
+                </div>
+
+                <div className="mb-4">
+                    <h4 className="text-sm font-semibold text-gray-700 mb-2 flex items-center gap-2">
+                        <Code className="w-4 h-4" />
+                        Tech Stack
+                    </h4>
+                    <div className="flex flex-wrap gap-2">
+                        {project.tech_stack?.slice(0, 10).map((tech, index) => (
+                            <TechIcon 
+                                key={index} 
+                                tech={tech} 
+                                size="sm" 
+                                showName={true}
+                            />
+                        ))}
+                        {project.tech_stack?.length > 10 && (
+                            <div className={`px-2 py-1 ${isMobile ? 'bg-gray-100' : 'bg-gray-100/80 backdrop-blur-sm'} text-gray-600 rounded-md text-xs font-medium border border-gray-200/50`}>
+                                +{project.tech_stack.length - 10} more
+                            </div>
+                        )}
+                    </div>
+                </div>
+
+                <div className="space-y-2 mb-4">
+                    <h4 className="text-sm font-semibold text-gray-700 flex items-center gap-2">
+                        <Star className="w-4 h-4" />
+                        Key Features
+                    </h4>
+                    <div className="flex flex-wrap gap-2">
+                        {project.features?.slice(0, 3).map((feature, index) => (
+                            <div key={index} className={`px-2 py-1 ${isMobile ? 'bg-green-50' : 'bg-green-50/80 backdrop-blur-sm'} text-green-700 rounded-md text-xs font-medium border border-green-200/50`}>
+                                {feature}
+                            </div>
+                        ))}
+                        {project.features?.length > 3 && (
+                            <div className={`px-2 py-1 ${isMobile ? 'bg-gray-100' : 'bg-gray-100/80 backdrop-blur-sm'} text-gray-600 rounded-md text-xs font-medium border border-gray-200/50`}>
+                                +{project.features.length - 3} more
+                            </div>
+                        )}
+                    </div>
+                </div>
+            </div>
+
+            <div className="flex items-center justify-between pt-4 border-t-2 border-gray-200 mt-auto">
+                <div className="flex items-center gap-2">
+                    <Sparkles className="w-4 h-4 text-purple-500" />
+                    <span className="text-sm font-medium text-gray-600">
+                        {project.aura_count || 0} Aura
+                    </span>
+                </div>
+                
+                {user ? (
+                    <motion.button
+                        whileHover={isMobile ? {} : { scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        onClick={() => toggleAura(project.id)}
+                        disabled={togglingAura.has(project.id)}
+                        className={`px-3 w-[50%] py-3 rounded-full text-sm font-medium transition-all duration-300 flex items-center justify-center gap-1 ${
+                            project.has_aura
+                                ? 'bg-purple-100 text-purple-700 border border-purple-300'
+                                : 'bg-gray-100 text-purple-600 hover:bg-purple-50 '
+                        } disabled:opacity-50 disabled:cursor-not-allowed`}
+                    >
+                        {togglingAura.has(project.id) ? (
+                            <motion.div
+                                animate={{ rotate: 360 }}
+                                transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
+                                className="w-3 h-3 border border-current border-t-transparent rounded-full"
+                            />
+                        ) : (
+                            <Sparkles className={`w-3 h-3 ${project.has_aura ? 'fill-current' : ''}`} />
+                        )}
+                        {project.has_aura ? 'Aura Given' : 'Give Aura'}
+                    </motion.button>
+                ) : (
+                    <span className="text-xs text-gray-400">Sign in to give aura</span>
+                )}
+            </div>
+        </motion.div>
+    );
+});
 
 export default Projects;
